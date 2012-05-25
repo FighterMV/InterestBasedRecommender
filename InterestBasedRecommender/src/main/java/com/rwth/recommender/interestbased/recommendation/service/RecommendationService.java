@@ -4,7 +4,7 @@
  */
 package com.rwth.recommender.interestbased.recommendation.service;
 
-import com.rwth.recommender.interestbased.api.dto.UserDTO;
+import com.rwth.recommender.interestbased.model.dto.UserDTO;
 import com.rwth.recommender.interestbased.model.dto.UserRecommendationDTO;
 
 /**
@@ -13,6 +13,6 @@ import com.rwth.recommender.interestbased.model.dto.UserRecommendationDTO;
  */
 public interface RecommendationService {
     
-    public UserRecommendationDTO fillWithRecommendations(UserDTO user);
+    public UserRecommendationDTO getRecommendations(UserDTO user);
     
 }

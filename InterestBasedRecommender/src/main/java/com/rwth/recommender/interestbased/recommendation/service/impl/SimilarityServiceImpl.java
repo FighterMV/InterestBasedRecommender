@@ -4,12 +4,11 @@
  */
 package com.rwth.recommender.interestbased.recommendation.service.impl;
 
+import com.rwth.recommender.interestbased.model.Constants;
 import com.rwth.recommender.interestbased.model.dto.UserDTO;
 import com.rwth.recommender.interestbased.model.service.UserService;
 import com.rwth.recommender.interestbased.recommendation.service.SimilarityService;
-import edu.smu.tspell.wordnet.NounSynset;
 import edu.smu.tspell.wordnet.Synset;
-import edu.smu.tspell.wordnet.SynsetType;
 import edu.smu.tspell.wordnet.WordNetDatabase;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,8 +22,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SimilarityServiceImpl implements SimilarityService{
-
-    public static int MINIMAL_SCORE_TO_BE_SIMILAR_USERS = 10;
     
     @Autowired
     UserService userService;
@@ -45,7 +42,14 @@ public class SimilarityServiceImpl implements SimilarityService{
 
     @Override
     public int calculateSimilarity(UserDTO user1, UserDTO user2) {
-	throw new UnsupportedOperationException("Not supported yet.");
+	//!TODO Implement better comparison
+	int equalInterestKeywords = 0;
+	for(String keyword : user1.getUserInterestKeywords()){
+	    if(user2.getUserInterestKeywords().contains(keyword)){
+		equalInterestKeywords += 1;
+	    }
+	}
+	return equalInterestKeywords;
     }
 
     @Override
@@ -54,7 +58,7 @@ public class SimilarityServiceImpl implements SimilarityService{
 	List<UserDTO> existingUsers = userService.getList();
 	for(UserDTO userToCompare : existingUsers){
 	    int similarityScore = calculateSimilarity(user, userToCompare);
-	    if(similarityScore >= MINIMAL_SCORE_TO_BE_SIMILAR_USERS){
+	    if(similarityScore >= Constants.MINIMAL_SCORE_TO_BE_SIMILAR_USERS){
 		similarUsers.add(userToCompare);
 	    }
 	}

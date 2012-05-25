@@ -16,13 +16,17 @@ public class User {
     
     private String name;
     private Date lastRecommendationDate;
-    private Map<Long, Integer> weightedItems;    
-
-    public User(String name, Date lastRecommendationDate, List<Item> recommendedItems, Map<Long, Integer> weightedItems) {
+    private List<String> userInterestKeywords;
+    private Map<Interest, Integer> weightedInterests;    
+    
+    public User(String name, Date lastRecommendationDate, Map<Interest, Integer> weightedInterests, List<String> userInterestKeywords){
 	this.name = name;
 	this.lastRecommendationDate = lastRecommendationDate;
-    }
+	this.weightedInterests = weightedInterests;
+	this.userInterestKeywords = userInterestKeywords;
 
+    }
+    
     public Date getLastRecommendationDate() {
 	return lastRecommendationDate;
     }
@@ -39,12 +43,20 @@ public class User {
 	this.name = name;
     }
 
-    public Map<Long, Integer> getWeightedItems() {
-	return weightedItems;
+    public Map<Interest, Integer> getWeightedInterests() {
+	return weightedInterests;
     }
 
-    public void setWeightedItems(Map<Long, Integer> weightedItems) {
-	this.weightedItems = weightedItems;
+    public void setWeightedInterests(Map<Interest, Integer> weightedInterests) {
+	this.weightedInterests = weightedInterests;
     }
-            
+
+    public List<String> getUserInterestKeywords() {
+	return userInterestKeywords;
+    }
+
+    public void setUserInterestKeywords(List<String> userInterestKeywords) {
+	this.userInterestKeywords = userInterestKeywords;
+    }
+                
 }
