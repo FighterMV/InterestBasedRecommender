@@ -2,9 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.rwth.recommender.interestbased.component.validation.impl;
+package com.rwth.recommender.interestbased.api.service.impl;
 
-import com.rwth.recommender.interestbased.component.validation.UserModelValidator;
+import com.rwth.recommender.interestbased.api.service.SynonymService;
+import java.util.List;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,10 +13,10 @@ import org.springframework.stereotype.Component;
  * @author Marco
  */
 @Component
-public class UserModelValidatorImpl implements UserModelValidator{
+public class SynonymServiceImpl implements SynonymService{
 
     @Override
-    public Boolean isValidModel(String userModel) {
+    public List<String> getSynonyms(String word) {
 	//!TODO Implement
 	throw new UnsupportedOperationException("Not supported yet.");
     }

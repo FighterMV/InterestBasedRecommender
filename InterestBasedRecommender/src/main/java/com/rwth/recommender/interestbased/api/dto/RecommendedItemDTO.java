@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.rwth.recommender.interestbased.dto;
+package com.rwth.recommender.interestbased.api.dto;
 
 import java.util.Date;
 
@@ -10,16 +10,18 @@ import java.util.Date;
  *
  * @author Marco
  */
-public class ItemDTO {
+public class RecommendedItemDTO {
     
     private String name;
     private Date publishDate;
     private AuthorDTO author;
+    private String link;
 
-    public ItemDTO(String name, Date publishDate, AuthorDTO author) {
+    public RecommendedItemDTO(String name, Date publishDate, AuthorDTO author, String link) {
 	this.name = name;
 	this.publishDate = publishDate;
 	this.author = author;
+	this.link = link;
     }
     
     public AuthorDTO getAuthor() {
@@ -45,5 +47,9 @@ public class ItemDTO {
     public void setPublishDate(Date publishDate) {
 	this.publishDate = publishDate;
     }
-        
+
+    public String getLink() {
+	return link;
+    }
+            
 }

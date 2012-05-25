@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.rwth.recommender.interestbased.dto;
+package com.rwth.recommender.interestbased.api.dto;
 
 import java.util.List;
 
@@ -13,28 +13,28 @@ import java.util.List;
 public class RecommendationDTO {
     
     private UserDTO user;
-    private List<ItemDTO> recommendedItems;
-    private List<InterestDTO> recommendedInterests;
+    private List<RecommendedItemDTO> recommendedItems;
+    private List<RecommendedInterestDTO> recommendedInterests;
 
-    public RecommendationDTO(UserDTO user, List<ItemDTO> recommendedItems, List<InterestDTO> recommendedInterests) {
+    public RecommendationDTO(UserDTO user, List<RecommendedItemDTO> recommendedItems, List<RecommendedInterestDTO> recommendedInterests) {
 	this.user = user;
 	this.recommendedItems = recommendedItems;
 	this.recommendedInterests = recommendedInterests;
     }
 
-    public List<InterestDTO> getRecommendedInterests() {
+    public List<RecommendedInterestDTO> getRecommendedInterests() {
 	return recommendedInterests;
     }
 
-    public void setRecommendedInterests(List<InterestDTO> recommendedInterests) {
+    public void setRecommendedInterests(List<RecommendedInterestDTO> recommendedInterests) {
 	this.recommendedInterests = recommendedInterests;
     }
 
-    public List<ItemDTO> getRecommendedItems() {
+    public List<RecommendedItemDTO> getRecommendedItems() {
 	return recommendedItems;
     }
 
-    public void setRecommendedItems(List<ItemDTO> recommendedItems) {
+    public void setRecommendedItems(List<RecommendedItemDTO> recommendedItems) {
 	this.recommendedItems = recommendedItems;
     }
 

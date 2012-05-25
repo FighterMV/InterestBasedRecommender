@@ -2,12 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.rwth.recommender.interestbased.impl;
+package com.rwth.recommender.interestbased.api.impl;
 
 import com.rwth.recommender.interestbased.api.RecommenderService;
-import com.rwth.recommender.interestbased.component.validation.UserModelValidator;
-import com.rwth.recommender.interestbased.dto.RecommendationDTO;
-import com.rwth.recommender.interestbased.exception.UserModelNotValidException;
+import com.rwth.recommender.interestbased.api.component.validation.UserModelValidator;
+import com.rwth.recommender.interestbased.api.dto.RecommendationDTO;
+import com.rwth.recommender.interestbased.api.exception.UserModelNotValidException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

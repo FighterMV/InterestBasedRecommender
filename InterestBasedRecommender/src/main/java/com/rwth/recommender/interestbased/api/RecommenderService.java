@@ -4,8 +4,8 @@
  */
 package com.rwth.recommender.interestbased.api;
 
-import com.rwth.recommender.interestbased.dto.RecommendationDTO;
-import com.rwth.recommender.interestbased.exception.UserModelNotValidException;
+import com.rwth.recommender.interestbased.api.dto.RecommendationDTO;
+import com.rwth.recommender.interestbased.api.exception.UserModelNotValidException;
 
 /**
  *

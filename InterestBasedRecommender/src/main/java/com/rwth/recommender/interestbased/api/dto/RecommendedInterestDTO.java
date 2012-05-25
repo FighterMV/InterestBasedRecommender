@@ -2,18 +2,18 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.rwth.recommender.interestbased.dto;
+package com.rwth.recommender.interestbased.api.dto;
 
 /**
  *
  * @author Marco
  */
-public class InterestDTO {
+public class RecommendedInterestDTO {
     
     private String name;
     private String source;
 
-    public InterestDTO(String name, String source) {
+    public RecommendedInterestDTO(String name, String source) {
 	this.name = name;
 	this.source = source;
     }
