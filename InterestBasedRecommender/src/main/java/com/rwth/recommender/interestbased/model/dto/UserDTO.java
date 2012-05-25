@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.rwth.recommender.interestbased.model;
+package com.rwth.recommender.interestbased.model.dto;
 
 import java.util.Date;
 import java.util.List;
@@ -12,18 +12,11 @@ import java.util.Map;
  *
  * @author Marco
  */
-public class User {
-    
+public class UserDTO {
     private String name;
     private Date lastRecommendationDate;
     private Map<Long, Integer> weightedItems;    
-    private List<Item> recommendedItems;
-
-    public User(String name, Date lastRecommendationDate, List<Item> recommendedItems, Map<Long, Integer> weightedItems) {
-	this.name = name;
-	this.lastRecommendationDate = lastRecommendationDate;
-	this.recommendedItems = recommendedItems;
-    }
+    private List<ItemDTO> recommendedItems;
 
     public Date getLastRecommendationDate() {
 	return lastRecommendationDate;
@@ -41,11 +34,11 @@ public class User {
 	this.name = name;
     }
 
-    public List<Item> getRecommendedItems() {
+    public List<ItemDTO> getRecommendedItems() {
 	return recommendedItems;
     }
 
-    public void setRecommendedItems(List<Item> recommendedItems) {
+    public void setRecommendedItems(List<ItemDTO> recommendedItems) {
 	this.recommendedItems = recommendedItems;
     }
 
@@ -56,5 +49,4 @@ public class User {
     public void setWeightedItems(Map<Long, Integer> weightedItems) {
 	this.weightedItems = weightedItems;
     }
-            
 }

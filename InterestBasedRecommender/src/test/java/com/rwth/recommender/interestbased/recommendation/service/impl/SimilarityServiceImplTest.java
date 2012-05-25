@@ -6,6 +6,7 @@ package com.rwth.recommender.interestbased.recommendation.service.impl;
 
 import com.rwth.recommender.interestbased.recommendation.service.SimilarityService;
 import java.util.List;
+import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,6 +27,9 @@ public class SimilarityServiceImplTest {
     @Test
     public void testSimilarityService(){
 	List<String> similarWords = similarityService.findSimilarKeywords("film");
+	
+	Assert.assertTrue(similarWords.contains("film"));
+	Assert.assertTrue(similarWords.contains("movie"));
     }
     
 }

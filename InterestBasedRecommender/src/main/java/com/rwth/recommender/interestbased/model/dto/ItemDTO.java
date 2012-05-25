@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.rwth.recommender.interestbased.model;
+package com.rwth.recommender.interestbased.model.dto;
 
 import java.util.List;
 
@@ -10,13 +10,12 @@ import java.util.List;
  *
  * @author Marco
  */
-public class Item {
-    
+public class ItemDTO {
     private String name;
     private List<String> keyWords;
     private String link;
 
-    public Item(String name, List<String> keyWords, String link) {
+    public ItemDTO(String name, List<String> keyWords, String link) {
 	this.name = name;
 	this.keyWords = keyWords;
 	this.link = link;
@@ -45,5 +44,4 @@ public class Item {
     public void setName(String name) {
 	this.name = name;
     }
-        
 }
