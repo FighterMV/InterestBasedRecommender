@@ -13,13 +13,13 @@ import java.util.List;
 public class UserRecommendationDTO {
     
     private UserDTO user;
-    private List<ItemDTO> recommendedItems;
+    private List<ItemRecommendationDTO> recommendedItems;
 
-    public List<ItemDTO> getRecommendedItems() {
+    public List<ItemRecommendationDTO> getRecommendedItems() {
 	return recommendedItems;
     }
 
-    public void setRecommendedItems(List<ItemDTO> recommendedItems) {
+    public void setRecommendedItems(List<ItemRecommendationDTO> recommendedItems) {
 	this.recommendedItems = recommendedItems;
     }
 

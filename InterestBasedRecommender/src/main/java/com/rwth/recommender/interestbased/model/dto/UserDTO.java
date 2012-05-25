@@ -21,18 +21,12 @@ public class UserDTO {
     @Autowired
     SimilarityService similarityService;
     
+    private Long id;
     private String name;
     private Date lastRecommendationDate;
     private List<String> userInterestKeywords;
     private Map<InterestDTO, Integer> weightedInterests;    
-    
-    public UserDTO(String name, Date lastRecommendationDate, Map<InterestDTO, Integer> weightedInterests){
-	this.name = name;
-	this.lastRecommendationDate = lastRecommendationDate;
-	this.weightedInterests = weightedInterests;
-	setInterestKeywords();
-    }
-    
+        
     public Date getLastRecommendationDate() {
 	return lastRecommendationDate;
     }
@@ -55,12 +49,21 @@ public class UserDTO {
 
     public void setWeightedInterests(Map<InterestDTO, Integer> weightedInterests) {
 	this.weightedInterests = weightedInterests;
+	setInterestKeywords();
     }
 
     public List<String> getUserInterestKeywords() {
 	return userInterestKeywords;
     }
-    
+
+    public Long getId() {
+	return id;
+    }
+
+    public void setId(Long id) {
+	this.id = id;
+    }
+        
     private void setInterestKeywords(){
 	userInterestKeywords = new ArrayList<String>();
 	for(InterestDTO interest : weightedInterests.keySet()){
