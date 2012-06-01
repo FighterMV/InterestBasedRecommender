@@ -5,7 +5,6 @@
 package com.rwth.recommender.interestbased.recommendation.service.impl;
 
 import com.rwth.recommender.interestbased.model.dto.ItemRecommendationDTO;
-import com.rwth.recommender.interestbased.model.dto.RecommendedItemDTO;
 import com.rwth.recommender.interestbased.model.dto.UserDTO;
 import com.rwth.recommender.interestbased.model.dto.UserRecommendationDTO;
 import com.rwth.recommender.interestbased.model.service.UserRecommendationService;
@@ -13,6 +12,8 @@ import com.rwth.recommender.interestbased.recommendation.service.RecommendationS
 import com.rwth.recommender.interestbased.recommendation.service.SimilarityService;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -20,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Marco
  */
 public class RecommendationServiceImpl implements RecommendationService{
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(RecommendationServiceImpl.class);
 
     @Autowired
     SimilarityService similarityService;
@@ -29,8 +32,10 @@ public class RecommendationServiceImpl implements RecommendationService{
     
     @Override
     public UserRecommendationDTO getRecommendations(UserDTO user) {
-		
+
+	LOGGER.trace("Starting to search similar users for user " + user.getName());
 	List<UserDTO> similarUsers = similarityService.findSimilarUsers(user);
+	LOGGER.trace("Found " + similarUsers.size() + " similar users for user " + user.getName());
 	
 	List<ItemRecommendationDTO> itemsToBeRecommended = new ArrayList<ItemRecommendationDTO>();
 	for(UserDTO similarUser : similarUsers){

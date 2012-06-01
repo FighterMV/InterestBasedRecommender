@@ -6,10 +6,12 @@ package com.rwth.recommender.interestbased.model.dto;
 
 import com.rwth.recommender.interestbased.model.Constants;
 import com.rwth.recommender.interestbased.recommendation.service.SimilarityService;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -17,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Marco
  */
 public class UserDTO {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserDTO.class);
         
     @Autowired
     SimilarityService similarityService;
@@ -24,7 +28,7 @@ public class UserDTO {
     private Long id;
     private String name;
     private Date lastRecommendationDate;
-    private List<String> userInterestKeywords;
+    private Set<String> userInterestKeywords;
     private Map<InterestDTO, Integer> weightedInterests;    
         
     public Date getLastRecommendationDate() {
@@ -52,7 +56,7 @@ public class UserDTO {
 	setInterestKeywords();
     }
 
-    public List<String> getUserInterestKeywords() {
+    public Set<String> getUserInterestKeywords() {
 	return userInterestKeywords;
     }
 
@@ -65,7 +69,8 @@ public class UserDTO {
     }
         
     private void setInterestKeywords(){
-	userInterestKeywords = new ArrayList<String>();
+	LOGGER.trace("Weighted Interests for user " + this.name + " were changed. Calculating a new list of userInterestKeywords");
+	userInterestKeywords = new HashSet<String>();
 	for(InterestDTO interest : weightedInterests.keySet()){
 	    if(weightedInterests.get(interest) > Constants.MINIMUM_VALUE_TO_BE_GOOD_INTEREST){
 		userInterestKeywords.addAll(similarityService.findSimilarKeywords(interest.getName()));
