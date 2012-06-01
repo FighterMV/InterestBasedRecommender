@@ -20,5 +20,15 @@ public class ItemRecommendationDTO {
     public RecommendedItemDTO getRecommendedItem() {
 	return recommendedItem;
     }
+
+    public void setAccuracy(int accuracy) {
+	this.accuracy = accuracy;
+    }
+
+    public void setRecommendedItem(RecommendedItemDTO recommendedItem) {
+	this.recommendedItem = recommendedItem;
+    }
+    
+    
         
 }

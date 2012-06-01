@@ -20,5 +20,15 @@ public class RecommendedItemDTO {
     public String getName() {
 	return name;
     }
+
+    public void setLink(String link) {
+	this.link = link;
+    }
+
+    public void setName(String name) {
+	this.name = name;
+    }
+    
+    
         
 }

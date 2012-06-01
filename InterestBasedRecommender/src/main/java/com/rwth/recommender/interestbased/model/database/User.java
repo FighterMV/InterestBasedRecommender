@@ -6,25 +6,32 @@ package com.rwth.recommender.interestbased.model.database;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
+import javax.persistence.*;
 
 /**
  *
  * @author Marco
  */
+@Entity
 public class User {
     
-    private String name;
-    private Date lastRecommendationDate;
-    private List<String> userInterestKeywords;
-    private Map<Interest, Integer> weightedInterests;    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     
-    public User(String name, Date lastRecommendationDate, Map<Interest, Integer> weightedInterests, List<String> userInterestKeywords){
-	this.name = name;
-	this.lastRecommendationDate = lastRecommendationDate;
-	this.weightedInterests = weightedInterests;
-	this.userInterestKeywords = userInterestKeywords;
-
+    private String name;
+    
+    @Temporal(TemporalType.DATE)
+    private Date lastRecommendationDate;
+    
+    @ElementCollection
+    private List<String> userInterestKeywords;
+    
+    @OneToMany
+    @ElementCollection
+    private List<WeightedInterest> weightedInterests;    
+    
+    public User(){
     }
     
     public Date getLastRecommendationDate() {
@@ -43,11 +50,11 @@ public class User {
 	this.name = name;
     }
 
-    public Map<Interest, Integer> getWeightedInterests() {
+    public List<WeightedInterest> getWeightedInterests() {
 	return weightedInterests;
     }
 
-    public void setWeightedInterests(Map<Interest, Integer> weightedInterests) {
+    public void setWeightedInterests(List<WeightedInterest> weightedInterests) {
 	this.weightedInterests = weightedInterests;
     }
 
@@ -58,5 +65,13 @@ public class User {
     public void setUserInterestKeywords(List<String> userInterestKeywords) {
 	this.userInterestKeywords = userInterestKeywords;
     }
-                
+
+    public Long getId() {
+	return id;
+    }
+
+    public void setId(Long id) {
+	this.id = id;
+    }
+                    
 }

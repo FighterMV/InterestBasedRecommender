@@ -5,22 +5,33 @@
 package com.rwth.recommender.interestbased.model.database;
 
 import java.util.List;
+import javax.persistence.*;
 
 /**
  *
  * @author Marco
  */
+@Entity
 public class UserRecommendation {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    
+    @OneToOne
     private User user;
-    private List<Item> recommendedItem;
+    
+    
+    @OneToMany
+    @ElementCollection
+    private List<ItemRecommendation> recommendedItems;
 
-    public List<Item> getRecommendedItem() {
-	return recommendedItem;
+    public List<ItemRecommendation> getRecommendedItems() {
+	return recommendedItems;
     }
 
-    public void setRecommendedItem(List<Item> recommendedItem) {
-	this.recommendedItem = recommendedItem;
+    public void setRecommendedItems(List<ItemRecommendation> recommendedItem) {
+	this.recommendedItems = recommendedItem;
     }
 
     public User getUser() {
@@ -30,5 +41,13 @@ public class UserRecommendation {
     public void setUser(User user) {
 	this.user = user;
     }
-    
+
+    public Long getId() {
+	return id;
+    }
+
+    public void setId(Long id) {
+	this.id = id;
+    }
+        
 }

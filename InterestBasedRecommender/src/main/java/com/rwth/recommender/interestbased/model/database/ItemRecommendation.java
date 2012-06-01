@@ -8,33 +8,40 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /**
  *
  * @author Marco
  */
 @Entity
-public class Interest {
+public class ItemRecommendation {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    private String name;
+    @OneToOne
+    private Item item;
+    
+    private Integer accuracy;
 
-    public Long getId() {
-	return id;
-    }
-
-    public void setId(Long id) {
-	this.id = id;
-    }
-        
-    public String getName() {
-	return name;
+    public Item getItem() {
+	return item;
     }
 
-    public void setName(String name) {
-	this.name = name;
+    public Integer getAccuracy() {
+	return accuracy;
     }
+
+    public void setItem(Item item) {
+	this.item = item;
+    }
+
+    public void setAccuracy(Integer score) {
+	this.accuracy = score;
+    }
+    
+    
+    
 }

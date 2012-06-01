@@ -12,8 +12,7 @@ public class InterestDTO {
     
     private String name;
 
-    public InterestDTO(String name) {
-	this.name = name;
+    public InterestDTO() {
     }
     
     public String getName() {

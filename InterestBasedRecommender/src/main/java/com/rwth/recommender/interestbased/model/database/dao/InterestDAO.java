@@ -4,15 +4,15 @@
  */
 package com.rwth.recommender.interestbased.model.database.dao;
 
-import com.rwth.recommender.interestbased.model.database.Item;
+import com.rwth.recommender.interestbased.model.database.Interest;
 
 /**
  *
  * @author Marco
  */
-public interface ItemDAO {
+public interface InterestDAO {
     
-    void persist(Item item);
-    Item get(Long id);
+    Interest get(Long id);
+    void persist(Interest interest);
     
 }

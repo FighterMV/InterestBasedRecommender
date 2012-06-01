@@ -5,21 +5,27 @@
 package com.rwth.recommender.interestbased.model.database;
 
 import java.util.List;
+import javax.persistence.*;
 
 /**
  *
  * @author Marco
  */
+@Entity
 public class Item {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    
     private String name;
+    
+    @ElementCollection
     private List<String> keyWords;
+    
     private String link;
 
-    public Item(String name, List<String> keyWords, String link) {
-	this.name = name;
-	this.keyWords = keyWords;
-	this.link = link;
+    public Item() {
     }
 
     public List<String> getKeyWords() {
@@ -45,5 +51,13 @@ public class Item {
     public void setName(String name) {
 	this.name = name;
     }
-        
+
+    public Long getId() {
+	return id;
+    }
+
+    public void setId(Long id) {
+	this.id = id;
+    }
+       
 }
