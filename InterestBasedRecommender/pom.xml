@@ -14,7 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	<spring.framework.version>3.0.5.RELEASE</spring.framework.version>
 	<hibernate.version>3.5.6-Final</hibernate.version>
-        <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
+        <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
     </properties>
 
     <repositories>
@@ -113,8 +113,6 @@
 	    <groupId>jaws-bin</groupId>
 	    <artifactId>jaws-bin</artifactId>
 	    <version>0</version>
-	    <scope>system</scope>
-	    <systemPath>${basedir}/wordnet/jaws-bin.jar</systemPath>
 	</dependency>
 	<!-- End JAWS -->
  
@@ -152,7 +150,6 @@
 	    <version>${hibernate.version}</version>
 	    <scope>compile</scope>
 	</dependency>
- 
  
 	<!-- Hibernate library dependecy start -->
 	<dependency>
@@ -200,6 +197,13 @@
 	    <version>2.5.0</version>
 	    <type>pom</type>
 	</dependency>
+	
+	<dependency>
+	    <groupId>javax.servlet</groupId>
+	    <artifactId>jstl</artifactId>
+	    <version>1.2</version>
+	</dependency>
+	
 	
     </dependencies>
 

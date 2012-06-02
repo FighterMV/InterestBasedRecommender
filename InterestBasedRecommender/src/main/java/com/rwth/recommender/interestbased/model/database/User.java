@@ -6,6 +6,7 @@ package com.rwth.recommender.interestbased.model.database;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.*;
 
 /**
@@ -25,7 +26,7 @@ public class User {
     private Date lastRecommendationDate;
     
     @ElementCollection
-    private List<String> userInterestKeywords;
+    private Set<String> userInterestKeywords;
     
     @OneToMany
     @ElementCollection
@@ -58,11 +59,11 @@ public class User {
 	this.weightedInterests = weightedInterests;
     }
 
-    public List<String> getUserInterestKeywords() {
+    public Set<String> getUserInterestKeywords() {
 	return userInterestKeywords;
     }
 
-    public void setUserInterestKeywords(List<String> userInterestKeywords) {
+    public void setUserInterestKeywords(Set<String> userInterestKeywords) {
 	this.userInterestKeywords = userInterestKeywords;
     }
 

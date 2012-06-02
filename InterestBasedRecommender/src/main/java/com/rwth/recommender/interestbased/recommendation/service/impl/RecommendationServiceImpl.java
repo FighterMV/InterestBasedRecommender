@@ -44,7 +44,6 @@ public class RecommendationServiceImpl implements RecommendationService{
     UserService userService;
     
     @Override
-    @Transactional
     public UserRecommendationDTO getRecommendations(UserDTO userDTO) {
 
 	LOGGER.debug("Storing a new user with name " + userDTO.getName() + " in the database");

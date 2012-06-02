@@ -30,6 +30,7 @@ public class UserAssembler {
 	userDTO.setId(user.getId());
 	userDTO.setLastRecommendationDate(user.getLastRecommendationDate());
 	userDTO.setName(user.getName());
+	userDTO.setUserInterestKeywords(user.getUserInterestKeywords());
 	userDTO.setWeightedInterests(assembleWeightedInterestMap(user.getWeightedInterests()));
 	return userDTO;
     }
@@ -55,8 +56,8 @@ public class UserAssembler {
 	User user = new User();
 	user.setLastRecommendationDate(userDTO.getLastRecommendationDate());
 	user.setId(userDTO.getId());
-	user.setName(user.getName());
-	user.setUserInterestKeywords(user.getUserInterestKeywords());
+	user.setName(userDTO.getName());
+	user.setUserInterestKeywords(userDTO.getUserInterestKeywords());
 	user.setWeightedInterests(assembleWeightedInterestList(userDTO.getWeightedInterests()));
 	return user;
     }

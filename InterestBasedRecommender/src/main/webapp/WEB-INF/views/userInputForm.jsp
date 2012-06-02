@@ -7,11 +7,21 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <form:form action="store-and-recommend-user" commandName="storeAndRecommendUserModel" method="POST">
-	    
-	    <form:input path="storeAndRecommendUserModel.username"/>
-	    <form:input path="storeAndRecommendUserModel.interests"/>
-	    <form:input path="storeAndRecommendUserModel.weightings"/>
+        <form:form action="store-and-recommend-user.html" commandName="storeAndRecommendUserModel" method="POST">
+	    <table>
+		<tr>
+		    <td>Username: </td>
+		    <td><form:input path="username"/></td>
+		</tr>
+		<tr>
+		    <td>Interests (separate by comma): </td>
+		    <td><form:input path="interests"/></td>
+		</tr>
+		<tr>
+		    <td>Weightings (separate by comma): </td>
+		    <td><form:input path="weightings"/></td>
+		</tr>
+	    </table>
 	    
 	    <input type="submit"/>
 	    

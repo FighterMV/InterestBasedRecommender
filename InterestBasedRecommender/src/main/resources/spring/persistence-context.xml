@@ -26,8 +26,7 @@
 
 	</bean>
 
-	<tx:annotation-driven transaction-manager="transactionManager"
-		mode="proxy" />
+	
 
 	<!--
 		Transaction manager for a single Hibernate SessionFactory (alternative
@@ -63,10 +62,8 @@
 				<prop key="hibernate.cache.use_query_cache">true</prop>
 				<prop key="hibernate.default_batch_fetch_size">0</prop>
 
-				<prop key="hibernate.hbm2ddl.auto">create</prop>
+				<prop key="hibernate.hbm2ddl.auto">none</prop>
 				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
-
-
 
 			</props>
 		</property>

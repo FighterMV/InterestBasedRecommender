@@ -4,8 +4,6 @@
  */
 package com.rwth.recommender.interestbased.web.model;
 
-import java.util.List;
-
 /**
  *
  * @author Marco
@@ -16,6 +14,12 @@ public class StoreAndRecommendUserModel {
     private String interests;
     private String weightings;
 
+    public StoreAndRecommendUserModel(){
+	username = "";
+	interests = "";
+	weightings = "";
+    }
+    
     public String getInterests() {
 	return interests;
     }

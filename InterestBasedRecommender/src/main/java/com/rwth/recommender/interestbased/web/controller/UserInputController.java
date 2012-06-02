@@ -19,7 +19,8 @@ public class UserInputController {
     @RequestMapping("/user-input")
     public ModelAndView showUserInput(){
 	ModelAndView modelAndView = new ModelAndView("userInputForm");
-	modelAndView.addObject("storeAndRecommendUserModel", new StoreAndRecommendUserModel());
+	StoreAndRecommendUserModel storeAndRecommendUserModel = new StoreAndRecommendUserModel();
+	modelAndView.addObject("storeAndRecommendUserModel", storeAndRecommendUserModel);
 	return modelAndView;
     }
     
