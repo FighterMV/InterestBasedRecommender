@@ -65,6 +65,8 @@ public class RecommendationServiceImpl implements RecommendationService{
 	recommendation.setUser(userDTO);
 	recommendation.setRecommendedItems(itemsToBeRecommended);
 	
+	LOGGER.debug("Storing the recommendation for user " + userDTO.getName() + " in the database");
+	userRecommendationService.storeInDatabase(recommendation);
 	
 	return recommendation;
     }

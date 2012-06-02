@@ -41,6 +41,14 @@ public class ItemRecommendation {
     public void setAccuracy(Integer score) {
 	this.accuracy = score;
     }
+
+    public Long getId() {
+	return id;
+    }
+
+    public void setId(Long id) {
+	this.id = id;
+    }
     
     
     

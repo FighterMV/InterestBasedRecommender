@@ -10,6 +10,7 @@ package com.rwth.recommender.interestbased.model.dto;
  */
 public class ItemRecommendationDTO {
     
+    private Long id;
     private RecommendedItemDTO recommendedItem;
     private int accuracy;
 
@@ -28,7 +29,13 @@ public class ItemRecommendationDTO {
     public void setRecommendedItem(RecommendedItemDTO recommendedItem) {
 	this.recommendedItem = recommendedItem;
     }
-    
-    
-        
+
+    public Long getId() {
+	return id;
+    }
+
+    public void setId(Long id) {
+	this.id = id;
+    }
+           
 }

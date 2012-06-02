@@ -14,4 +14,6 @@ public interface UserRecommendationService {
     
     public UserRecommendationDTO getRecommendationForUser(Long userId);
     
+    public void storeInDatabase(UserRecommendationDTO userRecommendationDTO);
+    
 }

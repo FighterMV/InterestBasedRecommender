@@ -14,4 +14,6 @@ public class Constants {
     
     public static int MINIMAL_SCORE_TO_BE_SIMILAR_USERS = 10;
     
+    public static String INTEREST_SEPARATOR = ",";
+    
 }
