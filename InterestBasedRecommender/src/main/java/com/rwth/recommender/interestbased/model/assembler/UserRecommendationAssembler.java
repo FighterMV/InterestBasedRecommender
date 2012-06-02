@@ -26,7 +26,7 @@ public class UserRecommendationAssembler {
     
     public UserRecommendationDTO getDTO(UserRecommendation userRecommendation){
 	UserRecommendationDTO userRecommendationDTO = new UserRecommendationDTO();
-	userRecommendationDTO.setUser(userAssembler.getDTO(userRecommendation.getUser()));
+	userRecommendationDTO.setUser(userAssembler.assembleDTO(userRecommendation.getUser()));
 	userRecommendationDTO.setRecommendedItems(itemRecommendationAssembler.getDTOList(userRecommendation.getRecommendedItems()));
 	return userRecommendationDTO;
     }

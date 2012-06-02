@@ -15,4 +15,6 @@ public interface UserService {
     
     public List<UserDTO> getList();
     
+    public void storeInDatabase(UserDTO userDTO);
+    
 }

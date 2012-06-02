@@ -15,10 +15,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class InterestAssembler {
     
-    public InterestDTO getDTO(Interest interest){
+    public InterestDTO assembleDTO(Interest interest){
 	InterestDTO interestDTO = new InterestDTO();
 	interestDTO.setName(interest.getName());
 	return interestDTO;
+    }
+    
+    public Interest assemble(InterestDTO interestDTO){
+	Interest interest = new Interest();
+	interest.setId(interestDTO.getId());
+	interest.setName(interestDTO.getName());
+	return interest;
     }
     
 }
