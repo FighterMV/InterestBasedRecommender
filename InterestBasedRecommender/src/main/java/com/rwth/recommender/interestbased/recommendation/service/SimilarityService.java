@@ -21,6 +21,6 @@ public interface SimilarityService {
     
     public List<PersonDTO> findSimilarPersons(PersonDTO person);
     
-    public Set<String> getInterestKeywords(List<InterestDTO> weightedInterests);
+    public List<String> getInterestKeywords(List<InterestDTO> weightedInterests);
     
 }

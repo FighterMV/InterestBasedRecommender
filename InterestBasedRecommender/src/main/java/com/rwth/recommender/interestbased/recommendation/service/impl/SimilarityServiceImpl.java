@@ -59,7 +59,9 @@ public class SimilarityServiceImpl implements SimilarityService{
 
     @Override
     public List<PersonDTO> findSimilarPersons(PersonDTO user) {
+	LOGGER.trace("Starting to find similar persons");
 	List<PersonDTO> similarUsers = new ArrayList<PersonDTO>();
+	LOGGER.trace("Starting to get existing users");
 	List<PersonDTO> existingUsers = personService.getList();
 	for(PersonDTO userToCompare : existingUsers){
 	    int similarityScore = calculateSimilarity(user, userToCompare);
@@ -71,8 +73,8 @@ public class SimilarityServiceImpl implements SimilarityService{
     }
     
     @Override
-    public Set<String> getInterestKeywords(List<InterestDTO> weightedInterests){
-	Set<String> userInterestKeywords = new HashSet<String>();
+    public List<String> getInterestKeywords(List<InterestDTO> weightedInterests){
+	List<String> userInterestKeywords = new ArrayList<String>();
 	for(InterestDTO interest : weightedInterests){
 	    if(interest.getWeighting() > Constants.MINIMUM_VALUE_TO_BE_GOOD_INTEREST){
 		List<String> similarKeywords = findSimilarKeywords(interest.getName());

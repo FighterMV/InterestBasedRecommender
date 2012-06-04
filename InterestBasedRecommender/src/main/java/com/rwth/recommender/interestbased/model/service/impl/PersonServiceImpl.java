@@ -52,7 +52,9 @@ public class PersonServiceImpl implements PersonService{
     public List<PersonDTO> getList() {
 	LOGGER.debug("Getting userList from database");
 	List<Person> personList = personDAO.getList();
+	LOGGER.trace("Starting to assemble personDTOList");
 	List<PersonDTO> personDTOs = personAssembler.assembleDTOList(personList);
+	LOGGER.trace("Finished assembling personDTOList");
 	return personDTOs;
     }
 

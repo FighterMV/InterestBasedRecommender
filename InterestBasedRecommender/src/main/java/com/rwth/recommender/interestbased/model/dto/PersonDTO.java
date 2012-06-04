@@ -19,7 +19,7 @@ public class PersonDTO {
     
     private Long id;
     private String name;
-    private Set<String> personInterestKeywords;
+    private List<String> personInterestKeywords;
     private List<ItemRecommendationDTO> itemRecommendations;
 
     public String getName() {
@@ -30,11 +30,11 @@ public class PersonDTO {
 	this.name = name;
     }
 
-    public Set<String> getPersonInterestKeywords() {
+    public List<String> getPersonInterestKeywords() {
 	return personInterestKeywords;
     }
 
-    public void setPersonInterestKeywords(Set<String> personInterestKeywords) {
+    public void setPersonInterestKeywords(List<String> personInterestKeywords) {
 	this.personInterestKeywords = personInterestKeywords;
     }
     

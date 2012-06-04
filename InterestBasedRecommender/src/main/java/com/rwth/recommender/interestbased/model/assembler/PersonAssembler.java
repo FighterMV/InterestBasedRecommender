@@ -19,9 +19,6 @@ import org.springframework.stereotype.Component;
 public class PersonAssembler {
     
     @Autowired
-    private InterestAssembler interestAssembler;
-    
-    @Autowired
     private ItemRecommendationAssembler itemRecommendationAssembler;
     
     public PersonDTO assembleDTO(Person person){

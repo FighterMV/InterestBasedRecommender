@@ -11,9 +11,7 @@ import com.rwth.recommender.interestbased.recommendation.service.SimilarityServi
 import com.rwth.recommender.interestbased.web.model.StoreAndRecommendUserModel;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -81,7 +79,7 @@ public class StoreAndRecommendUserController {
 	
 	List<InterestDTO> weightedInterests = getInterestDTOs(model, personDTO);
 		
-	Set<String> interestKeywords = similarityService.getInterestKeywords(weightedInterests);
+	List<String> interestKeywords = similarityService.getInterestKeywords(weightedInterests);
 	personDTO.setPersonInterestKeywords(interestKeywords);
 	
 	String itemNames = model.getItemNames().replace(" ", "");

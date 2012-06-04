@@ -4,9 +4,7 @@
  */
 package com.rwth.recommender.interestbased.model.database;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.*;
 
 /**
@@ -22,8 +20,8 @@ public class Person {
     
     private String name;
     
-    @ElementCollection
-    private Set<String> personInterestKeywords;
+    @ElementCollection(fetch=FetchType.EAGER)
+    private List<String> personInterestKeywords;
     
     @OneToMany
     private List<ItemRecommendation> itemRecommendations;
@@ -39,11 +37,11 @@ public class Person {
 	this.name = name;
     }
 
-    public Set<String> getPersonInterestKeywords() {
+    public List<String> getPersonInterestKeywords() {
 	return personInterestKeywords;
     }
 
-    public void setPersonInterestKeywords(Set<String> personInterestKeywords) {
+    public void setPersonInterestKeywords(List<String> personInterestKeywords) {
 	this.personInterestKeywords = personInterestKeywords;
     }
 
