@@ -11,23 +11,23 @@ package com.rwth.recommender.interestbased.model.dto;
 public class ItemRecommendationDTO {
     
     private Long id;
-    private RecommendedItemDTO recommendedItem;
+    private ItemDTO item;
     private int accuracy;
 
     public int getAccuracy() {
 	return accuracy;
     }
 
-    public RecommendedItemDTO getRecommendedItem() {
-	return recommendedItem;
+    public ItemDTO getItem() {
+	return item;
     }
 
     public void setAccuracy(int accuracy) {
 	this.accuracy = accuracy;
     }
 
-    public void setRecommendedItem(RecommendedItemDTO recommendedItem) {
-	this.recommendedItem = recommendedItem;
+    public void setItem(ItemDTO recommendedItem) {
+	this.item = recommendedItem;
     }
 
     public Long getId() {

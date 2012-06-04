@@ -6,8 +6,8 @@ package com.rwth.recommender.interestbased.recommendation.service.impl;
 
 import com.rwth.recommender.interestbased.model.Constants;
 import com.rwth.recommender.interestbased.model.dto.InterestDTO;
-import com.rwth.recommender.interestbased.model.dto.UserDTO;
-import com.rwth.recommender.interestbased.model.service.UserService;
+import com.rwth.recommender.interestbased.model.dto.PersonDTO;
+import com.rwth.recommender.interestbased.model.service.PersonService;
 import com.rwth.recommender.interestbased.recommendation.service.SimilarityService;
 import edu.smu.tspell.wordnet.Synset;
 import edu.smu.tspell.wordnet.WordNetDatabase;
@@ -27,7 +27,7 @@ public class SimilarityServiceImpl implements SimilarityService{
     private static final Logger LOGGER = LoggerFactory.getLogger(SimilarityServiceImpl.class);
     
     @Autowired
-    UserService userService;
+    PersonService personService;
     
     @Override
     public List<String> findSimilarKeywords(String keyword) {
@@ -46,11 +46,11 @@ public class SimilarityServiceImpl implements SimilarityService{
     }
 
     @Override
-    public int calculateSimilarity(UserDTO user1, UserDTO user2) {
+    public int calculateSimilarity(PersonDTO person1, PersonDTO person2) {
 	//!TODO Implement better comparison
 	int equalInterestKeywords = 0;
-	for(String keyword : user1.getUserInterestKeywords()){
-	    if(user2.getUserInterestKeywords().contains(keyword)){
+	for(String keyword : person1.getPersonInterestKeywords()){
+	    if(person2.getPersonInterestKeywords().contains(keyword)){
 		equalInterestKeywords += 1;
 	    }
 	}
@@ -58,10 +58,10 @@ public class SimilarityServiceImpl implements SimilarityService{
     }
 
     @Override
-    public List<UserDTO> findSimilarUsers(UserDTO user) {
-	List<UserDTO> similarUsers = new ArrayList<UserDTO>();
-	List<UserDTO> existingUsers = userService.getList();
-	for(UserDTO userToCompare : existingUsers){
+    public List<PersonDTO> findSimilarPersons(PersonDTO user) {
+	List<PersonDTO> similarUsers = new ArrayList<PersonDTO>();
+	List<PersonDTO> existingUsers = personService.getList();
+	for(PersonDTO userToCompare : existingUsers){
 	    int similarityScore = calculateSimilarity(user, userToCompare);
 	    if(similarityScore >= Constants.MINIMAL_SCORE_TO_BE_SIMILAR_USERS){
 		similarUsers.add(userToCompare);
@@ -71,10 +71,10 @@ public class SimilarityServiceImpl implements SimilarityService{
     }
     
     @Override
-    public Set<String> getInterestKeywords(Map<InterestDTO, Integer> weightedInterests){
+    public Set<String> getInterestKeywords(List<InterestDTO> weightedInterests){
 	Set<String> userInterestKeywords = new HashSet<String>();
-	for(InterestDTO interest : weightedInterests.keySet()){
-	    if(weightedInterests.get(interest) > Constants.MINIMUM_VALUE_TO_BE_GOOD_INTEREST){
+	for(InterestDTO interest : weightedInterests){
+	    if(interest.getWeighting() > Constants.MINIMUM_VALUE_TO_BE_GOOD_INTEREST){
 		List<String> similarKeywords = findSimilarKeywords(interest.getName());
 		userInterestKeywords.addAll(similarKeywords);
 	    }

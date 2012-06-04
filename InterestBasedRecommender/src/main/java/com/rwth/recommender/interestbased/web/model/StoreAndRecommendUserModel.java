@@ -13,11 +13,15 @@ public class StoreAndRecommendUserModel {
     private String username;
     private String interests;
     private String weightings;
+    private String itemNames;
+    private String itemLinks;
 
     public StoreAndRecommendUserModel(){
 	username = "";
 	interests = "";
 	weightings = "";
+	itemNames = "";
+	itemLinks = "";
     }
     
     public String getInterests() {
@@ -42,6 +46,22 @@ public class StoreAndRecommendUserModel {
 
     public void setWeightings(String weightings) {
 	this.weightings = weightings;
+    }
+
+    public String getItemLinks() {
+	return itemLinks;
+    }
+
+    public void setItemLinks(String itemLinks) {
+	this.itemLinks = itemLinks;
+    }
+
+    public String getItemNames() {
+	return itemNames;
+    }
+
+    public void setItemNames(String itemNames) {
+	this.itemNames = itemNames;
     }
         
     

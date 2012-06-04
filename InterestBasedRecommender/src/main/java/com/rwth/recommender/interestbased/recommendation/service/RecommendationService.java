@@ -4,8 +4,10 @@
  */
 package com.rwth.recommender.interestbased.recommendation.service;
 
-import com.rwth.recommender.interestbased.model.dto.UserDTO;
-import com.rwth.recommender.interestbased.model.dto.UserRecommendationDTO;
+import com.rwth.recommender.interestbased.model.dto.InterestDTO;
+import com.rwth.recommender.interestbased.model.dto.PersonDTO;
+import com.rwth.recommender.interestbased.model.dto.RecommendationDTO;
+import java.util.List;
 
 /**
  *
@@ -13,6 +15,6 @@ import com.rwth.recommender.interestbased.model.dto.UserRecommendationDTO;
  */
 public interface RecommendationService {
     
-    public UserRecommendationDTO getRecommendations(UserDTO user);
+    public RecommendationDTO getRecommendations(PersonDTO person, List<InterestDTO> interestDTOs);
     
 }

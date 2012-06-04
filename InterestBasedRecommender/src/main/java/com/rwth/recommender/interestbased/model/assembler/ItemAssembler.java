@@ -5,9 +5,10 @@
 package com.rwth.recommender.interestbased.model.assembler;
 
 import com.rwth.recommender.interestbased.model.database.Item;
-import com.rwth.recommender.interestbased.model.dto.RecommendedItemDTO;
-import java.util.ArrayList;
+import com.rwth.recommender.interestbased.model.dto.ItemDTO;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,25 +16,25 @@ import org.springframework.stereotype.Component;
  * @author Marco
  */
 @Component
-public class RecommendedItemAssembler {
+public class ItemAssembler {
     
-    public RecommendedItemDTO assembleDTO(Item item){
-	RecommendedItemDTO recommendedItemDTO = new RecommendedItemDTO();
+    public ItemDTO assembleDTO(Item item){
+	ItemDTO recommendedItemDTO = new ItemDTO();
 	recommendedItemDTO.setId(item.getId());
 	recommendedItemDTO.setLink(item.getLink());
 	recommendedItemDTO.setName(item.getName());
 	return recommendedItemDTO;
     }
     
-    public List<RecommendedItemDTO> assembleDTOList(List<Item> items){
-	List<RecommendedItemDTO> itemDTOs = new ArrayList<RecommendedItemDTO>();
+    public Set<ItemDTO> assembleDTOSet(Set<Item> items){
+	Set<ItemDTO> itemDTOs = new HashSet<ItemDTO>();
 	for(Item item : items){
 	    itemDTOs.add(assembleDTO(item));
 	}
 	return itemDTOs;
     }
     
-    public Item assemble(RecommendedItemDTO recommendedItemDTO){
+    public Item assemble(ItemDTO recommendedItemDTO){
 	Item item = new Item();
 	item.setId(recommendedItemDTO.getId());
 	item.setLink(recommendedItemDTO.getLink());
@@ -41,9 +42,9 @@ public class RecommendedItemAssembler {
 	return item;
     }
     
-    public List<Item> assembleList(List<RecommendedItemDTO> recommendedItemDTOs){
-	List<Item> items = new ArrayList<Item>();
-	for(RecommendedItemDTO recommendedItemDTO : recommendedItemDTOs){
+    public Set<Item> assembleSet(Set<ItemDTO> recommendedItemDTOs){
+	Set<Item> items = new HashSet<Item>();
+	for(ItemDTO recommendedItemDTO : recommendedItemDTOs){
 	    items.add(assemble(recommendedItemDTO));
 	}
 	return items;

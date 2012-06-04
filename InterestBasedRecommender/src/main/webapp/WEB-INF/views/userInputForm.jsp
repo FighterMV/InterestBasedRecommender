@@ -21,6 +21,14 @@
 		    <td>Weightings (separate by comma): </td>
 		    <td><form:input path="weightings"/></td>
 		</tr>
+		<tr>
+		    <td>Items (separate by comma): </td>
+		    <td><form:input path="itemNames"/></td>
+		</tr>
+		<tr>
+		    <td>Links (separate by comma): </td>
+		    <td><form:input path="itemLinks"/></td>
+		</tr>
 	    </table>
 	    
 	    <input type="submit"/>

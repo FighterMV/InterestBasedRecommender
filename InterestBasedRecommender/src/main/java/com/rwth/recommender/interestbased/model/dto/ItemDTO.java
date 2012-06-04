@@ -8,7 +8,7 @@ package com.rwth.recommender.interestbased.model.dto;
  *
  * @author Marco
  */
-public class RecommendedItemDTO {
+public class ItemDTO {
     
     private String name;
     private String link;

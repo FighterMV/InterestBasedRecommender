@@ -7,7 +7,9 @@ package com.rwth.recommender.interestbased.model.assembler;
 import com.rwth.recommender.interestbased.model.database.ItemRecommendation;
 import com.rwth.recommender.interestbased.model.dto.ItemRecommendationDTO;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,13 +21,13 @@ import org.springframework.stereotype.Component;
 public class ItemRecommendationAssembler {
     
     @Autowired
-    private RecommendedItemAssembler recommendedItemAssembler;
+    private ItemAssembler recommendedItemAssembler;
     
     public ItemRecommendationDTO assembleDTO(ItemRecommendation itemRecommendation){
 	ItemRecommendationDTO itemRecommendationDTO = new ItemRecommendationDTO();
 	itemRecommendationDTO.setId(itemRecommendation.getId());
 	itemRecommendationDTO.setAccuracy(itemRecommendation.getAccuracy());
-	itemRecommendationDTO.setRecommendedItem(recommendedItemAssembler.assembleDTO(itemRecommendation.getItem()));
+	itemRecommendationDTO.setItem(recommendedItemAssembler.assembleDTO(itemRecommendation.getItem()));
 	return itemRecommendationDTO;
     }
     
@@ -41,7 +43,7 @@ public class ItemRecommendationAssembler {
 	ItemRecommendation itemRecommendation = new ItemRecommendation();
 	itemRecommendation.setAccuracy(itemRecommendationDTO.getAccuracy());
 	itemRecommendation.setId(itemRecommendationDTO.getId());
-	itemRecommendation.setItem(recommendedItemAssembler.assemble(itemRecommendationDTO.getRecommendedItem()));
+	itemRecommendation.setItem(recommendedItemAssembler.assemble(itemRecommendationDTO.getItem()));
 	return itemRecommendation;
     }
     

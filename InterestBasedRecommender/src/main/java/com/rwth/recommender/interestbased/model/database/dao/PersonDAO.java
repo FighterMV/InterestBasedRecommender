@@ -4,17 +4,18 @@
  */
 package com.rwth.recommender.interestbased.model.database.dao;
 
-import com.rwth.recommender.interestbased.model.database.User;
+import com.rwth.recommender.interestbased.model.database.Person;
 import java.util.List;
 
 /**
  *
  * @author Marco
  */
-public interface UserDAO {
+public interface PersonDAO {
     
-    User get(Long id);
-    void persist(User user);
-    List<User> getList();
+    Person get(Long id);
+    void persist(Person person);
+    List<Person> getList();
+    void update(Person person);
     
 }

@@ -5,9 +5,8 @@
 package com.rwth.recommender.interestbased.recommendation.service;
 
 import com.rwth.recommender.interestbased.model.dto.InterestDTO;
-import com.rwth.recommender.interestbased.model.dto.UserDTO;
+import com.rwth.recommender.interestbased.model.dto.PersonDTO;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -18,10 +17,10 @@ public interface SimilarityService {
     
     public List<String> findSimilarKeywords(String keyword);
     
-    public int calculateSimilarity(UserDTO user1, UserDTO user2);
+    public int calculateSimilarity(PersonDTO user1, PersonDTO user2);
     
-    public List<UserDTO> findSimilarUsers(UserDTO user);
+    public List<PersonDTO> findSimilarPersons(PersonDTO person);
     
-    public Set<String> getInterestKeywords(Map<InterestDTO, Integer> weightedInterests);
+    public Set<String> getInterestKeywords(List<InterestDTO> weightedInterests);
     
 }
