@@ -63,10 +63,14 @@ public class RecommendationServiceImpl implements RecommendationService{
 	RecommendationDTO recommendation = new RecommendationDTO();
 	recommendation.setPerson(personDTO);
 	
-	Set<ItemRecommendationDTO> itemsToBeRecommended = new HashSet<ItemRecommendationDTO>();
+	List<ItemRecommendationDTO> itemsToBeRecommended = new ArrayList<ItemRecommendationDTO>();
 	for(PersonDTO similarUser : similarUsers){
 	    //!CALCULATE ACCURACY OF ITEMS AND DONT ADD JUST ALL ITEMS
-	    itemsToBeRecommended.addAll(similarUser.getItemRecommendations());
+	    for(ItemRecommendationDTO itemRecommendation : similarUser.getItemRecommendations()){
+		if(!containsLink(itemsToBeRecommended, itemRecommendation)){
+		    itemsToBeRecommended.add(itemRecommendation);
+		}
+	    }
 	}
 	
 	recommendation.setItemRecommendations(itemsToBeRecommended);
@@ -75,6 +79,15 @@ public class RecommendationServiceImpl implements RecommendationService{
 	personService.updatePersonInDatabase(personDTO);
 	
 	return recommendation;
+    }
+    
+    private Boolean containsLink(List<ItemRecommendationDTO> itemRecommendations, ItemRecommendationDTO itemRecommendation){
+	for(ItemRecommendationDTO itemRecommendationDTO: itemRecommendations){
+	    if(itemRecommendationDTO.getItem().getLink().equals(itemRecommendation.getItem().getLink())){
+		return true;
+	    }
+	}
+	return false;
     }
     
 }

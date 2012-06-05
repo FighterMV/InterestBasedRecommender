@@ -4,7 +4,7 @@
  */
 package com.rwth.recommender.interestbased.model.dto;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  *
@@ -14,13 +14,13 @@ public class RecommendationDTO {
     
     private PersonDTO person;
     
-    private Set<ItemRecommendationDTO> itemRecommendations;
+    private List<ItemRecommendationDTO> itemRecommendations;
 
-    public Set<ItemRecommendationDTO> getItemRecommendations() {
+    public List<ItemRecommendationDTO> getItemRecommendations() {
 	return itemRecommendations;
     }
 
-    public void setItemRecommendations(Set<ItemRecommendationDTO> itemRecommendations) {
+    public void setItemRecommendations(List<ItemRecommendationDTO> itemRecommendations) {
 	this.itemRecommendations = itemRecommendations;
     }
 

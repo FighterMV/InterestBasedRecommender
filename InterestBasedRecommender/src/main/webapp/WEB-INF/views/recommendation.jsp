@@ -10,7 +10,7 @@
     <body>
         <ul>
 	    <c:forEach items="${recommendations}" var="recommendation">
-		<li><a href="${recommendation.item.link}">${recommendation.item.name}</a></li>
+		<li><a href="${recommendation.item.link}" target="blank">${recommendation.item.name}</a></li>
 	    </c:forEach>
 	</ul>
     </body>
