@@ -65,7 +65,8 @@ public class SimilarityServiceImpl implements SimilarityService{
 	List<PersonDTO> existingUsers = personService.getList();
 	for(PersonDTO userToCompare : existingUsers){
 	    int similarityScore = calculateSimilarity(user, userToCompare);
-	    if(similarityScore >= Constants.MINIMAL_SCORE_TO_BE_SIMILAR_USERS){
+	    int minNumberOfInterestKeywords = Math.min(user.getPersonInterestKeywords().size(), userToCompare.getPersonInterestKeywords().size());
+	    if(similarityScore >= minNumberOfInterestKeywords * Constants.MULTIPLIER_TO_BE_EQUAL){
 		similarUsers.add(userToCompare);
 	    }
 	}

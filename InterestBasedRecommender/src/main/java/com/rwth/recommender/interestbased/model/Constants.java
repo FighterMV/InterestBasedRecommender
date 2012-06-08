@@ -11,9 +11,9 @@ package com.rwth.recommender.interestbased.model;
 public class Constants {
     
     public static int MINIMUM_VALUE_TO_BE_GOOD_INTEREST = 10;
-    
-    public static int MINIMAL_SCORE_TO_BE_SIMILAR_USERS = 10;
-    
+        
     public static String INTEREST_SEPARATOR = ",";
+    
+    public static Double MULTIPLIER_TO_BE_EQUAL = 0.3;
     
 }
