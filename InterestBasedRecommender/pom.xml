@@ -204,6 +204,13 @@
 	    <version>1.2</version>
 	</dependency>
 	
+	<!-- JAMA Matrix for SVD -->
+	<dependency>
+	    <groupId>jama</groupId>
+	    <artifactId>jama</artifactId>
+	    <version>1.0.2</version>
+	</dependency>
+	
 	
     </dependencies>
 
