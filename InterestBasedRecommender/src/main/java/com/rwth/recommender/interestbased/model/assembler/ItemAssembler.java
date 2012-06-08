@@ -6,6 +6,7 @@ package com.rwth.recommender.interestbased.model.assembler;
 
 import com.rwth.recommender.interestbased.model.database.Item;
 import com.rwth.recommender.interestbased.model.dto.ItemDTO;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,31 +20,31 @@ import org.springframework.stereotype.Component;
 public class ItemAssembler {
     
     public ItemDTO assembleDTO(Item item){
-	ItemDTO recommendedItemDTO = new ItemDTO();
-	recommendedItemDTO.setId(item.getId());
-	recommendedItemDTO.setLink(item.getLink());
-	recommendedItemDTO.setName(item.getName());
-	return recommendedItemDTO;
+	ItemDTO itemDTO = new ItemDTO();
+	itemDTO.setId(item.getId());
+	itemDTO.setLink(item.getLink());
+	itemDTO.setName(item.getName());
+	return itemDTO;
     }
     
-    public Set<ItemDTO> assembleDTOSet(Set<Item> items){
-	Set<ItemDTO> itemDTOs = new HashSet<ItemDTO>();
+    public List<ItemDTO> assembleDTOList(List<Item> items){
+	List<ItemDTO> itemDTOs = new ArrayList<ItemDTO>();
 	for(Item item : items){
 	    itemDTOs.add(assembleDTO(item));
 	}
 	return itemDTOs;
     }
     
-    public Item assemble(ItemDTO recommendedItemDTO){
+    public Item assemble(ItemDTO itemDTO){
 	Item item = new Item();
-	item.setId(recommendedItemDTO.getId());
-	item.setLink(recommendedItemDTO.getLink());
-	item.setName(recommendedItemDTO.getName());
+	item.setId(itemDTO.getId());
+	item.setLink(itemDTO.getLink());
+	item.setName(itemDTO.getName());
 	return item;
     }
     
-    public Set<Item> assembleSet(Set<ItemDTO> recommendedItemDTOs){
-	Set<Item> items = new HashSet<Item>();
+    public List<Item> assembleList(List<ItemDTO> recommendedItemDTOs){
+	List<Item> items = new ArrayList<Item>();
 	for(ItemDTO recommendedItemDTO : recommendedItemDTOs){
 	    items.add(assemble(recommendedItemDTO));
 	}

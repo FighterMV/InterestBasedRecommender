@@ -4,22 +4,15 @@
  */
 package com.rwth.recommender.interestbased.recommendation.service.impl;
 
-import com.rwth.recommender.interestbased.model.assembler.ItemRecommendationAssembler;
 import com.rwth.recommender.interestbased.model.assembler.PersonAssembler;
-import com.rwth.recommender.interestbased.model.database.ItemRecommendation;
-import com.rwth.recommender.interestbased.model.dto.InterestDTO;
-import com.rwth.recommender.interestbased.model.dto.ItemRecommendationDTO;
-import com.rwth.recommender.interestbased.model.dto.PersonDTO;
-import com.rwth.recommender.interestbased.model.dto.RecommendationDTO;
+import com.rwth.recommender.interestbased.model.dto.*;
 import com.rwth.recommender.interestbased.model.service.InterestService;
 import com.rwth.recommender.interestbased.model.service.ItemRecommendationService;
 import com.rwth.recommender.interestbased.model.service.PersonService;
 import com.rwth.recommender.interestbased.recommendation.service.RecommendationService;
 import com.rwth.recommender.interestbased.recommendation.service.SimilarityService;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,8 +59,11 @@ public class RecommendationServiceImpl implements RecommendationService{
 	List<ItemRecommendationDTO> itemsToBeRecommended = new ArrayList<ItemRecommendationDTO>();
 	for(PersonDTO similarUser : similarUsers){
 	    //!CALCULATE ACCURACY OF ITEMS AND DONT ADD JUST ALL ITEMS
-	    for(ItemRecommendationDTO itemRecommendation : similarUser.getItemRecommendations()){
-		if(!containsLink(itemsToBeRecommended, itemRecommendation)){
+	    for(ItemDTO similarUserItem : similarUser.getProvidedItems()){
+		if(!containsLink(itemsToBeRecommended, similarUserItem) &&!isOwnProvidedItem(personDTO, similarUserItem)){
+		    ItemRecommendationDTO itemRecommendation = new ItemRecommendationDTO();
+		    itemRecommendation.setItem(similarUserItem);
+		    //!TODO set accuracy
 		    itemsToBeRecommended.add(itemRecommendation);
 		}
 	    }
@@ -81,9 +77,18 @@ public class RecommendationServiceImpl implements RecommendationService{
 	return recommendation;
     }
     
-    private Boolean containsLink(List<ItemRecommendationDTO> itemRecommendations, ItemRecommendationDTO itemRecommendation){
+    private Boolean containsLink(List<ItemRecommendationDTO> itemRecommendations, ItemDTO recommendedItem){
 	for(ItemRecommendationDTO itemRecommendationDTO: itemRecommendations){
-	    if(itemRecommendationDTO.getItem().getLink().equals(itemRecommendation.getItem().getLink())){
+	    if(itemRecommendationDTO.getItem().getLink().equals(recommendedItem.getLink())){
+		return true;
+	    }
+	}
+	return false;
+    }
+    
+    private Boolean isOwnProvidedItem(PersonDTO person, ItemDTO item){
+	for(ItemDTO providedItem : person.getProvidedItems()){
+	    if(providedItem.getLink().equals(item.getLink())){
 		return true;
 	    }
 	}

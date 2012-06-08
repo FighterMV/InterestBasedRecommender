@@ -24,7 +24,7 @@ public class Person {
     private List<String> personInterestKeywords;
     
     @OneToMany
-    private List<ItemRecommendation> itemRecommendations;
+    private List<Item> providedItems;
     
     public Person(){
     }
@@ -53,12 +53,14 @@ public class Person {
 	this.id = id;
     }
 
-    public List<ItemRecommendation> getItemRecommendations() {
-	return itemRecommendations;
+    public List<Item> getProvidedItems() {
+	return providedItems;
     }
 
-    public void setItemRecommendations(List<ItemRecommendation> items) {
-	this.itemRecommendations = items;
+    public void setProvidedItems(List<Item> providedItems) {
+	this.providedItems = providedItems;
     }
+
+    
                         
 }

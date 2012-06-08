@@ -88,19 +88,16 @@ public class StoreAndRecommendUserController {
 	String itemLinks = model.getItemLinks().replace(" ", "");
 	List<String> itemLinkList = Arrays.asList(itemLinks.split(Constants.INTEREST_SEPARATOR));
 	
-	List<ItemRecommendationDTO> providedItems = new ArrayList<ItemRecommendationDTO>();
+	List<ItemDTO> providedItems = new ArrayList<ItemDTO>();
 	
 	for(int i = 0; i < itemNameList.size(); i++){
 	    ItemDTO itemDTO = new ItemDTO();
 	    itemDTO.setName(itemNameList.get(i));
 	    itemDTO.setLink(itemLinkList.get(i));
-	    ItemRecommendationDTO itemRecommendationDTO = new ItemRecommendationDTO();
-	    itemRecommendationDTO.setItem(itemDTO);
-	    itemRecommendationDTO.setAccuracy(100);
-	    providedItems.add(itemRecommendationDTO);
+	    providedItems.add(itemDTO);
 	}
 	
-	personDTO.setItemRecommendations(providedItems);
+	personDTO.setProvidedItems(providedItems);
 	
 	return personDTO;
     }

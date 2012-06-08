@@ -19,14 +19,14 @@ import org.springframework.stereotype.Component;
 public class PersonAssembler {
     
     @Autowired
-    private ItemRecommendationAssembler itemRecommendationAssembler;
+    private ItemAssembler itemAssembler;
     
     public PersonDTO assembleDTO(Person person){
 	PersonDTO personDTO = new PersonDTO();
 	personDTO.setId(person.getId());
 	personDTO.setName(person.getName());
 	personDTO.setPersonInterestKeywords(person.getPersonInterestKeywords());
-	personDTO.setItemRecommendations(itemRecommendationAssembler.assembleDTOList(person.getItemRecommendations()));
+	personDTO.setProvidedItems(itemAssembler.assembleDTOList(person.getProvidedItems()));
 	return personDTO;
     }
     
@@ -43,7 +43,7 @@ public class PersonAssembler {
 	person.setId(personDTO.getId());
 	person.setName(personDTO.getName());
 	person.setPersonInterestKeywords(personDTO.getPersonInterestKeywords());
-	person.setItemRecommendations(itemRecommendationAssembler.assembleList(personDTO.getItemRecommendations()));
+	person.setProvidedItems(itemAssembler.assembleList(personDTO.getProvidedItems()));
 	return person;
     }
     
