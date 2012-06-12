@@ -12,7 +12,7 @@ public class Constants {
     
     public static String WORDNET_FOLDER = "C:/Program Files (x86)/WordNet/2.1/dict";
     
-    public static int DIMENSIONS_TO_CHECK_SIMILARITY = 2;
+    public static int DIMENSIONS_TO_CHECK_SIMILARITY = 10;
     
     public static int MINIMUM_VALUE_TO_BE_GOOD_INTEREST = 10;
         

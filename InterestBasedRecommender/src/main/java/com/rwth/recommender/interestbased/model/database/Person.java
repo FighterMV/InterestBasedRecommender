@@ -20,7 +20,7 @@ public class Person {
     
     private String name;
     
-    @ElementCollection(fetch=FetchType.EAGER)
+    @ElementCollection
     private List<String> personInterestKeywords;
     
     @OneToMany

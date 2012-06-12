@@ -25,17 +25,22 @@ public class PersonAssembler {
 	PersonDTO personDTO = new PersonDTO();
 	personDTO.setId(person.getId());
 	personDTO.setName(person.getName());
-	personDTO.setPersonInterestKeywords(person.getPersonInterestKeywords());
+	List<String> personInterestKeywords = new ArrayList<String>();
+	for(String interestKeyword : person.getPersonInterestKeywords()){
+	    personInterestKeywords.add(interestKeyword);
+	}
+	personDTO.setPersonInterestKeywords(personInterestKeywords);
 	personDTO.setProvidedItems(itemAssembler.assembleDTOList(person.getProvidedItems()));
 	return personDTO;
     }
     
     public List<PersonDTO> assembleDTOList(List<Person> userList){
-	List<PersonDTO> userDTOs = new ArrayList<PersonDTO>();
-	for(Person user : userList){
-	    userDTOs.add(assembleDTO(user));
+	List<PersonDTO> personDTOs = new ArrayList<PersonDTO>();
+	for(Person person : userList){
+	    PersonDTO personDTO = assembleDTO(person);
+	    personDTOs.add(personDTO);
 	}
-	return userDTOs;
+	return personDTOs;
     }
     
     public Person assemble(PersonDTO personDTO){

@@ -9,10 +9,12 @@ import com.rwth.recommender.interestbased.model.dto.InterestDTO;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
 import com.rwth.recommender.interestbased.model.service.PersonService;
 import com.rwth.recommender.interestbased.recommendation.service.SimilarityService;
-import com.rwth.recommender.interestbased.recommendation.service.component.SVDSimilarityCalculator;
+import com.rwth.recommender.interestbased.recommendation.service.component.SimilarPersonFinder;
 import edu.smu.tspell.wordnet.Synset;
 import edu.smu.tspell.wordnet.WordNetDatabase;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,7 @@ public class SimilarityServiceImpl implements SimilarityService{
     PersonService personService;
     
     @Autowired
-    SVDSimilarityCalculator sVDSimilarityCalculator;
+    SimilarPersonFinder similarPersonFinder;
     
     @Override
     public List<String> findSimilarKeywords(String keyword) {
@@ -54,7 +56,7 @@ public class SimilarityServiceImpl implements SimilarityService{
 	LOGGER.trace("Starting to find similar persons");
 	LOGGER.trace("Starting to get existing users");
 	List<PersonDTO> existingUsers = personService.getList();
-	List<PersonDTO> similarUsers = sVDSimilarityCalculator.getXSimilarPersons(user, existingUsers, 5);
+	List<PersonDTO> similarUsers = similarPersonFinder.getXSimilarPersons(user, existingUsers, 5);
 	return similarUsers;
     }
     

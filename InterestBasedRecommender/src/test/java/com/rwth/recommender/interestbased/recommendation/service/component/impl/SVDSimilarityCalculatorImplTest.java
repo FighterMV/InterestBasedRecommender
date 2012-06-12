@@ -4,8 +4,9 @@
  */
 package com.rwth.recommender.interestbased.recommendation.service.component.impl;
 
+import com.rwth.recommender.interestbased.recommendation.service.component.helper.impl.SVDSimilarityCalculatorImpl;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
-import com.rwth.recommender.interestbased.recommendation.service.component.SVDSimilarityCalculator;
+import com.rwth.recommender.interestbased.recommendation.service.component.helper.SVDSimilarityCalculator;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
