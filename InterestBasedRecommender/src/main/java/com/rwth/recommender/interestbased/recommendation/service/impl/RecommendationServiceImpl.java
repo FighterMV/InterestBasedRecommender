@@ -7,7 +7,6 @@ package com.rwth.recommender.interestbased.recommendation.service.impl;
 import com.rwth.recommender.interestbased.model.assembler.PersonAssembler;
 import com.rwth.recommender.interestbased.model.dto.*;
 import com.rwth.recommender.interestbased.model.service.InterestService;
-import com.rwth.recommender.interestbased.model.service.ItemRecommendationService;
 import com.rwth.recommender.interestbased.model.service.PersonService;
 import com.rwth.recommender.interestbased.recommendation.service.RecommendationService;
 import com.rwth.recommender.interestbased.recommendation.service.SimilarityService;
@@ -38,9 +37,6 @@ public class RecommendationServiceImpl implements RecommendationService{
     
     @Autowired
     InterestService interestService;
-    
-    @Autowired
-    ItemRecommendationService itemRecommendationService;
     
     @Override
     public RecommendationDTO getRecommendations(PersonDTO personDTO, List<InterestDTO> interestDTOs) {

@@ -5,6 +5,7 @@
 package com.rwth.recommender.interestbased.recommendation.service.component;
 
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
+import java.util.List;
 
 /**
  *
@@ -12,6 +13,6 @@ import com.rwth.recommender.interestbased.model.dto.PersonDTO;
  */
 public interface SVDSimilarityCalculator {
     
-    public Boolean areSimilar(PersonDTO person1, PersonDTO person2);
+    public List<PersonDTO> getXSimilarPersons(PersonDTO person, List<PersonDTO> personDTOs, int numberOfUsersToReturn);
     
 }

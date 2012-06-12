@@ -16,9 +16,7 @@ import java.util.Set;
 public interface SimilarityService {
     
     public List<String> findSimilarKeywords(String keyword);
-    
-    public int calculateSimilarity(PersonDTO user1, PersonDTO user2);
-    
+        
     public List<PersonDTO> findSimilarPersons(PersonDTO person);
     
     public List<String> getInterestKeywords(List<InterestDTO> weightedInterests);

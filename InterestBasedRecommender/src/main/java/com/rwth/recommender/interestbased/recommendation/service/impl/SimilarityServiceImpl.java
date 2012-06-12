@@ -9,6 +9,7 @@ import com.rwth.recommender.interestbased.model.dto.InterestDTO;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
 import com.rwth.recommender.interestbased.model.service.PersonService;
 import com.rwth.recommender.interestbased.recommendation.service.SimilarityService;
+import com.rwth.recommender.interestbased.recommendation.service.component.SVDSimilarityCalculator;
 import edu.smu.tspell.wordnet.Synset;
 import edu.smu.tspell.wordnet.WordNetDatabase;
 import java.util.*;
@@ -29,12 +30,15 @@ public class SimilarityServiceImpl implements SimilarityService{
     @Autowired
     PersonService personService;
     
+    @Autowired
+    SVDSimilarityCalculator sVDSimilarityCalculator;
+    
     @Override
     public List<String> findSimilarKeywords(String keyword) {
 	
 	List<String> keywords = new ArrayList<String>();	
 	
-	System.setProperty("wordnet.database.dir", "C:/Program Files (x86)/WordNet/2.1/dict");
+	System.setProperty("wordnet.database.dir", Constants.WORDNET_FOLDER);
 	WordNetDatabase database = WordNetDatabase.getFileInstance();
 	
 	Synset[] synsets = database.getSynsets(keyword);
@@ -46,30 +50,11 @@ public class SimilarityServiceImpl implements SimilarityService{
     }
 
     @Override
-    public int calculateSimilarity(PersonDTO person1, PersonDTO person2) {
-	//!TODO Implement better comparison
-	int equalInterestKeywords = 0;
-	for(String keyword : person1.getPersonInterestKeywords()){
-	    if(person2.getPersonInterestKeywords().contains(keyword)){
-		equalInterestKeywords += 1;
-	    }
-	}
-	return equalInterestKeywords;
-    }
-
-    @Override
     public List<PersonDTO> findSimilarPersons(PersonDTO user) {
 	LOGGER.trace("Starting to find similar persons");
-	List<PersonDTO> similarUsers = new ArrayList<PersonDTO>();
 	LOGGER.trace("Starting to get existing users");
 	List<PersonDTO> existingUsers = personService.getList();
-	for(PersonDTO userToCompare : existingUsers){
-	    int similarityScore = calculateSimilarity(user, userToCompare);
-	    int minNumberOfInterestKeywords = Math.min(user.getPersonInterestKeywords().size(), userToCompare.getPersonInterestKeywords().size());
-	    if(similarityScore >= minNumberOfInterestKeywords * Constants.MULTIPLIER_TO_BE_EQUAL){
-		similarUsers.add(userToCompare);
-	    }
-	}
+	List<PersonDTO> similarUsers = sVDSimilarityCalculator.getXSimilarPersons(user, existingUsers, 5);
 	return similarUsers;
     }
     
