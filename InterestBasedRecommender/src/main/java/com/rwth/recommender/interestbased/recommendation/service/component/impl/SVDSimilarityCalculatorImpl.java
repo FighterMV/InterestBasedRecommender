@@ -10,9 +10,7 @@ import com.rwth.recommender.interestbased.model.Constants;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
 import com.rwth.recommender.interestbased.recommendation.service.component.SVDSimilarityCalculator;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import org.springframework.stereotype.Component;
 
 /**
@@ -25,7 +23,7 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
     @Override
     public List<PersonDTO> getXSimilarPersons(PersonDTO person, List<PersonDTO> personDTOs, int numberOfUsersToReturn) {
 	
-	Matrix queryDocument = getMatrix(person.getPersonInterestKeywords());
+	Matrix queryDocument = getMatrix(person.getPersonInterestKeywords(), personDTOs);
 	Matrix A = getA(person.getPersonInterestKeywords(), personDTOs);
 	SingularValueDecomposition svd = A.svd();
 	
@@ -48,9 +46,9 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
     }
     
     
-    private Matrix getMatrix(List<String> keywords){
+    private Matrix getMatrix(List<String> keywords, List<PersonDTO> persons){
 		
-	List<String> neededTerms = getNeededTerms(keywords);
+	List<String> neededTerms = getNeededTerms(keywords, persons);
 	int numberOfNeededRows = neededTerms.size();
 	
 	double[][] matrixArray = new double[numberOfNeededRows][1];
@@ -65,9 +63,14 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
 	return new Matrix(matrixArray);
     }
     
-    private List<String> getNeededTerms(List<String> keywords){
+    private List<String> getNeededTerms(List<String> keywords, List<PersonDTO> persons){
 	List<String> neededTermList = new ArrayList<String>();
-	for(String keyword : keywords){
+	List<String> allKeywords = new ArrayList<String>();
+	allKeywords.addAll(keywords);
+	for(PersonDTO person : persons){
+	    allKeywords.addAll(person.getPersonInterestKeywords());
+	}
+	for(String keyword : allKeywords){
 	    if(!neededTermList.contains(keyword)){
 		 neededTermList.add(keyword);
 	    }
@@ -87,17 +90,17 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
     
     private Matrix getA(List<String> keyWords, List<PersonDTO> persons){
 	
-	List<String> keyWordsToSearchFor = getNeededTerms(keyWords);
+	List<String> keyWordsToSearchFor = getNeededTerms(keyWords, persons);
 	int numberOfKeywords = keyWordsToSearchFor.size();
 	
-	double[][] A = new double[persons.size()][numberOfKeywords];
+	double[][] A = new double[numberOfKeywords][persons.size()];
 	
 	int i = 0;
 	for(PersonDTO person : persons){
 	    int j = 0;
 	    for(String keyWord : keyWordsToSearchFor){
 		int numberOfOccurences = getNumberOfOccurences(keyWord, person.getPersonInterestKeywords());
-		A[i][j] = numberOfOccurences;
+		A[j][i] = numberOfOccurences;
 		j++;
 	    }
 	    i++;
@@ -126,13 +129,13 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
 	    
 	    double numerator = 0;	
 	    for(int i = 0; i < queryMatrix.getColumnDimension(); i++){
-		numerator += queryMatrix.get(0, i) * documentsMatrix.get(0, i);
+		numerator += queryMatrix.get(0, i) * documentMatrix.get(0, i);
 	    }
 
 
 	    double queryMatrixSquareSum = 0;
 	    for(int i = 0; i < queryMatrix.getColumnDimension(); i++){
-		queryMatrixSquareSum += queryMatrix.get(0, i) * queryMatrix.get(0, i);
+		queryMatrixSquareSum += (queryMatrix.get(0, i) * queryMatrix.get(0, i));
 	    }
 
 	    double denominator = Math.sqrt(queryMatrixSquareSum);
