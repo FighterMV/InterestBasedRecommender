@@ -64,6 +64,7 @@ public class SimilarityServiceImpl implements SimilarityService{
     public List<String> getInterestKeywords(List<InterestDTO> weightedInterests){
 	List<String> userInterestKeywords = new ArrayList<String>();
 	for(InterestDTO interest : weightedInterests){
+	    userInterestKeywords.add(interest.getName());
 	    if(interest.getWeighting() > Constants.MINIMUM_VALUE_TO_BE_GOOD_INTEREST){
 		List<String> similarKeywords = findSimilarKeywords(interest.getName());
 		userInterestKeywords.addAll(similarKeywords);

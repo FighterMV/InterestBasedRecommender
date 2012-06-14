@@ -25,7 +25,9 @@ public class SimpleSimilarPersonFinderImpl implements SimpleSimilarPersonFinder{
 	
 	for(PersonDTO candidate : persons){
 	    int score = getScore(person, candidate);
-	    candidateScoreMap.put(candidate, score);
+	    if(score > 0){
+		candidateScoreMap.put(candidate, score);
+	    }
 	}
 	
 	return getXPersonsWithHighestScore(candidateScoreMap, numberOfPersonsToReturn);
