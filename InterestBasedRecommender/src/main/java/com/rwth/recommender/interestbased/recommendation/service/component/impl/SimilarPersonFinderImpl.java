@@ -6,6 +6,7 @@ package com.rwth.recommender.interestbased.recommendation.service.component.impl
 
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
 import com.rwth.recommender.interestbased.recommendation.service.component.SimilarPersonFinder;
+import com.rwth.recommender.interestbased.recommendation.service.component.helper.CosineSimilarPersonFinder;
 import com.rwth.recommender.interestbased.recommendation.service.component.helper.SVDSimilarityCalculator;
 import com.rwth.recommender.interestbased.recommendation.service.component.helper.SimpleSimilarPersonFinder;
 import java.util.List;
@@ -25,9 +26,12 @@ public class SimilarPersonFinderImpl implements SimilarPersonFinder{
     @Autowired
     SVDSimilarityCalculator svdSimilarityCalculator;
     
+    @Autowired
+    CosineSimilarPersonFinder cosineSimilarPersonFinder;
+    
     @Override
     public List<PersonDTO> getXSimilarPersons(PersonDTO person, List<PersonDTO> persons, int numberOfPersonsToReturn) {
-	return useSimpleSimilarPersonFinder(person, persons, numberOfPersonsToReturn);
+	return useCosineSimilarPersonFinder(person, persons, numberOfPersonsToReturn);
     }
     
     private List<PersonDTO> useSimpleSimilarPersonFinder(PersonDTO person, List<PersonDTO> persons, int numberOfPersonsToReturn){
@@ -36,6 +40,10 @@ public class SimilarPersonFinderImpl implements SimilarPersonFinder{
     
     private List<PersonDTO> useSVDSimilarPersonFinder(PersonDTO person, List<PersonDTO> persons, int numberOfPersonsToReturn){
 	return svdSimilarityCalculator.getXSimilarPersons(person, persons, numberOfPersonsToReturn);
+    }
+    
+    private List<PersonDTO> useCosineSimilarPersonFinder(PersonDTO person, List<PersonDTO> persons, int numberOfPersonsToReturn){
+	return cosineSimilarPersonFinder.getXSimilarPersons(person, persons, numberOfPersonsToReturn);
     }
     
 }
