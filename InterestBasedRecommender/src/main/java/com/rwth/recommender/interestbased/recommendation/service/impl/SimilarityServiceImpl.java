@@ -6,9 +6,11 @@ package com.rwth.recommender.interestbased.recommendation.service.impl;
 
 import com.rwth.recommender.interestbased.model.Constants;
 import com.rwth.recommender.interestbased.model.dto.InterestDTO;
+import com.rwth.recommender.interestbased.model.dto.ItemDTO;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
 import com.rwth.recommender.interestbased.model.service.PersonService;
 import com.rwth.recommender.interestbased.recommendation.service.SimilarityService;
+import com.rwth.recommender.interestbased.recommendation.service.component.SimilarItemFinder;
 import com.rwth.recommender.interestbased.recommendation.service.component.SimilarPersonFinder;
 import edu.smu.tspell.wordnet.Synset;
 import edu.smu.tspell.wordnet.WordNetDatabase;
@@ -35,6 +37,9 @@ public class SimilarityServiceImpl implements SimilarityService{
     @Autowired
     SimilarPersonFinder similarPersonFinder;
     
+    @Autowired
+    SimilarItemFinder similarItemFinder;
+    
     @Override
     public List<String> findSimilarKeywords(String keyword) {
 	
@@ -56,7 +61,7 @@ public class SimilarityServiceImpl implements SimilarityService{
 	LOGGER.trace("Starting to find similar persons");
 	LOGGER.trace("Starting to get existing users");
 	List<PersonDTO> existingUsers = personService.getList();
-	List<PersonDTO> similarUsers = similarPersonFinder.getXSimilarPersons(user, existingUsers, 5);
+	List<PersonDTO> similarUsers = similarPersonFinder.getXSimilarPersons(user, existingUsers, Constants.NUMBER_OF_BEST_OBJECTS_TO_RETURN);
 	return similarUsers;
     }
     
@@ -71,6 +76,12 @@ public class SimilarityServiceImpl implements SimilarityService{
 	    }
 	}
 	return userInterestKeywords;
+    }
+
+    @Override
+    public List<ItemDTO> findSimilarItems(List<ItemDTO> items, PersonDTO person) {
+	List<ItemDTO> similarItems = similarItemFinder.getXSimilarItems(items, person, Constants.NUMBER_OF_BEST_OBJECTS_TO_RETURN);
+	return similarItems;
     }
     
 }

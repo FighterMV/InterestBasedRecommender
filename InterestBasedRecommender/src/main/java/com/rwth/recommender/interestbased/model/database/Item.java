@@ -21,19 +21,19 @@ public class Item {
     private String name;
     
     @ElementCollection
-    private List<String> keyWords;
+    private List<String> describingKeywords;
     
     private String link;
 
     public Item() {
     }
 
-    public List<String> getKeyWords() {
-	return keyWords;
+    public List<String> getDescribingKeywords() {
+	return describingKeywords;
     }
 
-    public void setKeyWords(List<String> keyWords) {
-	this.keyWords = keyWords;
+    public void setDescribingKeywords(List<String> keyWords) {
+	this.describingKeywords = keyWords;
     }
 
     public String getLink() {

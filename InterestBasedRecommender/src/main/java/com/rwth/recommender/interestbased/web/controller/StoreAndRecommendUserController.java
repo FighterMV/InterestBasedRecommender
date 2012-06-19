@@ -5,7 +5,10 @@
 package com.rwth.recommender.interestbased.web.controller;
 
 import com.rwth.recommender.interestbased.model.Constants;
-import com.rwth.recommender.interestbased.model.dto.*;
+import com.rwth.recommender.interestbased.model.dto.InterestDTO;
+import com.rwth.recommender.interestbased.model.dto.ItemDTO;
+import com.rwth.recommender.interestbased.model.dto.PersonDTO;
+import com.rwth.recommender.interestbased.model.dto.RecommendationDTO;
 import com.rwth.recommender.interestbased.recommendation.service.RecommendationService;
 import com.rwth.recommender.interestbased.recommendation.service.SimilarityService;
 import com.rwth.recommender.interestbased.web.model.StoreAndRecommendUserModel;
@@ -55,7 +58,7 @@ public class StoreAndRecommendUserController {
 	String weightings = model.getWeightings().replace(" ", "");
 	List<String> weightingListString = Arrays.asList(weightings.split(Constants.INTEREST_SEPARATOR));
 	List<Integer> weightingList = new ArrayList<Integer>();
-	
+
 	for(String weightingString : weightingListString){
 	    weightingList.add(Integer.parseInt(weightingString));
 	}
@@ -88,12 +91,23 @@ public class StoreAndRecommendUserController {
 	String itemLinks = model.getItemLinks().replace(" ", "");
 	List<String> itemLinkList = Arrays.asList(itemLinks.split(Constants.INTEREST_SEPARATOR));
 	
+	
+	List<List<String>> itemKeywords = new ArrayList<List<String>>();
+	String rawItemKeywords = model.getItemKeywords().replace(" ", "");
+	List<String> items = Arrays.asList(rawItemKeywords.split(Constants.ITEM_SEPARATOR));
+	for(String currentItem : items){
+	    List<String> currentItemKeywords = Arrays.asList(currentItem.split(Constants.INTEREST_SEPARATOR));
+	    itemKeywords.add(currentItemKeywords);
+	}	
+	
+	
 	List<ItemDTO> providedItems = new ArrayList<ItemDTO>();
 	
 	for(int i = 0; i < itemNameList.size(); i++){
 	    ItemDTO itemDTO = new ItemDTO();
 	    itemDTO.setName(itemNameList.get(i));
 	    itemDTO.setLink(itemLinkList.get(i));
+	    itemDTO.setDescribingKeywords(itemKeywords.get(i));
 	    providedItems.add(itemDTO);
 	}
 	

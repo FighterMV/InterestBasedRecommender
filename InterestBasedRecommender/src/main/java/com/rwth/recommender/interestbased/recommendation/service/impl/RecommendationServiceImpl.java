@@ -54,8 +54,8 @@ public class RecommendationServiceImpl implements RecommendationService{
 	
 	List<ItemRecommendationDTO> itemsToBeRecommended = new ArrayList<ItemRecommendationDTO>();
 	for(PersonDTO similarUser : similarUsers){
-	    //!CALCULATE ACCURACY OF ITEMS AND DONT ADD JUST ALL ITEMS
-	    for(ItemDTO similarUserItem : similarUser.getProvidedItems()){
+	    List<ItemDTO> matchingItemsForUser = similarityService.findSimilarItems(similarUser.getProvidedItems(), personDTO);
+	    for(ItemDTO similarUserItem : matchingItemsForUser){
 		if(!containsLink(itemsToBeRecommended, similarUserItem) &&!isOwnProvidedItem(personDTO, similarUserItem)){
 		    ItemRecommendationDTO itemRecommendation = new ItemRecommendationDTO();
 		    itemRecommendation.setItem(similarUserItem);

@@ -29,6 +29,10 @@
 		    <td>Links (separate by comma): </td>
 		    <td><form:input path="itemLinks"/></td>
 		</tr>
+		<tr>
+		    <td>ItemKeywords (separate by semicolon): </td>
+		    <td><form:input path="itemKeywords"/></td>
+		</tr>
 	    </table>
 	    
 	    <input type="submit"/>

@@ -7,9 +7,7 @@ package com.rwth.recommender.interestbased.model.assembler;
 import com.rwth.recommender.interestbased.model.database.Item;
 import com.rwth.recommender.interestbased.model.dto.ItemDTO;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,6 +22,11 @@ public class ItemAssembler {
 	itemDTO.setId(item.getId());
 	itemDTO.setLink(item.getLink());
 	itemDTO.setName(item.getName());
+	List<String> describingKeywords = new ArrayList<String>();
+	for(String describingKeyword : item.getDescribingKeywords()){
+	    describingKeywords.add(describingKeyword);
+	}
+	itemDTO.setDescribingKeywords(describingKeywords);
 	return itemDTO;
     }
     
@@ -40,6 +43,7 @@ public class ItemAssembler {
 	item.setId(itemDTO.getId());
 	item.setLink(itemDTO.getLink());
 	item.setName(itemDTO.getName());
+	item.setDescribingKeywords(itemDTO.getDescribingKeywords());
 	return item;
     }
     
