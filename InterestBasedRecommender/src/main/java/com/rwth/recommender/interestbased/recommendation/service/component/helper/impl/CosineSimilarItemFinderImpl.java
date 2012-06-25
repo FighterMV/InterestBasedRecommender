@@ -8,6 +8,7 @@ import com.rwth.recommender.interestbased.model.dto.ItemDTO;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
 import com.rwth.recommender.interestbased.recommendation.service.component.helper.CosineCalculator;
 import com.rwth.recommender.interestbased.recommendation.service.component.helper.CosineSimilarItemFinder;
+import com.rwth.recommender.interestbased.recommendation.service.component.helper.MostSimilarObjectsGetter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,16 +25,19 @@ public class CosineSimilarItemFinderImpl implements CosineSimilarItemFinder{
     @Autowired
     CosineCalculator cosineCalculator;
     
+    @Autowired
+    MostSimilarObjectsGetter mostSimilarObjectsGetter;
+    
     @Override
     public List<ItemDTO> getXSimilarItems(List<ItemDTO> items, PersonDTO person, int numberOfItemsToReturn) {
 	Map<ItemDTO, Double> itemAngleMap = new HashMap<ItemDTO, Double>();
 	
 	for(ItemDTO item : items){
-	    Double angle = cosineCalculator.getAngle(person.getPersonInterestKeywords(), item.getDescribingKeywords());
+	    Double angle = cosineCalculator.getKeywordsAngle(person.getPersonInterestKeywords(), item.getDescribingKeywords());
 	    itemAngleMap.put(item, angle);
 	}
 	
-	List<ItemDTO> mostSimilarItems = cosineCalculator.getXMostSimilarObjects(itemAngleMap, numberOfItemsToReturn);
+	List<ItemDTO> mostSimilarItems = mostSimilarObjectsGetter.getXMostSimilarObjects(itemAngleMap, numberOfItemsToReturn);
 	
 	return mostSimilarItems;
     }

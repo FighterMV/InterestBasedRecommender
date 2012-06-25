@@ -5,6 +5,7 @@
 package com.rwth.recommender.interestbased.recommendation.service.component.helper.impl;
 
 import Jama.Matrix;
+import com.rwth.recommender.interestbased.model.dto.InterestDTO;
 import com.rwth.recommender.interestbased.recommendation.service.component.helper.CosineCalculator;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
  * @author Marco
  */
 @Component
-public class CosineCalculatorImpl<E> implements CosineCalculator{
+public class CosineCalculatorImpl implements CosineCalculator{
     
     private double getCosine(Matrix vector1, Matrix vector2) {
 	if(vector1.getRowDimension() != vector2.getRowDimension() || vector1.getColumnDimension() != 1 || vector2.getColumnDimension() != 1){
@@ -47,13 +48,19 @@ public class CosineCalculatorImpl<E> implements CosineCalculator{
     }
 
     @Override
-    public double getAngle(List interestingKeywords1, List interestingKeywords2) {
+    public double getInterestsAngle(List<InterestDTO> interests1, List<InterestDTO> interests2) {
 	Set<String> neededKeywords = new HashSet<String>();
-	neededKeywords.addAll(interestingKeywords1);
-	neededKeywords.addAll(interestingKeywords2);
 	
-	double[][] interestVectorOfPerson = getInterestVector(interestingKeywords1, neededKeywords);
-	double[][] interestVectorOfCandidate = getInterestVector(interestingKeywords2, neededKeywords);
+	for(InterestDTO interest : interests1){
+	    neededKeywords.add(interest.getName());
+	}
+	
+	for(InterestDTO interest : interests2){
+	    neededKeywords.add(interest.getName());
+	}
+	
+	double[][] interestVectorOfPerson = getInterestVector(interests1, neededKeywords);
+	double[][] interestVectorOfCandidate = getInterestVector(interests2, neededKeywords);
 	
 	Matrix vectorOfPerson = new Matrix(interestVectorOfPerson);
 	Matrix vectorOfCandidate = new Matrix(interestVectorOfCandidate);
@@ -65,18 +72,38 @@ public class CosineCalculatorImpl<E> implements CosineCalculator{
 	return angle;
     }
 
-    private double[][] getInterestVector(List<String> interestingKeywords, Set<String> neededKeywords) {
+    private double[][] getInterestVector(List<InterestDTO> interests, Set<String> neededKeywords) {
 	double[][] vector = new double[neededKeywords.size()][1];
 	
 	int i = 0;
-	for(String keyword : neededKeywords){
-	    double numberOfOccurences = 0.0;
-	    for(String interest : interestingKeywords){
-		if(interest.equals(keyword)){
-		    numberOfOccurences += 1;
+	for (Iterator<String> it = neededKeywords.iterator(); it.hasNext();) {
+	    String keyWord = it.next();
+	    double vectorEntryForInterest = 0.0;
+	    for(InterestDTO interest  : interests){
+		if(interest.getName().equals(keyWord)){
+		    vectorEntryForInterest += interest.getWeighting();
 		}
 	    }
-	    vector[i][0] = numberOfOccurences;
+	    vector[i][0] = vectorEntryForInterest;
+	    i++;
+	}
+	
+	return vector;
+    }
+    
+    private double[][] getKeywordVector(List<String> interests, Set<String> neededKeywords) {
+	double[][] vector = new double[neededKeywords.size()][1];
+	
+	int i = 0;
+	for (Iterator<String> it = neededKeywords.iterator(); it.hasNext();) {
+	    String keyWord = it.next();
+	    double vectorEntryForInterest = 0.0;
+	    for(String interest  : interests){
+		if(interest.equals(keyWord)){
+		    vectorEntryForInterest += 1;
+		}
+	    }
+	    vector[i][0] = vectorEntryForInterest;
 	    i++;
 	}
 	
@@ -84,41 +111,25 @@ public class CosineCalculatorImpl<E> implements CosineCalculator{
     }
 
     @Override
-    public List<E> getXMostSimilarObjects(Map angleMap, int numberOfObjectsToReturn) {
-	List<E> bestObjects = new ArrayList<E>();
-	for (Iterator<E> it = angleMap.keySet().iterator(); it.hasNext();) {
-	    E candidate = it.next();
-	    if(bestObjects.size() <= numberOfObjectsToReturn){
-		bestObjects.add(candidate);
-	    }else{
-		E weakestObjectInList = getWeakestPersonInList(bestObjects, angleMap);
-		Double candidateAngle = (Double) angleMap.get(candidate);
-		Double weakestObjectInListAngle = (Double) angleMap.get(weakestObjectInList);
-		if(candidateAngle < weakestObjectInListAngle){
-		    bestObjects.remove(weakestObjectInList);
-		    bestObjects.add(candidate);
-		}
-	    }
-	}
+    public double getKeywordsAngle(List<String> keywords1, List<String> keywords2) {
+	Set<String> neededKeywords = new HashSet<String>();
 	
-	return bestObjects;
+	neededKeywords.addAll(keywords1);
+	neededKeywords.addAll(keywords2);
+	
+	double[][] interestVectorOfPerson = getKeywordVector(keywords1, neededKeywords);
+	double[][] interestVectorOfCandidate = getKeywordVector(keywords2, neededKeywords);
+	
+	Matrix vectorOfPerson = new Matrix(interestVectorOfPerson);
+	Matrix vectorOfCandidate = new Matrix(interestVectorOfCandidate);
+	
+	double cosine = getCosine(vectorOfPerson, vectorOfCandidate);
+	
+	Double angle = Math.acos(cosine);
+	
+	return angle;
     }
+
     
-    private E getWeakestPersonInList(List objects, Map angleMap){
-	if(objects.isEmpty()){
-	    return null;
-	}
-	E weakestObject = (E) objects.get(0);
-	
-	for (Iterator<E> it = objects.iterator(); it.hasNext();) {
-	    E object = it.next();
-	    if((Double) angleMap.get(object) > (Double) angleMap.get(weakestObject)){
-		weakestObject = object;
-	    }
-	}
-	
-	return weakestObject;
-	
-    }
     
 }

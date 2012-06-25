@@ -8,6 +8,7 @@ import com.rwth.recommender.interestbased.model.assembler.InterestAssembler;
 import com.rwth.recommender.interestbased.model.database.Interest;
 import com.rwth.recommender.interestbased.model.database.dao.InterestDAO;
 import com.rwth.recommender.interestbased.model.dto.InterestDTO;
+import com.rwth.recommender.interestbased.model.dto.PersonDTO;
 import com.rwth.recommender.interestbased.model.service.InterestService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,13 @@ public class InterestServiceImpl implements InterestService{
 	    Interest interest = interestAssembler.assemble(interestDTO);
 	    interestDAO.persist(interest); 
 	}
+    }
+
+    @Override
+    @Transactional
+    public List<InterestDTO> getInterests(PersonDTO person) {
+	List<Interest> interests = interestDAO.getInterests(person.getId());
+	return interestAssembler.assembleDTOList(interests);
     }
     
 }

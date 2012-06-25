@@ -4,17 +4,18 @@
  */
 package com.rwth.recommender.interestbased.recommendation.service.component.helper;
 
+import com.rwth.recommender.interestbased.model.dto.InterestDTO;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
  * @author Marco
  */
-public interface CosineCalculator<E> {
+public interface CosineCalculator {
       
-    public double getAngle(List<String> interestingKeywords1, List<String> interestingKeywords2);
+    public double getInterestsAngle(List<InterestDTO> interests1, List<InterestDTO> interests2);
     
-    public List<E> getXMostSimilarObjects(Map<E, Double> angleMap, int numberOfObjectsToReturn);
+    public double getKeywordsAngle(List<String> keywords1, List<String> keywords2);
+    
     	    
 }

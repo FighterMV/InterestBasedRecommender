@@ -5,6 +5,7 @@
 package com.rwth.recommender.interestbased.model.service;
 
 import com.rwth.recommender.interestbased.model.dto.InterestDTO;
+import com.rwth.recommender.interestbased.model.dto.PersonDTO;
 import java.util.List;
 
 /**
@@ -16,5 +17,7 @@ public interface InterestService {
     public void storeInDatabase(InterestDTO interestDTO);
     
     public void storeInDatabase(List<InterestDTO>interestDTOs);
+    
+    public List<InterestDTO> getInterests(PersonDTO person);
     
 }
