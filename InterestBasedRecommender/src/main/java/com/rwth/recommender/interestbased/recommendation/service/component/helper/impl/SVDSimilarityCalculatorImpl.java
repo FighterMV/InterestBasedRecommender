@@ -27,9 +27,11 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
 	Matrix A = getA(person.getPersonInterestKeywords(), personDTOs);
 	SingularValueDecomposition svd = A.svd();
 	
-	Matrix U = getFirstXColums(svd.getU(), Constants.DIMENSIONS_TO_CHECK_SIMILARITY);
-	Matrix V = getFirstXColums(svd.getV(), Constants.DIMENSIONS_TO_CHECK_SIMILARITY);
-	Matrix S = getFirstColumsAndRows(svd.getS(), Constants.DIMENSIONS_TO_CHECK_SIMILARITY, Constants.DIMENSIONS_TO_CHECK_SIMILARITY);
+	int dimensionsToCheckSimilarity = getDimensionToCheckSimilarity(svd);
+	
+	Matrix U = getFirstXColums(svd.getU(), dimensionsToCheckSimilarity);
+	Matrix V = getFirstXColums(svd.getV(), dimensionsToCheckSimilarity);
+	Matrix S = getFirstColumsAndRows(svd.getS(), dimensionsToCheckSimilarity, dimensionsToCheckSimilarity);
 	
 	Matrix queryMatrix = (queryDocument.transpose().times(U)).times(S.inverse());
 	
@@ -43,6 +45,28 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
 	}
 	
 	return similarPersons;
+    }
+
+    private int getDimensionToCheckSimilarity(SingularValueDecomposition svd) {
+	int dimensionsToCheckSimilarity = Constants.MAX_DIMENSIONS_TO_CHECK_SIMILARITY;
+	dimensionsToCheckSimilarity = Math.min(dimensionsToCheckSimilarity, svd.getU().getColumnDimension());
+	dimensionsToCheckSimilarity = Math.min(dimensionsToCheckSimilarity, svd.getV().getColumnDimension());
+	dimensionsToCheckSimilarity = Math.min(dimensionsToCheckSimilarity, svd.getS().getColumnDimension());
+	dimensionsToCheckSimilarity = Math.min(dimensionsToCheckSimilarity, svd.getS().getRowDimension());
+	int firstOccurenceOfZeroInS = getFirstOccurenceOfZeroInS(svd);
+	dimensionsToCheckSimilarity = Math.min(dimensionsToCheckSimilarity, firstOccurenceOfZeroInS);
+	return dimensionsToCheckSimilarity;
+    }
+
+    private int getFirstOccurenceOfZeroInS(SingularValueDecomposition svd) {
+	int firstOccurenceOfZeroInS = 1;
+	double[] singularValues = svd.getSingularValues();
+	for(int i = 0; i < singularValues.length; i++){
+	    if(singularValues[i] < 0.01){
+		return i + 1;
+	    }
+	}
+	return firstOccurenceOfZeroInS;
     }
     
     
@@ -163,15 +187,36 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
 	    if(i < numberOfIndexesToReturn){
 		indexesToReturn[i] = i;
 	    }else{
-		for(int j = 0; j < numberOfIndexesToReturn; j++){
-		    if(similarities[i] > similarities[indexesToReturn[j]]){
-			indexesToReturn[j] = i;
+		int smallestNumberIndexInSimilarities = getSmallestContentIndex(indexesToReturn, similarities);
+		int indexToReplace = 0;
+		for(int j = 0; j < indexesToReturn.length; j++){
+		    if(indexesToReturn[j] == smallestNumberIndexInSimilarities){
+			indexToReplace = j;
 		    }
+		}
+		if(similarities[i] > similarities[smallestNumberIndexInSimilarities]){
+		    indexesToReturn[indexToReplace] = i;
 		}
 	    }
 	}
 	    
 	return indexesToReturn;
+    }
+    
+    
+    private int getSmallestContentIndex(int[] indexesToCheck, Double[] numbers){
+	double[] numbersToCheck = new double[indexesToCheck.length];
+	for(int i = 0; i < indexesToCheck.length; i++){
+	    numbersToCheck[i] = numbers[indexesToCheck[i]];
+	}
+	int smallestNumberIndex = 0;
+	for(int i = 0; i < numbersToCheck.length; i++){
+	    if(numbersToCheck[i] < numbersToCheck[smallestNumberIndex]){
+		smallestNumberIndex = i;
+	    }
+	}
+	
+	return indexesToCheck[smallestNumberIndex];
     }
 
 }
