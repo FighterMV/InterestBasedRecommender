@@ -31,7 +31,7 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
 	
 	Matrix U = getFirstXColums(svd.getU(), dimensionsToCheckSimilarity);
 	Matrix V = getFirstXColums(svd.getV(), dimensionsToCheckSimilarity);
-	Matrix S = getFirstColumsAndRows(svd.getS(), dimensionsToCheckSimilarity, dimensionsToCheckSimilarity);
+	Matrix S = getFirstColumsAndRows(svd.getSingularValues(), dimensionsToCheckSimilarity, dimensionsToCheckSimilarity);
 	
 	Matrix queryMatrix = (queryDocument.transpose().times(U)).times(S.inverse());
 	
@@ -51,8 +51,7 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
 	int dimensionsToCheckSimilarity = Constants.MAX_DIMENSIONS_TO_CHECK_SIMILARITY;
 	dimensionsToCheckSimilarity = Math.min(dimensionsToCheckSimilarity, svd.getU().getColumnDimension());
 	dimensionsToCheckSimilarity = Math.min(dimensionsToCheckSimilarity, svd.getV().getColumnDimension());
-	dimensionsToCheckSimilarity = Math.min(dimensionsToCheckSimilarity, svd.getS().getColumnDimension());
-	dimensionsToCheckSimilarity = Math.min(dimensionsToCheckSimilarity, svd.getS().getRowDimension());
+	dimensionsToCheckSimilarity = Math.min(dimensionsToCheckSimilarity, svd.getSingularValues().length);
 	int firstOccurenceOfZeroInS = getFirstOccurenceOfZeroInS(svd);
 	dimensionsToCheckSimilarity = Math.min(dimensionsToCheckSimilarity, firstOccurenceOfZeroInS);
 	return dimensionsToCheckSimilarity;
@@ -138,8 +137,19 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
 	return matrix.getMatrix(0, matrix.getRowDimension()-1, 0, numberOfColums-1);
     }
     
-    private Matrix getFirstColumsAndRows(Matrix matrix, int numberOfColums, int numberOfRows){
-	return matrix.getMatrix(0, numberOfColums-1, 0, numberOfRows-1);
+    private Matrix getFirstColumsAndRows(double[] singluarValues, int numberOfColums, int numberOfRows){
+	int dimension = Math.min(singluarValues.length, numberOfRows);
+	dimension = Math.min(dimension, numberOfColums);
+	double[][] matrix = new double[dimension][dimension];
+	for(int i = 0; i < dimension; i++){
+	    for(int j = 0; j < dimension; j++){
+		matrix[i][j] = 0;
+	    }
+	}
+	for(int i = 0; i < dimension; i++){
+	    matrix[i][i] = singluarValues[i];
+	}
+	return new Matrix(matrix);
     }
     
     private Double[] getSimilarities(Matrix queryMatrix, Matrix documentsMatrix){
