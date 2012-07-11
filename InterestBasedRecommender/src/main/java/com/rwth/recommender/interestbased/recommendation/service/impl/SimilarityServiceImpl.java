@@ -10,13 +10,13 @@ import com.rwth.recommender.interestbased.model.dto.ItemDTO;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
 import com.rwth.recommender.interestbased.model.service.PersonService;
 import com.rwth.recommender.interestbased.recommendation.service.SimilarityService;
+import com.rwth.recommender.interestbased.recommendation.service.component.FreebaseService;
 import com.rwth.recommender.interestbased.recommendation.service.component.SimilarItemFinder;
 import com.rwth.recommender.interestbased.recommendation.service.component.SimilarPersonFinder;
+import com.rwth.recommender.interestbased.recommendation.service.component.WordnetService;
 import edu.smu.tspell.wordnet.Synset;
 import edu.smu.tspell.wordnet.WordNetDatabase;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,20 +40,21 @@ public class SimilarityServiceImpl implements SimilarityService{
     @Autowired
     SimilarItemFinder similarItemFinder;
     
+    @Autowired
+    WordnetService wordnetService;
+    
+    @Autowired
+    FreebaseService freebaseService;
+    
     @Override
     public List<String> findSimilarKeywords(String keyword) {
 	
-	List<String> keywords = new ArrayList<String>();	
+	Set<String> similarKeywords = new HashSet<String>();
+	similarKeywords.addAll(wordnetService.findSimilarKeywords(keyword));
+	similarKeywords.addAll(freebaseService.getSimilarKeywords(keyword));
 	
-	System.setProperty("wordnet.database.dir", Constants.WORDNET_FOLDER);
-	WordNetDatabase database = WordNetDatabase.getFileInstance();
+	return new ArrayList<String>(similarKeywords);
 	
-	Synset[] synsets = database.getSynsets(keyword);
-	for(Synset synset : synsets){
-	    keywords.addAll(Arrays.asList(synset.getWordForms()));
-	}
-	
-	return keywords;
     }
 
     @Override
