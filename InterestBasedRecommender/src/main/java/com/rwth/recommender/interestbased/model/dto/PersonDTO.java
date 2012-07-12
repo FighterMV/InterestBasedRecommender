@@ -20,6 +20,7 @@ public class PersonDTO {
     private Long id;
     private String name;
     private List<String> personInterestKeywords;
+    private List<String> personMainTopicKeywords;
     private List<ItemDTO> providedItems;
 
     public String getName() {
@@ -53,5 +54,14 @@ public class PersonDTO {
     public void setProvidedItems(List<ItemDTO> providedItems) {
 	this.providedItems = providedItems;
     }
+
+    public List<String> getPersonMainTopicKeywords() {
+	return personMainTopicKeywords;
+    }
+
+    public void setPersonMainTopicKeywords(List<String> personMainTopicKeywords) {
+	this.personMainTopicKeywords = personMainTopicKeywords;
+    }
+    
         
 }

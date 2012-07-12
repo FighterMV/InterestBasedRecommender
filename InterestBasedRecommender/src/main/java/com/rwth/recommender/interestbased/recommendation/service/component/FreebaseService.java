@@ -11,7 +11,9 @@ import java.util.List;
  * @author Marco
  */
 public interface FreebaseService {
-    
+        
     public List<String> getSimilarKeywords(String keyword);
+    
+    public List<String> getMainTopics(List<String> keywords);
     
 }

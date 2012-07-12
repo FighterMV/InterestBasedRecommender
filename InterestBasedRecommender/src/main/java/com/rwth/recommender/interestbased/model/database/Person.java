@@ -23,6 +23,9 @@ public class Person {
     @ElementCollection
     private List<String> personInterestKeywords;
     
+    @ElementCollection
+    private List<String> personMainTopicKeywords;
+    
     @OneToMany
     private List<Item> providedItems;
     
@@ -59,6 +62,14 @@ public class Person {
 
     public void setProvidedItems(List<Item> providedItems) {
 	this.providedItems = providedItems;
+    }
+
+    public List<String> getPersonMainTopicKeywords() {
+	return personMainTopicKeywords;
+    }
+
+    public void setPersonMainTopicKeywords(List<String> personMainTopicKeywords) {
+	this.personMainTopicKeywords = personMainTopicKeywords;
     }
 
     

@@ -11,7 +11,9 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sf.json.JSONArray;
@@ -28,26 +30,11 @@ public class FreebaseServiceImpl implements FreebaseService{
 
     @Override
     public List<String> getSimilarKeywords(String keyword) {
-	URL url = null;
-	String output = "";
-	try {
-	    String urlString = "https://www.googleapis.com/freebase/v1/search?query=" + keyword;
-	    url = new URL(urlString);
-	    BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-	    
-	    String currentLine = "";
-	    while((currentLine = reader.readLine()) != null){
-		output += currentLine;
-	    }
-	} catch (MalformedURLException ex) {
-	    Logger.getLogger(FreebaseServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-	}catch (IOException ex) {
-	    Logger.getLogger(FreebaseServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-	}
+	
+	JSONObject json = getJSONObject(keyword);
 	
 	List<String> similarKeywords = new ArrayList<String>();
 	
-	JSONObject json = (JSONObject) JSONSerializer.toJSON(output);
 	JSONArray resultArray = json.getJSONArray("result");
 	for(int i = 0; i < resultArray.size(); i++){
 	    JSONObject currentResult = (JSONObject)resultArray.get(i);
@@ -67,6 +54,61 @@ public class FreebaseServiceImpl implements FreebaseService{
 	    }
 	}
 	return false;
+    }
+
+    @Override
+    public List<String> getMainTopics(List<String> keywords) {
+	Set<String> mainTopics = new HashSet<String>();
+	for(String keyword : keywords){
+	    mainTopics.addAll(getMainTopics(keyword));
+	}
+	
+	return new ArrayList<String>(mainTopics);
+    }
+
+    
+    private Set<String> getMainTopics(String keyword) {
+	
+	String requestKeyword = keyword.replaceAll(" ", "_");
+	
+	JSONObject json = getJSONObject(requestKeyword);
+	
+	Set<String> mainTopics = new HashSet<String>();	
+	
+	if(json.containsKey("result")){
+	    JSONArray resultArray = json.getJSONArray("result");
+	    for(int i = 0; i < resultArray.size(); i++){
+		JSONObject currentResult = (JSONObject)resultArray.get(i);
+		if(currentResult.containsKey("notable")){
+		    JSONObject notable = currentResult.getJSONObject("notable");
+		    if(notable.containsKey("name")){
+			mainTopics.add(notable.getString("name"));
+		    }
+		}
+	    }
+	}
+	return mainTopics;
+    }
+
+    private JSONObject getJSONObject(String keyword) {
+	URL url = null;
+	String output = "";
+	try {
+	    String urlString = "https://www.googleapis.com/freebase/v1/search?query=" + keyword.replaceAll(" ", "_");
+	    url = new URL(urlString);
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+	    
+	    String currentLine = "";
+	    while((currentLine = reader.readLine()) != null){
+		output += currentLine;
+	    }
+	} catch (MalformedURLException ex) {
+	    Logger.getLogger(FreebaseServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+	}catch (IOException ex) {
+	    Logger.getLogger(FreebaseServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+	}
+	JSONObject json = (JSONObject) JSONSerializer.toJSON(output);
+	return json;
     }
     
 }

@@ -216,8 +216,6 @@
 	    <artifactId>json-lib</artifactId>
 	    <version>2.4</version>
 	</dependency>
-
-	
 	
     </dependencies>
 

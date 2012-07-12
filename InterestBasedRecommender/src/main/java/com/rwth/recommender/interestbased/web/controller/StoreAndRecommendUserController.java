@@ -11,6 +11,7 @@ import com.rwth.recommender.interestbased.model.dto.PersonDTO;
 import com.rwth.recommender.interestbased.model.dto.RecommendationDTO;
 import com.rwth.recommender.interestbased.recommendation.service.RecommendationService;
 import com.rwth.recommender.interestbased.recommendation.service.SimilarityService;
+import com.rwth.recommender.interestbased.recommendation.service.component.FreebaseService;
 import com.rwth.recommender.interestbased.web.model.StoreAndRecommendUserModel;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +35,9 @@ public class StoreAndRecommendUserController {
     
     @Autowired
     SimilarityService similarityService;
+    
+    @Autowired
+    FreebaseService freebaseService;
     
     
     @RequestMapping(value = "/store-and-recommend-user", method = RequestMethod.POST)
@@ -84,6 +88,9 @@ public class StoreAndRecommendUserController {
 		
 	List<String> interestKeywords = similarityService.getInterestKeywords(weightedInterests);
 	personDTO.setPersonInterestKeywords(interestKeywords);
+	
+	List<String> interestMainTopicKeywords = freebaseService.getMainTopics(interestKeywords);
+	personDTO.setPersonMainTopicKeywords(interestMainTopicKeywords);
 	
 	String itemNames = model.getItemNames().replace(" ", "");
 	List<String> itemNameList = Arrays.asList(itemNames.split(Constants.INTEREST_SEPARATOR));

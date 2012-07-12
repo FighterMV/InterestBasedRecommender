@@ -5,7 +5,9 @@
 package com.rwth.recommender.interestbased.recommendation.service.component.impl;
 
 import com.rwth.recommender.interestbased.recommendation.service.component.FreebaseService;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,6 +27,10 @@ public class SimilarityServiceImplTest {
     @Test
     public void testFreebaseService(){
 	List<String> test = freebaseService.getSimilarKeywords("film");
+	List<String> keywords = new ArrayList<String>();
+	keywords.add("men in black");
+	List<String> mainTopics = freebaseService.getMainTopics(keywords);
+	String test2 = "";
     }
     
 }

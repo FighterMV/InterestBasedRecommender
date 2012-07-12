@@ -25,11 +25,19 @@ public class PersonAssembler {
 	PersonDTO personDTO = new PersonDTO();
 	personDTO.setId(person.getId());
 	personDTO.setName(person.getName());
+	
 	List<String> personInterestKeywords = new ArrayList<String>();
 	for(String interestKeyword : person.getPersonInterestKeywords()){
 	    personInterestKeywords.add(interestKeyword);
 	}
 	personDTO.setPersonInterestKeywords(personInterestKeywords);
+	
+	List<String> personMainTopicKeywords = new ArrayList<String>();
+	for(String mainTopicKeyword : person.getPersonMainTopicKeywords()){
+	    personMainTopicKeywords.add(mainTopicKeyword);
+	}
+	personDTO.setPersonMainTopicKeywords(personMainTopicKeywords);
+	
 	personDTO.setProvidedItems(itemAssembler.assembleDTOList(person.getProvidedItems()));
 	return personDTO;
     }
@@ -48,6 +56,7 @@ public class PersonAssembler {
 	person.setId(personDTO.getId());
 	person.setName(personDTO.getName());
 	person.setPersonInterestKeywords(personDTO.getPersonInterestKeywords());
+	person.setPersonMainTopicKeywords(personDTO.getPersonMainTopicKeywords());
 	person.setProvidedItems(itemAssembler.assembleList(personDTO.getProvidedItems()));
 	return person;
     }
