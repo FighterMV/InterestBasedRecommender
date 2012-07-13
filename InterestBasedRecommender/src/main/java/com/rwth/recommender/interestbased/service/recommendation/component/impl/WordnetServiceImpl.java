@@ -10,7 +10,9 @@ import edu.smu.tspell.wordnet.Synset;
 import edu.smu.tspell.wordnet.WordNetDatabase;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.springframework.stereotype.Component;
 
 /**
@@ -22,7 +24,7 @@ public class WordnetServiceImpl implements WordnetService{
 
     @Override
     public List<String> findSimilarKeywords(String keyword) {
-	List<String> keywords = new ArrayList<String>();	
+	Set<String> keywords = new HashSet<String>();	
 	
 	System.setProperty("wordnet.database.dir", Constants.WORDNET_FOLDER);
 	WordNetDatabase database = WordNetDatabase.getFileInstance();
@@ -32,26 +34,7 @@ public class WordnetServiceImpl implements WordnetService{
 	    keywords.addAll(Arrays.asList(synset.getWordForms()));
 	}
 	
-	return removeDoubleEntries(keywords);
-    }
-    
-    private List<String> removeDoubleEntries(List<String> keywords){
-	List<String> updatedList = new ArrayList<String>();
-	for(String keyword : keywords){
-	    if(!isInList(updatedList, keyword)){
-		updatedList.add(keyword);
-	    }
-	}
-	return updatedList;
-    }
-    
-    private Boolean isInList(List<String> keywords, String newEntry){
-	for(String keyword : keywords){
-	    if(keyword.equals(newEntry)){
-		return true;
-	    }
-	}
-	return false;
+	return new ArrayList<String>(keywords);
     }
     
 }

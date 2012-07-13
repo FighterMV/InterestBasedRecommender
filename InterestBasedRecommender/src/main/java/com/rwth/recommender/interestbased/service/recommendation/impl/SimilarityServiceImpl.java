@@ -14,9 +14,10 @@ import com.rwth.recommender.interestbased.service.recommendation.component.Freeb
 import com.rwth.recommender.interestbased.service.recommendation.component.SimilarItemFinder;
 import com.rwth.recommender.interestbased.service.recommendation.component.SimilarPersonFinder;
 import com.rwth.recommender.interestbased.service.recommendation.component.WordnetService;
-import edu.smu.tspell.wordnet.Synset;
-import edu.smu.tspell.wordnet.WordNetDatabase;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +66,6 @@ public class SimilarityServiceImpl implements SimilarityService{
     @Override
     public List<PersonDTO> findSimilarPersons(PersonDTO user) {
 	LOGGER.trace("Starting to find similar persons");
-	LOGGER.trace("Starting to get existing users");
 	List<PersonDTO> existingUsers = personService.getList();
 	List<PersonDTO> similarUsers = similarPersonFinder.getXSimilarPersons(user, existingUsers, Constants.NUMBER_OF_BEST_OBJECTS_TO_RETURN);
 	return similarUsers;
@@ -86,6 +86,7 @@ public class SimilarityServiceImpl implements SimilarityService{
 
     @Override
     public List<ItemDTO> findSimilarItems(List<ItemDTO> items, PersonDTO person) {
+	LOGGER.trace("Starting to find similar items");
 	List<ItemDTO> similarItems = similarItemFinder.getXSimilarItems(items, person, Constants.NUMBER_OF_BEST_OBJECTS_TO_RETURN);
 	return similarItems;
     }
