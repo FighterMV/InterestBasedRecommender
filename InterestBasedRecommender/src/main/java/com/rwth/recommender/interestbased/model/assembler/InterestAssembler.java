@@ -8,6 +8,8 @@ import com.rwth.recommender.interestbased.model.database.Interest;
 import com.rwth.recommender.interestbased.model.dto.InterestDTO;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +19,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class InterestAssembler {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(InterestAssembler.class);
     
     @Autowired
     PersonAssembler personAssembler;
