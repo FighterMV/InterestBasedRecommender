@@ -31,7 +31,13 @@ public class SimilarPersonFinderImpl implements SimilarPersonFinder{
     
     @Override
     public List<PersonDTO> getXSimilarPersons(PersonDTO person, List<PersonDTO> persons, int numberOfPersonsToReturn) {
-	return useCosineSimilarPersonFinder(person, persons, numberOfPersonsToReturn);
+	List<PersonDTO> similarPersonsByGroup = svdSimilarityCalculator.getXSimilarPersonsByGroup(person, persons, numberOfPersonsToReturn*5);
+	return useCosineSimilarPersonFinder(person, similarPersonsByGroup, numberOfPersonsToReturn);
+    }
+    
+    @Override
+    public List<PersonDTO> getXSimilarPersonsByGroup(PersonDTO person, List<PersonDTO> persons, int numberOfPersonsToReturn) {
+	return svdSimilarityCalculator.getXSimilarPersonsByGroup(person, persons, numberOfPersonsToReturn);
     }
     
     private List<PersonDTO> useSimpleSimilarPersonFinder(PersonDTO person, List<PersonDTO> persons, int numberOfPersonsToReturn){

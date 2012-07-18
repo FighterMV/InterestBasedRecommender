@@ -13,6 +13,8 @@ import java.util.List;
  */
 public interface SVDSimilarityCalculator {
     
+    public List<PersonDTO> getXSimilarPersonsByGroup(PersonDTO person, List<PersonDTO> personDTOs, int numberOfUsersToReturn);
+    
     public List<PersonDTO> getXSimilarPersons(PersonDTO person, List<PersonDTO> personDTOs, int numberOfUsersToReturn);
     
 }

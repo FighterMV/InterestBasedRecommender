@@ -13,6 +13,16 @@ import java.util.List;
  */
 public interface SimilarPersonFinder {
     
+    
+    /**
+     * Receives a person A and a list of persons and calculated and calculates a List of the x most similar persons to A by their main topic group
+     * @param person
+     * @param persons
+     * @param numberOfPersonsToReturn
+     * @return 
+     */
+    public List<PersonDTO> getXSimilarPersonsByGroup(PersonDTO person, List<PersonDTO> persons, int numberOfPersonsToReturn);
+    
     /**
      * Receives a person A and a list of persons and calculated and calculates a List of the x most similar persons to A
      * @param person

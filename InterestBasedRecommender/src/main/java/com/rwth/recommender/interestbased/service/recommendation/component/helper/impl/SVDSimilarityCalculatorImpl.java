@@ -21,10 +21,21 @@ import org.springframework.stereotype.Component;
 public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
 
     @Override
+    public List<PersonDTO> getXSimilarPersonsByGroup(PersonDTO person, List<PersonDTO> personDTOs, int numberOfUsersToReturn) {
+	return getXSimilarPersonsCalc(person, personDTOs, numberOfUsersToReturn, true);
+    }
+    
+    @Override
     public List<PersonDTO> getXSimilarPersons(PersonDTO person, List<PersonDTO> personDTOs, int numberOfUsersToReturn) {
+	return getXSimilarPersonsCalc(person, personDTOs, numberOfUsersToReturn, false);
+    }
+    
+    public List<PersonDTO> getXSimilarPersonsCalc(PersonDTO person, List<PersonDTO> personDTOs, int numberOfUsersToReturn, Boolean byGroup) {
 	
-	Matrix queryDocument = getMatrix(person.getPersonInterestKeywords(), personDTOs);
-	Matrix A = getA(person.getPersonInterestKeywords(), personDTOs);
+	Matrix queryDocument = getMatrix(person, personDTOs, byGroup);
+	
+	Matrix A = getA(person, personDTOs, byGroup);
+	
 	SingularValueDecomposition svd = A.svd();
 	
 	int dimensionsToCheckSimilarity = getDimensionToCheckSimilarity(svd);
@@ -69,16 +80,16 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
     }
     
     
-    private Matrix getMatrix(List<String> keywords, List<PersonDTO> persons){
+    private Matrix getMatrix(PersonDTO personDTO, List<PersonDTO> persons, Boolean byGroup){
 		
-	List<String> neededTerms = getNeededTerms(keywords, persons);
+	List<String> neededTerms = getNeededTerms(personDTO, persons, byGroup);
 	int numberOfNeededRows = neededTerms.size();
 	
 	double[][] matrixArray = new double[numberOfNeededRows][1];
 	
 	int i = 0;
 	for(String term : neededTerms){
-	    int numberOfOccurencesInList = getNumberOfOccurences(term, keywords);
+	    int numberOfOccurencesInList = getNumberOfOccurences(term, personDTO, byGroup);
 	    matrixArray[i][0] = numberOfOccurencesInList;
 	    i++;
 	}
@@ -86,12 +97,22 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
 	return new Matrix(matrixArray);
     }
     
-    private List<String> getNeededTerms(List<String> keywords, List<PersonDTO> persons){
+    private List<String> getNeededTerms(PersonDTO personDTO, List<PersonDTO> persons, Boolean byGroup){
 	List<String> neededTermList = new ArrayList<String>();
 	List<String> allKeywords = new ArrayList<String>();
+	List<String> keywords;
+	if(byGroup){
+	    keywords = personDTO.getPersonMainTopicKeywords();
+	}else{
+	    keywords = personDTO.getPersonInterestKeywords();
+	}
 	allKeywords.addAll(keywords);
 	for(PersonDTO person : persons){
-	    allKeywords.addAll(person.getPersonInterestKeywords());
+	    if(byGroup){
+		allKeywords.addAll(person.getPersonMainTopicKeywords());
+	    }else{
+		allKeywords.addAll(person.getPersonInterestKeywords());
+	    }
 	}
 	for(String keyword : allKeywords){
 	    if(!neededTermList.contains(keyword)){
@@ -101,7 +122,13 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
 	return neededTermList;
     }
     
-    private int getNumberOfOccurences(String term, List<String> keywords){
+    private int getNumberOfOccurences(String term, PersonDTO personDTO, Boolean byGroup){
+	List<String> keywords;
+	if(byGroup){
+	    keywords = personDTO.getPersonMainTopicKeywords();
+	}else{
+	    keywords = personDTO.getPersonInterestKeywords();
+	}
 	int numberOfOccurences = 0;
 	for(String keyword : keywords){
 	    if(term.equals(keyword)){
@@ -111,9 +138,9 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
 	return numberOfOccurences;
     }
     
-    private Matrix getA(List<String> keyWords, List<PersonDTO> persons){
-	
-	List<String> keyWordsToSearchFor = getNeededTerms(keyWords, persons);
+    private Matrix getA(PersonDTO personDTO, List<PersonDTO> persons, Boolean byGroup){
+		
+	List<String> keyWordsToSearchFor = getNeededTerms(personDTO, persons, byGroup);
 	int numberOfKeywords = keyWordsToSearchFor.size();
 	
 	double[][] A = new double[numberOfKeywords][persons.size()];
@@ -122,7 +149,7 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
 	for(PersonDTO person : persons){
 	    int j = 0;
 	    for(String keyWord : keyWordsToSearchFor){
-		int numberOfOccurences = getNumberOfOccurences(keyWord, person.getPersonInterestKeywords());
+		int numberOfOccurences = getNumberOfOccurences(keyWord, personDTO, byGroup);
 		A[j][i] = numberOfOccurences;
 		j++;
 	    }
