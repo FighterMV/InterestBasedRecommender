@@ -58,7 +58,7 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
     }
 
     private int getFirstOccurenceOfZeroInS(SingularValueDecomposition svd) {
-	int firstOccurenceOfZeroInS = 1;
+	int firstOccurenceOfZeroInS = svd.getSingularValues().length;
 	double[] singularValues = svd.getSingularValues();
 	for(int i = 0; i < singularValues.length; i++){
 	    if(singularValues[i] < 0.01){

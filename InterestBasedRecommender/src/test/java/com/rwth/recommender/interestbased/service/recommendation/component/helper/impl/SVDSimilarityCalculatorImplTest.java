@@ -77,7 +77,7 @@ public class SVDSimilarityCalculatorImplTest {
 	
 	List<PersonDTO> similarPersons = sVDSimilarityCalculator.getXSimilarPersons(person4, persons, 1);
 	
-	Assert.assertEquals(person1, similarPersons.get(0));
+	Assert.assertEquals(person2, similarPersons.get(0));
     }
         
 }
