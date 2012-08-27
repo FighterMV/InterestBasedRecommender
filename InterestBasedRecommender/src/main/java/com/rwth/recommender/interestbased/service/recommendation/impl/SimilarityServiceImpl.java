@@ -48,26 +48,13 @@ public class SimilarityServiceImpl implements SimilarityService{
 	
 	LOGGER.debug("Request to find similar keywords for: " + personInterest.getInterest().getName() + " arrived.");
 	
-	Set<String> similarKeywords = new HashSet<String>();
-	similarKeywords.addAll(wordnetService.findSimilarKeywords(personInterest.getInterest().getName()));
-	LOGGER.debug("Added similar keywords with wordnet");
-	similarKeywords.addAll(freebaseService.getSimilarKeywords(personInterest.getInterest().getName()));
-	LOGGER.debug("Added similar keywords with freebase");
+	List<PersonInterestDTO> similarInterests = new ArrayList<PersonInterestDTO>();
+	similarInterests.addAll(freebaseService.getSimilarInterests(personInterest));
+	LOGGER.debug("Added similar interests with freebase");
 	
-	LOGGER.debug("Returning " + similarKeywords.size() + " similar keywords");
+	LOGGER.debug("Returning " + similarInterests.size() + " similar keywords");
 	
-	List<PersonInterestDTO> personInterestDTOs = new ArrayList<PersonInterestDTO>();
-	for(String similarKeyword : similarKeywords){
-	    PersonInterestDTO personInterestDTO = new PersonInterestDTO();
-	    personInterestDTO.setPerson(personInterest.getPerson());
-	    InterestDTO interestDTO = new InterestDTO();
-	    interestDTO.setName(similarKeyword);
-	    personInterestDTO.setInterest(interestDTO);
-	    //!TODO CALCULATE AND SET WEIGHTING
-	    personInterestDTOs.add(personInterestDTO);
-	}
-	
-	return personInterestDTOs;
+	return similarInterests;
 	
     }
 

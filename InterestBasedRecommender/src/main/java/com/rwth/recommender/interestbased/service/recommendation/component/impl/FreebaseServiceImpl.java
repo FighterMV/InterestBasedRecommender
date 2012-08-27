@@ -5,6 +5,8 @@
 package com.rwth.recommender.interestbased.service.recommendation.component.impl;
 
 import com.rwth.recommender.interestbased.model.Constants;
+import com.rwth.recommender.interestbased.model.dto.InterestDTO;
+import com.rwth.recommender.interestbased.model.dto.PersonInterestDTO;
 import com.rwth.recommender.interestbased.service.recommendation.component.FreebaseService;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,27 +34,38 @@ public class FreebaseServiceImpl implements FreebaseService{
     private static String API_KEY = "AIzaSyB4M19NvSIhCgjb3C5y9SLZWoI0ib-sgO4";
     
     @Override
-    public List<String> getSimilarKeywords(String keyword) {
+    public List<PersonInterestDTO> getSimilarInterests(PersonInterestDTO personInterestDTO) {
 	
-	JSONObject json = getJSONObject(keyword);
+	JSONObject json = getJSONObject(personInterestDTO.getInterest().getName());
 	
-	List<String> similarKeywords = new ArrayList<String>();
+	List<PersonInterestDTO> similarPersonInterestDTOs = new ArrayList<PersonInterestDTO>();
+	similarPersonInterestDTOs.add(personInterestDTO);
 	
 	JSONArray resultArray = json.getJSONArray("result");
 	for(int i = 0; i < resultArray.size(); i++){
 	    JSONObject currentResult = (JSONObject)resultArray.get(i);
 	    String name = currentResult.getString("name");
-	    if(!contains(similarKeywords, name)){
-		similarKeywords.add(name);
+	    if(!contains(similarPersonInterestDTOs, name)){
+		PersonInterestDTO newPersonInterestDTO = new PersonInterestDTO();
+		newPersonInterestDTO.setPerson(personInterestDTO.getPerson());
+		InterestDTO interest = new InterestDTO();
+		interest.setName(name);
+		newPersonInterestDTO.setInterest(interest);
+		double score = currentResult.getDouble("score");
+		if(score > Constants.MIN_SCORE_FROM_FREEBASE_TO_BE_CONSIDERED){
+		    double newWeighting = (new Double(score) / new Double(Constants.FREEBASE_MAX_SCORE)) * personInterestDTO.getWeighting();
+		    newPersonInterestDTO.setWeighting((int) newWeighting);
+		    similarPersonInterestDTOs.add(newPersonInterestDTO);
+		}
 	    }
 	}
 	
-	return similarKeywords;
+	return similarPersonInterestDTOs;
     }
     
-    private Boolean contains(List<String> keywords, String keyword){
-	for(String currentKeyword : keywords){
-	    if(currentKeyword.equals(keyword)){
+    private Boolean contains(List<PersonInterestDTO> personInterestDTOs, String keyword){
+	for(PersonInterestDTO personInterestDTO : personInterestDTOs){
+	    if(personInterestDTO.getInterest().getName().equals(keyword)){
 		return true;
 	    }
 	}
@@ -83,7 +96,7 @@ public class FreebaseServiceImpl implements FreebaseService{
 	    for(int i = 0; i < resultArray.size(); i++){
 		JSONObject currentResult = (JSONObject)resultArray.get(i);
 		if(currentResult.containsKey("score")){
-		    if(currentResult.getDouble("score") > Constants.MIN_SCORE_TO_BE_MAIN_TOPIC){
+		    if(currentResult.getDouble("score") > Constants.MIN_SCORE_FROM_FREEBASE_TO_BE_CONSIDERED){
 			if(currentResult.containsKey("notable")){
 			    JSONObject notable = currentResult.getJSONObject("notable");
 			    if(notable.containsKey("name")){

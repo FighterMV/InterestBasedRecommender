@@ -4,6 +4,7 @@
  */
 package com.rwth.recommender.interestbased.service.recommendation.impl;
 
+import com.rwth.recommender.interestbased.model.Constants;
 import com.rwth.recommender.interestbased.model.assembler.PersonAssembler;
 import com.rwth.recommender.interestbased.model.dto.*;
 import com.rwth.recommender.interestbased.model.service.InterestService;
@@ -12,6 +13,7 @@ import com.rwth.recommender.interestbased.model.service.PersonService;
 import com.rwth.recommender.interestbased.service.recommendation.RecommendationService;
 import com.rwth.recommender.interestbased.service.recommendation.SimilarityService;
 import com.rwth.recommender.interestbased.service.recommendation.component.FreebaseService;
+import com.sun.corba.se.impl.orbutil.closure.Constant;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -57,9 +59,9 @@ public class RecommendationServiceImpl implements RecommendationService{
 	personDTO.setPersonInterests(personInterests);
 	addSimilarInterestsAndMainTopics(personDTO);
 	
-	personInterestService.storeInDatabase(personInterests);
+	personInterestService.storeInDatabase(personDTO.getPersonInterests());
 	
-	personService.updatePersonInDatabase(personDTO, personInterests);
+	personService.updatePersonInDatabase(personDTO, personDTO.getPersonInterests());
 	
 	LOGGER.debug("Starting to search similar users for user " + personDTO.getName());
 	List<PersonDTO> similarUsers = similarityService.findSimilarPersons(personDTO);
@@ -84,9 +86,6 @@ public class RecommendationServiceImpl implements RecommendationService{
 	}
 	
 	recommendation.setItemRecommendations(itemsToBeRecommended);
-	
-	LOGGER.debug("Storing the recommendation for user " + personDTO.getName() + " in the database");
-	personService.updatePersonInDatabase(personDTO, personInterests);
 	
 	return recommendation;
     }
@@ -113,6 +112,8 @@ public class RecommendationServiceImpl implements RecommendationService{
 	
 	List<PersonInterestDTO> personInterests = personDTO.getPersonInterests();
 	
+	normWeightings(personInterests);
+	
 	List<PersonInterestDTO> similarInterests = similarityService.getSimilarInterests(personInterests);
 	personDTO.setPersonInterests(similarInterests);
 	
@@ -122,9 +123,8 @@ public class RecommendationServiceImpl implements RecommendationService{
 	}
 	
 	List<String> interestMainTopicKeywords = freebaseService.getMainTopics(interestKeywords);
-	personDTO.setPersonMainTopics(interestMainTopicKeywords);
+	personDTO.setPersonMainTopics(interestMainTopicKeywords);	
 	
-	normWeightings(personInterests);
     }
     
     
@@ -137,8 +137,8 @@ public class RecommendationServiceImpl implements RecommendationService{
 	
 	for(PersonInterestDTO personInterestDTO : personInterestDTOs){
 	    int oldRating = personInterestDTO.getWeighting();
-	    int newRating = new Double((oldRating/maxRating)*100).intValue();
-	    personInterestDTO.setWeighting(newRating);
+	    double newRating = (new Double(oldRating) / new Double(maxRating)) * Constants.MAX_WEIGHTING;
+	    personInterestDTO.setWeighting((int)newRating);
 	}
     }
     

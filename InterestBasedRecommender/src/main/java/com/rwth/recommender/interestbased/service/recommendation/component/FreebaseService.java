@@ -4,6 +4,7 @@
  */
 package com.rwth.recommender.interestbased.service.recommendation.component;
 
+import com.rwth.recommender.interestbased.model.dto.PersonInterestDTO;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public interface FreebaseService {
      * @param keyword
      * @return A list of similar keywords using the freebase api
      */
-    public List<String> getSimilarKeywords(String keyword);
+    public List<PersonInterestDTO> getSimilarInterests(PersonInterestDTO personInterestDTO);
     
     /**
      * 
