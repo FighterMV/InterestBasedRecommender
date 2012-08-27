@@ -14,7 +14,8 @@ import java.util.List;
 public interface InterestDAO {
     
     Interest get(Long id);
-    void persist(Interest interest);
+    Long persist(Interest interest);
     List<Interest> getInterests(Long personId);
+    List<Interest> getList();
     
 }

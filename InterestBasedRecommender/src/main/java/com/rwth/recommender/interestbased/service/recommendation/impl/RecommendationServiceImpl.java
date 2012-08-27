@@ -7,6 +7,7 @@ package com.rwth.recommender.interestbased.service.recommendation.impl;
 import com.rwth.recommender.interestbased.model.assembler.PersonAssembler;
 import com.rwth.recommender.interestbased.model.dto.*;
 import com.rwth.recommender.interestbased.model.service.InterestService;
+import com.rwth.recommender.interestbased.model.service.PersonInterestService;
 import com.rwth.recommender.interestbased.model.service.PersonService;
 import com.rwth.recommender.interestbased.service.recommendation.RecommendationService;
 import com.rwth.recommender.interestbased.service.recommendation.SimilarityService;
@@ -36,16 +37,29 @@ public class RecommendationServiceImpl implements RecommendationService{
     PersonService personService;
     
     @Autowired
+    PersonInterestService personInterestService;
+    
+    @Autowired
     InterestService interestService;
     
     @Override
-    public RecommendationDTO getRecommendations(PersonDTO personDTO, List<InterestDTO> interestDTOs) {
+    public RecommendationDTO getRecommendations(PersonDTO personDTO, List<PersonInterestDTO> personInterests) {
 
 	LOGGER.debug("A new request for a Recommendation for a person with name: " + personDTO.getName() + " arrived");
 	
 	LOGGER.debug("Storing person with name: " + personDTO.getName() + " and his interests in the database");
 	personService.storeInDatabase(personDTO);
-	interestService.storeInDatabase(interestDTOs);
+		
+//	List<InterestDTO> interests = new ArrayList<InterestDTO>();
+//	for(PersonInterestDTO personInterestDTO : personInterests){
+//	    interests.add(personInterestDTO.getInterest());
+//	}
+//	interestService.storeInDatabase(interests);
+	
+	personInterestService.storeInDatabase(personInterests);
+	
+	personDTO.setPersonInterests(personInterests);
+	personService.updatePersonInDatabase(personDTO, personInterests);
 	
 	LOGGER.debug("Starting to search similar users for user " + personDTO.getName());
 	List<PersonDTO> similarUsers = similarityService.findSimilarPersons(personDTO);
@@ -72,7 +86,7 @@ public class RecommendationServiceImpl implements RecommendationService{
 	recommendation.setItemRecommendations(itemsToBeRecommended);
 	
 	LOGGER.debug("Storing the recommendation for user " + personDTO.getName() + " in the database");
-	personService.updatePersonInDatabase(personDTO);
+	personService.updatePersonInDatabase(personDTO, personInterests);
 	
 	return recommendation;
     }

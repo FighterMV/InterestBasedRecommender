@@ -7,6 +7,7 @@ package com.rwth.recommender.interestbased.service.recommendation;
 import com.rwth.recommender.interestbased.model.dto.InterestDTO;
 import com.rwth.recommender.interestbased.model.dto.ItemDTO;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
+import com.rwth.recommender.interestbased.model.dto.PersonInterestDTO;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public interface SimilarityService {
      * @param keyword
      * @return A list of similar keywords
      */
-    public List<String> findSimilarKeywords(String keyword);
+    public List<PersonInterestDTO> findSimilarInterests(PersonInterestDTO keyword);
         
     /**
      * This method receives a person and returns a List of similar persons
@@ -42,6 +43,6 @@ public interface SimilarityService {
      * @param weightedInterests
      * @return 
      */
-    public List<String> getInterestKeywords(List<InterestDTO> weightedInterests);
+    public List<PersonInterestDTO> getSimilarInterests(List<PersonInterestDTO> weightedInterests);
     
 }

@@ -28,8 +28,6 @@ public class InterestAssembler {
     public InterestDTO assembleDTO(Interest interest){
 	InterestDTO interestDTO = new InterestDTO();
 	interestDTO.setName(interest.getName());
-	interestDTO.setPerson(personAssembler.assembleDTO(interest.getPerson()));
-	interestDTO.setWeighting(interest.getWeighting());
 	interestDTO.setId(interest.getId());
 	return interestDTO;
     }
@@ -38,8 +36,6 @@ public class InterestAssembler {
 	Interest interest = new Interest();
 	interest.setId(interestDTO.getId());
 	interest.setName(interestDTO.getName());
-	interest.setWeighting(interestDTO.getWeighting());
-	interest.setPerson(personAssembler.assemble(interestDTO.getPerson()));
 	return interest;
     }
     

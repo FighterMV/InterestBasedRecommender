@@ -6,6 +6,7 @@ package com.rwth.recommender.interestbased.service.recommendation;
 
 import com.rwth.recommender.interestbased.model.dto.InterestDTO;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
+import com.rwth.recommender.interestbased.model.dto.PersonInterestDTO;
 import com.rwth.recommender.interestbased.model.dto.RecommendationDTO;
 import java.util.List;
 
@@ -21,6 +22,6 @@ public interface RecommendationService {
      * @param interestDTOs A list of interests of the person
      * @return A recommendation with items the user may be interested in
      */
-    public RecommendationDTO getRecommendations(PersonDTO person, List<InterestDTO> interestDTOs);
+    public RecommendationDTO getRecommendations(PersonDTO person, List<PersonInterestDTO> personInterests);
     
 }

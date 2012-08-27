@@ -4,6 +4,7 @@
  */
 package com.rwth.recommender.interestbased.model.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.slf4j.Logger;
@@ -14,14 +15,12 @@ import org.slf4j.LoggerFactory;
  * @author Marco
  */
 public class PersonDTO {
-    
-    private static final Logger LOGGER = LoggerFactory.getLogger(PersonDTO.class);
-    
+        
     private Long id;
     private String name;
-    private List<String> personInterestKeywords;
-    private List<String> personMainTopicKeywords;
     private List<ItemDTO> providedItems;
+    private List<String> personMainTopics;
+    private List<PersonInterestDTO> personInterests;
 
     public String getName() {
 	return name;
@@ -29,14 +28,6 @@ public class PersonDTO {
 
     public void setName(String name) {
 	this.name = name;
-    }
-
-    public List<String> getPersonInterestKeywords() {
-	return personInterestKeywords;
-    }
-
-    public void setPersonInterestKeywords(List<String> personInterestKeywords) {
-	this.personInterestKeywords = personInterestKeywords;
     }
     
     public Long getId() {
@@ -55,13 +46,32 @@ public class PersonDTO {
 	this.providedItems = providedItems;
     }
 
-    public List<String> getPersonMainTopicKeywords() {
-	return personMainTopicKeywords;
+    public List<String> getPersonMainTopics() {
+	return personMainTopics;
     }
 
-    public void setPersonMainTopicKeywords(List<String> personMainTopicKeywords) {
-	this.personMainTopicKeywords = personMainTopicKeywords;
+    public void setPersonMainTopics(List<String> personMainTopics) {
+	this.personMainTopics = personMainTopics;
+    }
+
+    public List<PersonInterestDTO> getPersonInterests() {
+	return personInterests;
+    }
+
+    public void setPersonInterests(List<PersonInterestDTO> personInterests) {
+	this.personInterests = personInterests;
     }
     
+    /**
+     * 
+     * @return a List of Strings which represents the interest keywords without weighting 
+     */
+    public List<String> getInterestKeywords(){
+	List<String> interestKeywords = new ArrayList<String>();
+	for(PersonInterestDTO personInterest : personInterests){
+	    interestKeywords.add(personInterest.getInterest().getName());
+	}
+	return interestKeywords;
+    }
         
 }

@@ -8,6 +8,7 @@ import com.rwth.recommender.interestbased.model.Constants;
 import com.rwth.recommender.interestbased.model.dto.InterestDTO;
 import com.rwth.recommender.interestbased.model.dto.ItemDTO;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
+import com.rwth.recommender.interestbased.model.dto.PersonInterestDTO;
 import com.rwth.recommender.interestbased.model.service.PersonService;
 import com.rwth.recommender.interestbased.service.recommendation.SimilarityService;
 import com.rwth.recommender.interestbased.service.recommendation.component.FreebaseService;
@@ -47,18 +48,29 @@ public class SimilarityServiceImpl implements SimilarityService{
     FreebaseService freebaseService;
     
     @Override
-    public List<String> findSimilarKeywords(String keyword) {
+    public List<PersonInterestDTO> findSimilarInterests(PersonInterestDTO personInterest) {
 	
-	LOGGER.debug("Request to find similar keywords for: " + keyword + " arrived.");
+	LOGGER.debug("Request to find similar keywords for: " + personInterest.getInterest().getName() + " arrived.");
 	
 	Set<String> similarKeywords = new HashSet<String>();
-	similarKeywords.addAll(wordnetService.findSimilarKeywords(keyword));
+	similarKeywords.addAll(wordnetService.findSimilarKeywords(personInterest.getInterest().getName()));
 	LOGGER.debug("Added similar keywords with wordnet");
-	similarKeywords.addAll(freebaseService.getSimilarKeywords(keyword));
+	similarKeywords.addAll(freebaseService.getSimilarKeywords(personInterest.getInterest().getName()));
 	LOGGER.debug("Added similar keywords with freebase");
 	
 	LOGGER.debug("Returning " + similarKeywords.size() + " similar keywords");
-	return new ArrayList<String>(similarKeywords);
+	
+	List<PersonInterestDTO> personInterestDTOs = new ArrayList<PersonInterestDTO>();
+	for(String similarKeyword : similarKeywords){
+	    PersonInterestDTO personInterestDTO = new PersonInterestDTO();
+	    personInterestDTO.setPerson(personInterest.getPerson());
+	    InterestDTO interestDTO = new InterestDTO();
+	    interestDTO.setName(similarKeyword);
+	    personInterestDTO.setInterest(interestDTO);
+	    //!TODO CALCULATE AND SET WEIGHTING
+	}
+	
+	return personInterestDTOs;
 	
     }
 
@@ -72,16 +84,12 @@ public class SimilarityServiceImpl implements SimilarityService{
     }
     
     @Override
-    public List<String> getInterestKeywords(List<InterestDTO> weightedInterests){
-	List<String> userInterestKeywords = new ArrayList<String>();
-	for(InterestDTO interest : weightedInterests){
-	    userInterestKeywords.add(interest.getName());
-	    if(interest.getWeighting() > Constants.MINIMUM_VALUE_TO_BE_GOOD_INTEREST){
-		List<String> similarKeywords = findSimilarKeywords(interest.getName());
-		userInterestKeywords.addAll(similarKeywords);
-	    }
+    public List<PersonInterestDTO> getSimilarInterests(List<PersonInterestDTO> personInterests){
+	List<PersonInterestDTO> personInterestDTOs = new ArrayList<PersonInterestDTO>();
+	for(PersonInterestDTO personInterest : personInterests){
+	    personInterestDTOs.addAll(findSimilarInterests(personInterest));
 	}
-	return userInterestKeywords;
+	return personInterestDTOs;
     }
 
     @Override

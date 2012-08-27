@@ -20,14 +20,14 @@ public class Person {
     
     private String name;
     
-    @ElementCollection
-    private List<String> personInterestKeywords;
-    
-    @ElementCollection
-    private List<String> personMainTopicKeywords;
-    
     @OneToMany
     private List<Item> providedItems;
+    
+    @ElementCollection
+    private List<String> personMainTopics;
+    
+    @ElementCollection
+    private List<PersonInterest> personInterests;
     
     public Person(){
     }
@@ -38,14 +38,6 @@ public class Person {
 
     public void setName(String name) {
 	this.name = name;
-    }
-
-    public List<String> getPersonInterestKeywords() {
-	return personInterestKeywords;
-    }
-
-    public void setPersonInterestKeywords(List<String> personInterestKeywords) {
-	this.personInterestKeywords = personInterestKeywords;
     }
 
     public Long getId() {
@@ -64,14 +56,22 @@ public class Person {
 	this.providedItems = providedItems;
     }
 
-    public List<String> getPersonMainTopicKeywords() {
-	return personMainTopicKeywords;
+    public List<String> getPersonMainTopics() {
+	return personMainTopics;
     }
 
-    public void setPersonMainTopicKeywords(List<String> personMainTopicKeywords) {
-	this.personMainTopicKeywords = personMainTopicKeywords;
+    public void setPersonMainTopics(List<String> personMainTopics) {
+	this.personMainTopics = personMainTopics;
     }
 
+    public List<PersonInterest> getPersonInterests() {
+	return personInterests;
+    }
+
+    public void setPersonInterests(List<PersonInterest> personInterests) {
+	this.personInterests = personInterests;
+    }
+    
     
                         
 }

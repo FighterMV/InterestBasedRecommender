@@ -12,12 +12,10 @@ import java.util.List;
  *
  * @author Marco
  */
-public interface PersonService {
+public interface PersonInterestService {
     
-    public List<PersonDTO> getList();
+    public List<PersonInterestDTO> getPersonInterests(PersonDTO person);
     
-    public void storeInDatabase(PersonDTO personDTO);
-    
-    public void updatePersonInDatabase(PersonDTO personDTO, List<PersonInterestDTO> personInterests);
+    public void storeInDatabase(List<PersonInterestDTO> personInterests);
     
 }

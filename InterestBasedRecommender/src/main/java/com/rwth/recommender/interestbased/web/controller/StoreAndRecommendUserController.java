@@ -5,10 +5,7 @@
 package com.rwth.recommender.interestbased.web.controller;
 
 import com.rwth.recommender.interestbased.model.Constants;
-import com.rwth.recommender.interestbased.model.dto.InterestDTO;
-import com.rwth.recommender.interestbased.model.dto.ItemDTO;
-import com.rwth.recommender.interestbased.model.dto.PersonDTO;
-import com.rwth.recommender.interestbased.model.dto.RecommendationDTO;
+import com.rwth.recommender.interestbased.model.dto.*;
 import com.rwth.recommender.interestbased.service.recommendation.RecommendationService;
 import com.rwth.recommender.interestbased.service.recommendation.SimilarityService;
 import com.rwth.recommender.interestbased.service.recommendation.component.FreebaseService;
@@ -44,9 +41,9 @@ public class StoreAndRecommendUserController {
     public ModelAndView storeAndRecommendUser(@ModelAttribute("storeAndRecommendUserModel")StoreAndRecommendUserModel model){
 	
 	PersonDTO personDTO = getPersonDTO(model);
-	List<InterestDTO> interestDTOs = getInterestDTOs(model, personDTO);
-	
-	RecommendationDTO recommendation = recommendationService.getRecommendations(personDTO, interestDTOs);
+	List<PersonInterestDTO> personInterestDTOs = getPersonInterestDTOs(model, personDTO);
+		
+	RecommendationDTO recommendation = recommendationService.getRecommendations(personDTO, personInterestDTOs);
 	
 	ModelAndView modelAndView = new ModelAndView("recommendation");
 	modelAndView.addObject("username", recommendation.getPerson().getName());
@@ -55,28 +52,31 @@ public class StoreAndRecommendUserController {
 	return modelAndView;
     }
     
-    private List<InterestDTO> getInterestDTOs(StoreAndRecommendUserModel model, PersonDTO personDTO){
+    private List<PersonInterestDTO> getPersonInterestDTOs(StoreAndRecommendUserModel model, PersonDTO personDTO){
 	String interests = model.getInterests().replace(" ", "");
 	List<String> interestList = Arrays.asList(interests.split(Constants.INTEREST_SEPARATOR));
 	
 	String weightings = model.getWeightings().replace(" ", "");
 	List<String> weightingListString = Arrays.asList(weightings.split(Constants.INTEREST_SEPARATOR));
 	List<Integer> weightingList = new ArrayList<Integer>();
-
+	
 	for(String weightingString : weightingListString){
 	    weightingList.add(Integer.parseInt(weightingString));
 	}
 	
-	List<InterestDTO> weightedInterests = new ArrayList<InterestDTO>();
+	List<PersonInterestDTO> personInterestDTOs = new ArrayList<PersonInterestDTO>();
+	
 	for(int i = 0; i < interestList.size(); i++){
+	    PersonInterestDTO personInterestDTO = new PersonInterestDTO();
 	    InterestDTO interestDTO = new InterestDTO();
 	    interestDTO.setName(interestList.get(i));
-	    interestDTO.setPerson(personDTO);
-	    interestDTO.setWeighting(weightingList.get(i));
-	    weightedInterests.add(interestDTO);
+	    personInterestDTO.setInterest(interestDTO);
+	    personInterestDTO.setPerson(personDTO);
+	    personInterestDTO.setWeighting(weightingList.get(i));
+	    personInterestDTOs.add(personInterestDTO);
 	}
 	
-	return weightedInterests;
+	return personInterestDTOs;
 	
     }
     
@@ -84,13 +84,18 @@ public class StoreAndRecommendUserController {
 	PersonDTO personDTO = new PersonDTO();
 	personDTO.setName(model.getUsername());
 	
-	List<InterestDTO> weightedInterests = getInterestDTOs(model, personDTO);
+	List<PersonInterestDTO> personInterests = getPersonInterestDTOs(model, personDTO);
 		
-	List<String> interestKeywords = similarityService.getInterestKeywords(weightedInterests);
-	personDTO.setPersonInterestKeywords(interestKeywords);
+	List<PersonInterestDTO> similarPersonInterests = similarityService.getSimilarInterests(personInterests);
+	personDTO.setPersonInterests(similarPersonInterests);
+	
+	List<String> interestKeywords = new ArrayList<String>();
+	for(PersonInterestDTO personInterestDTO : personInterests){
+	    interestKeywords.add(personInterestDTO.getInterest().getName());
+	}
 	
 	List<String> interestMainTopicKeywords = freebaseService.getMainTopics(interestKeywords);
-	personDTO.setPersonMainTopicKeywords(interestMainTopicKeywords);
+	personDTO.setPersonMainTopics(interestMainTopicKeywords);
 	
 	String itemNames = model.getItemNames().replace(" ", "");
 	List<String> itemNameList = Arrays.asList(itemNames.split(Constants.INTEREST_SEPARATOR));

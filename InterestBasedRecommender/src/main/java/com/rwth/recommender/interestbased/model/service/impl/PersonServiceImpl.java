@@ -4,14 +4,20 @@
  */
 package com.rwth.recommender.interestbased.model.service.impl;
 
+import com.rwth.recommender.interestbased.model.assembler.InterestAssembler;
 import com.rwth.recommender.interestbased.model.assembler.PersonAssembler;
+import com.rwth.recommender.interestbased.model.assembler.PersonInterestAssembler;
 import com.rwth.recommender.interestbased.model.database.Item;
 import com.rwth.recommender.interestbased.model.database.Person;
+import com.rwth.recommender.interestbased.model.database.PersonInterest;
 import com.rwth.recommender.interestbased.model.database.dao.InterestDAO;
 import com.rwth.recommender.interestbased.model.database.dao.ItemDAO;
 import com.rwth.recommender.interestbased.model.database.dao.PersonDAO;
+import com.rwth.recommender.interestbased.model.database.dao.PersonInterestDAO;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
+import com.rwth.recommender.interestbased.model.dto.PersonInterestDTO;
 import com.rwth.recommender.interestbased.model.service.PersonService;
+import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +39,12 @@ public class PersonServiceImpl implements PersonService{
     
     @Autowired
     PersonAssembler personAssembler;
+    
+    @Autowired
+    InterestAssembler interestAssembler;
+    
+    @Autowired
+    PersonInterestDAO personInterestDAO;
     
     @Autowired
     InterestDAO interestDAO;
@@ -68,8 +80,25 @@ public class PersonServiceImpl implements PersonService{
 
     @Override
     @Transactional
-    public void updatePersonInDatabase(PersonDTO personDTO) {
+    public void updatePersonInDatabase(PersonDTO personDTO, List<PersonInterestDTO> personInterestDTOs) {
 	Person person = personAssembler.assemble(personDTO);
+	
+	if(personInterestDTOs == null){
+	    throw new IllegalStateException("Interests must not be null");
+	}
+	
+	List<PersonInterest> personInterests = new ArrayList<PersonInterest>();
+	for(PersonInterestDTO personInterestDTO : personInterestDTOs){
+	    PersonInterest personInterest = new PersonInterest();
+	    personInterest.setId(personInterestDTO.getId());
+	    personInterest.setInterest(interestAssembler.assemble(personInterestDTO.getInterest()));
+	    personInterest.setPerson(person);
+	    personInterest.setWeighting(personInterestDTO.getWeighting());
+	    personInterests.add(personInterest);
+	}
+
+	person.setPersonInterests(personInterests);
+	
 	personDAO.update(person);
     }
     

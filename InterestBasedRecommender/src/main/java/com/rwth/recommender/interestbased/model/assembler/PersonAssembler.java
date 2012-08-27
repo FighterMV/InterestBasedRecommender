@@ -5,7 +5,9 @@
 package com.rwth.recommender.interestbased.model.assembler;
 
 import com.rwth.recommender.interestbased.model.database.Person;
+import com.rwth.recommender.interestbased.model.database.PersonInterest;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
+import com.rwth.recommender.interestbased.model.dto.PersonInterestDTO;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,27 +23,35 @@ public class PersonAssembler {
     @Autowired
     private ItemAssembler itemAssembler;
     
+    @Autowired
+    private PersonInterestAssembler personInterestAssembler;
+    
+    /**
+     * PERSONINTERESTS ARE NOT ASSEMBLED
+     * @param person
+     * @return 
+     */
     public PersonDTO assembleDTO(Person person){
 	PersonDTO personDTO = new PersonDTO();
 	personDTO.setId(person.getId());
 	personDTO.setName(person.getName());
 	
-	List<String> personInterestKeywords = new ArrayList<String>();
-	for(String interestKeyword : person.getPersonInterestKeywords()){
-	    personInterestKeywords.add(interestKeyword);
+	List<String> personMainTopics = new ArrayList<String>();
+	for(String mainTopicKeyword : person.getPersonMainTopics()){
+	    personMainTopics.add(mainTopicKeyword);
 	}
-	personDTO.setPersonInterestKeywords(personInterestKeywords);
-	
-	List<String> personMainTopicKeywords = new ArrayList<String>();
-	for(String mainTopicKeyword : person.getPersonMainTopicKeywords()){
-	    personMainTopicKeywords.add(mainTopicKeyword);
-	}
-	personDTO.setPersonMainTopicKeywords(personMainTopicKeywords);
+	personDTO.setPersonMainTopics(personMainTopics);
 	
 	personDTO.setProvidedItems(itemAssembler.assembleDTOList(person.getProvidedItems()));
+	
 	return personDTO;
     }
     
+    /**
+     * PERSONINTERESTS ARE NOT ASSEMBLED
+     * @param person
+     * @return 
+     */
     public List<PersonDTO> assembleDTOList(List<Person> userList){
 	List<PersonDTO> personDTOs = new ArrayList<PersonDTO>();
 	for(Person person : userList){
@@ -51,12 +61,16 @@ public class PersonAssembler {
 	return personDTOs;
     }
     
+    /**
+     * PERSONINTERESTS ARE NOT ASSEMBLED
+     * @param person
+     * @return 
+     */
     public Person assemble(PersonDTO personDTO){
 	Person person = new Person();
 	person.setId(personDTO.getId());
 	person.setName(personDTO.getName());
-	person.setPersonInterestKeywords(personDTO.getPersonInterestKeywords());
-	person.setPersonMainTopicKeywords(personDTO.getPersonMainTopicKeywords());
+	person.setPersonMainTopics(personDTO.getPersonMainTopics());
 	person.setProvidedItems(itemAssembler.assembleList(personDTO.getProvidedItems()));
 	return person;
     }

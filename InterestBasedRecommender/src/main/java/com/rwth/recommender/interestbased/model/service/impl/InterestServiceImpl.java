@@ -33,6 +33,7 @@ public class InterestServiceImpl implements InterestService{
     public void storeInDatabase(InterestDTO interestDTO) {
 	Interest interest = interestAssembler.assemble(interestDTO);
 	interestDAO.persist(interest);
+	interestDTO.setId(interest.getId());
     }
 
     @Override
@@ -40,7 +41,8 @@ public class InterestServiceImpl implements InterestService{
     public void storeInDatabase(List<InterestDTO> interestDTOs) {
 	for(InterestDTO interestDTO : interestDTOs){
 	    Interest interest = interestAssembler.assemble(interestDTO);
-	    interestDAO.persist(interest); 
+	    interestDAO.persist(interest);
+	    interestDTO.setId(interest.getId());
 	}
     }
 

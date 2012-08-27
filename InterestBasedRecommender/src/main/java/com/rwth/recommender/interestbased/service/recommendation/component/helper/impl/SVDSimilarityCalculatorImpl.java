@@ -102,16 +102,16 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
 	List<String> allKeywords = new ArrayList<String>();
 	List<String> keywords;
 	if(byGroup){
-	    keywords = personDTO.getPersonMainTopicKeywords();
+	    keywords = personDTO.getPersonMainTopics();
 	}else{
-	    keywords = personDTO.getPersonInterestKeywords();
+	    keywords = personDTO.getInterestKeywords();
 	}
 	allKeywords.addAll(keywords);
 	for(PersonDTO person : persons){
 	    if(byGroup){
-		allKeywords.addAll(person.getPersonMainTopicKeywords());
+		allKeywords.addAll(person.getPersonMainTopics());
 	    }else{
-		allKeywords.addAll(person.getPersonInterestKeywords());
+		allKeywords.addAll(person.getInterestKeywords());
 	    }
 	}
 	for(String keyword : allKeywords){
@@ -125,9 +125,9 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
     private int getNumberOfOccurences(String term, PersonDTO personDTO, Boolean byGroup){
 	List<String> keywords;
 	if(byGroup){
-	    keywords = personDTO.getPersonMainTopicKeywords();
+	    keywords = personDTO.getPersonMainTopics();
 	}else{
-	    keywords = personDTO.getPersonInterestKeywords();
+	    keywords = personDTO.getInterestKeywords();
 	}
 	int numberOfOccurences = 0;
 	for(String keyword : keywords){

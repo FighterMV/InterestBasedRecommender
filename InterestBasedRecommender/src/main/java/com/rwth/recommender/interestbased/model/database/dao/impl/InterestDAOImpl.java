@@ -34,9 +34,16 @@ public class InterestDAOImpl implements InterestDAO{
     }
 
     @Override
-    public void persist(Interest interest) {
+    public Long persist(Interest interest) {
 	LOGGER.trace("Persisting interest with name: " + interest.getName() + " in database");
+	List<Interest> interests = getList();
+	for(Interest existingInterest : interests){
+	    if(interest.getName().equals(existingInterest.getName())){
+		return existingInterest.getId();
+	    }
+	}
 	sessionFactory.getCurrentSession().persist(interest);
+	return interest.getId();
     }
 
     @Override
@@ -44,6 +51,12 @@ public class InterestDAOImpl implements InterestDAO{
 	LOGGER.trace("Fetching interests from person with id: " + personId + " from database");
 	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Interest.class);
 	criteria.add(Restrictions.eq("person.id", personId));
+	return criteria.list();
+    }
+
+    @Override
+    public List<Interest> getList() {
+	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Interest.class);
 	return criteria.list();
     }
 }

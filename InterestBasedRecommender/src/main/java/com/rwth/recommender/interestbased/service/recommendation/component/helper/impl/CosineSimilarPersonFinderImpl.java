@@ -7,7 +7,9 @@ package com.rwth.recommender.interestbased.service.recommendation.component.help
 import Jama.Matrix;
 import com.rwth.recommender.interestbased.model.dto.InterestDTO;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
+import com.rwth.recommender.interestbased.model.dto.PersonInterestDTO;
 import com.rwth.recommender.interestbased.model.service.InterestService;
+import com.rwth.recommender.interestbased.model.service.PersonInterestService;
 import com.rwth.recommender.interestbased.service.recommendation.component.helper.CosineCalculator;
 import com.rwth.recommender.interestbased.service.recommendation.component.helper.CosineSimilarPersonFinder;
 import com.rwth.recommender.interestbased.service.recommendation.component.helper.MostSimilarObjectsGetter;
@@ -26,7 +28,7 @@ public class CosineSimilarPersonFinderImpl implements CosineSimilarPersonFinder{
     private CosineCalculator cosineCalculator;
     
     @Autowired
-    InterestService interestService;
+    PersonInterestService personInterestService;
     
     @Autowired
     MostSimilarObjectsGetter mostSimilarObjectsGetter;
@@ -36,10 +38,10 @@ public class CosineSimilarPersonFinderImpl implements CosineSimilarPersonFinder{
 	
 	Map<PersonDTO, Double> candidateAngleMap = new HashMap<PersonDTO, Double>();
 	
-	List<InterestDTO> personInterests = interestService.getInterests(person);
+	List<PersonInterestDTO> personInterests = personInterestService.getPersonInterests(person);
 	
 	for(PersonDTO candidate : persons){
-	    List<InterestDTO> candidateInterests = interestService.getInterests(candidate);
+	    List<PersonInterestDTO> candidateInterests = personInterestService.getPersonInterests(candidate);
 	    Double angle = cosineCalculator.getInterestsAngle(personInterests, candidateInterests);
 	    candidateAngleMap.put(candidate, angle);
 	}

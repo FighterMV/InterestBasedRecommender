@@ -36,8 +36,8 @@ public class SimpleSimilarPersonFinderImpl implements SimpleSimilarPersonFinder{
     
     private int getScore(PersonDTO person, PersonDTO candidate){
 	int score = 0;
-	for(String keyword : person.getPersonInterestKeywords()){
-	    for(String candidateKeyword : candidate.getPersonInterestKeywords()){
+	for(String keyword : person.getInterestKeywords()){
+	    for(String candidateKeyword : candidate.getInterestKeywords()){
 		if(keyword.equals(candidateKeyword)){
 		    score++;
 		}

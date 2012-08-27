@@ -6,9 +6,11 @@ package com.rwth.recommender.interestbased.service.recommendation.component.help
 
 import com.rwth.recommender.interestbased.model.dto.ItemDTO;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
+import com.rwth.recommender.interestbased.model.dto.PersonInterestDTO;
 import com.rwth.recommender.interestbased.service.recommendation.component.helper.CosineCalculator;
 import com.rwth.recommender.interestbased.service.recommendation.component.helper.CosineSimilarItemFinder;
 import com.rwth.recommender.interestbased.service.recommendation.component.helper.MostSimilarObjectsGetter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,8 +34,13 @@ public class CosineSimilarItemFinderImpl implements CosineSimilarItemFinder{
     public List<ItemDTO> getXSimilarItems(List<ItemDTO> items, PersonDTO person, int numberOfItemsToReturn) {
 	Map<ItemDTO, Double> itemAngleMap = new HashMap<ItemDTO, Double>();
 	
+	List<String> personInterestKeywords = new ArrayList<String>();
+	for(PersonInterestDTO personInterest : person.getPersonInterests()){
+	    personInterestKeywords.add(personInterest.getInterest().getName());
+	}
+	
 	for(ItemDTO item : items){
-	    Double angle = cosineCalculator.getKeywordsAngle(person.getPersonInterestKeywords(), item.getDescribingKeywords());
+	    Double angle = cosineCalculator.getKeywordsAngle(personInterestKeywords, item.getDescribingKeywords());
 	    itemAngleMap.put(item, angle);
 	}
 	

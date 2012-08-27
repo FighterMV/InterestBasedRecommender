@@ -6,6 +6,7 @@ package com.rwth.recommender.interestbased.model.database.dao.impl;
 
 import com.rwth.recommender.interestbased.model.database.Person;
 import com.rwth.recommender.interestbased.model.database.dao.PersonDAO;
+import com.rwth.recommender.interestbased.model.database.dao.PersonInterestDAO;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
@@ -25,6 +26,9 @@ public class PersonDAOImpl implements PersonDAO{
     
     @Autowired
     private SessionFactory sessionFactory;
+    
+    @Autowired
+    PersonInterestDAO personInterestDAO;
     
     @Override
     public Person get(Long id) {

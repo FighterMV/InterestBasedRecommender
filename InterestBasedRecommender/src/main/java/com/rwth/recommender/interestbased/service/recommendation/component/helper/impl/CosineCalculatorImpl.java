@@ -6,6 +6,7 @@ package com.rwth.recommender.interestbased.service.recommendation.component.help
 
 import Jama.Matrix;
 import com.rwth.recommender.interestbased.model.dto.InterestDTO;
+import com.rwth.recommender.interestbased.model.dto.PersonInterestDTO;
 import com.rwth.recommender.interestbased.service.recommendation.component.helper.CosineCalculator;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,15 +49,15 @@ public class CosineCalculatorImpl implements CosineCalculator{
     }
 
     @Override
-    public double getInterestsAngle(List<InterestDTO> interests1, List<InterestDTO> interests2) {
+    public double getInterestsAngle(List<PersonInterestDTO> interests1, List<PersonInterestDTO> interests2) {
 	Set<String> neededKeywords = new HashSet<String>();
 	
-	for(InterestDTO interest : interests1){
-	    neededKeywords.add(interest.getName());
+	for(PersonInterestDTO personInterest : interests1){
+	    neededKeywords.add(personInterest.getInterest().getName());
 	}
 	
-	for(InterestDTO interest : interests2){
-	    neededKeywords.add(interest.getName());
+	for(PersonInterestDTO personInterest : interests2){
+	    neededKeywords.add(personInterest.getInterest().getName());
 	}
 	
 	double[][] interestVectorOfPerson = getInterestVector(interests1, neededKeywords);
@@ -72,16 +73,16 @@ public class CosineCalculatorImpl implements CosineCalculator{
 	return angle;
     }
 
-    private double[][] getInterestVector(List<InterestDTO> interests, Set<String> neededKeywords) {
+    private double[][] getInterestVector(List<PersonInterestDTO> personInterests, Set<String> neededKeywords) {
 	double[][] vector = new double[neededKeywords.size()][1];
 	
 	int i = 0;
 	for (Iterator<String> it = neededKeywords.iterator(); it.hasNext();) {
 	    String keyWord = it.next();
 	    double vectorEntryForInterest = 0.0;
-	    for(InterestDTO interest  : interests){
-		if(interest.getName().equals(keyWord)){
-		    vectorEntryForInterest += interest.getWeighting();
+	    for(PersonInterestDTO personInterest  : personInterests){
+		if(personInterest.getInterest().getName().equals(keyWord)){
+		    vectorEntryForInterest += personInterest.getWeighting();
 		}
 	    }
 	    vector[i][0] = vectorEntryForInterest;

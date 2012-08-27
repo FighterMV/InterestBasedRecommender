@@ -13,10 +13,6 @@ public class InterestDTO {
     private Long id;
     
     private String name;
-    
-    private PersonDTO person;
-    
-    private Integer weighting;
 
     public InterestDTO() {
     }
@@ -36,21 +32,4 @@ public class InterestDTO {
     public void setId(Long id) {
 	this.id = id;
     }
-
-    public PersonDTO getPerson() {
-	return person;
-    }
-
-    public void setPerson(PersonDTO person) {
-	this.person = person;
-    }
-
-    public Integer getWeighting() {
-	return weighting;
-    }
-
-    public void setWeighting(Integer weighting) {
-	this.weighting = weighting;
-    }
-        
 }
