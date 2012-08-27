@@ -23,4 +23,6 @@ public class Constants {
     public static Double MULTIPLIER_TO_BE_EQUAL = 0.3;
     
     public static int NUMBER_OF_BEST_OBJECTS_TO_RETURN = 5;
+    
+    public static int MIN_SCORE_TO_BE_MAIN_TOPIC = 50;
 }

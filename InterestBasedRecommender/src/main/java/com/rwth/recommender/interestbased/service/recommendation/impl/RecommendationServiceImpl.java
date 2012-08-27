@@ -48,17 +48,17 @@ public class RecommendationServiceImpl implements RecommendationService{
     
     @Override
     public RecommendationDTO getRecommendations(PersonDTO personDTO, List<PersonInterestDTO> personInterests) {
-
-	preparePerson(personDTO);
 	
 	LOGGER.debug("A new request for a Recommendation for a person with name: " + personDTO.getName() + " arrived");
 	
 	LOGGER.debug("Storing person with name: " + personDTO.getName() + " and his interests in the database");
 	personService.storeInDatabase(personDTO);
+		
+	personDTO.setPersonInterests(personInterests);
+	addSimilarInterestsAndMainTopics(personDTO);
 	
 	personInterestService.storeInDatabase(personInterests);
 	
-	personDTO.setPersonInterests(personInterests);
 	personService.updatePersonInDatabase(personDTO, personInterests);
 	
 	LOGGER.debug("Starting to search similar users for user " + personDTO.getName());
@@ -109,7 +109,7 @@ public class RecommendationServiceImpl implements RecommendationService{
 	return false;
     }
     
-    private void preparePerson(PersonDTO personDTO){
+    private void addSimilarInterestsAndMainTopics(PersonDTO personDTO){
 	
 	List<PersonInterestDTO> personInterests = personDTO.getPersonInterests();
 	
@@ -137,7 +137,7 @@ public class RecommendationServiceImpl implements RecommendationService{
 	
 	for(PersonInterestDTO personInterestDTO : personInterestDTOs){
 	    int oldRating = personInterestDTO.getWeighting();
-	    int newRating = (int) ((oldRating/maxRating)*100);
+	    int newRating = new Double((oldRating/maxRating)*100).intValue();
 	    personInterestDTO.setWeighting(newRating);
 	}
     }

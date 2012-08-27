@@ -64,6 +64,7 @@ public class SimilarityServiceImpl implements SimilarityService{
 	    interestDTO.setName(similarKeyword);
 	    personInterestDTO.setInterest(interestDTO);
 	    //!TODO CALCULATE AND SET WEIGHTING
+	    personInterestDTOs.add(personInterestDTO);
 	}
 	
 	return personInterestDTOs;

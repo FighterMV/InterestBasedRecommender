@@ -4,6 +4,7 @@
  */
 package com.rwth.recommender.interestbased.service.recommendation.component.impl;
 
+import com.rwth.recommender.interestbased.model.Constants;
 import com.rwth.recommender.interestbased.service.recommendation.component.FreebaseService;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -81,12 +82,16 @@ public class FreebaseServiceImpl implements FreebaseService{
 	    JSONArray resultArray = json.getJSONArray("result");
 	    for(int i = 0; i < resultArray.size(); i++){
 		JSONObject currentResult = (JSONObject)resultArray.get(i);
-		if(currentResult.containsKey("notable")){
-		    JSONObject notable = currentResult.getJSONObject("notable");
-		    if(notable.containsKey("name")){
-			mainTopics.add(notable.getString("name"));
+		if(currentResult.containsKey("score")){
+		    if(currentResult.getDouble("score") > Constants.MIN_SCORE_TO_BE_MAIN_TOPIC){
+			if(currentResult.containsKey("notable")){
+			    JSONObject notable = currentResult.getJSONObject("notable");
+			    if(notable.containsKey("name")){
+				mainTopics.add(notable.getString("name"));
+			    }
+			}
 		    }
-		}
+		}		
 	    }
 	}
 	return mainTopics;
