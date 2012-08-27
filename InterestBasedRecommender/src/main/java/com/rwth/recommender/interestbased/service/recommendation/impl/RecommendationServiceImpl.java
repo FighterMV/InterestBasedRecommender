@@ -11,6 +11,7 @@ import com.rwth.recommender.interestbased.model.service.PersonInterestService;
 import com.rwth.recommender.interestbased.model.service.PersonService;
 import com.rwth.recommender.interestbased.service.recommendation.RecommendationService;
 import com.rwth.recommender.interestbased.service.recommendation.SimilarityService;
+import com.rwth.recommender.interestbased.service.recommendation.component.FreebaseService;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -31,6 +32,9 @@ public class RecommendationServiceImpl implements RecommendationService{
     SimilarityService similarityService;
     
     @Autowired
+    FreebaseService freebaseService;
+    
+    @Autowired
     PersonAssembler userAssembler;
    
     @Autowired
@@ -45,6 +49,8 @@ public class RecommendationServiceImpl implements RecommendationService{
     @Override
     public RecommendationDTO getRecommendations(PersonDTO personDTO, List<PersonInterestDTO> personInterests) {
 
+	preparePerson(personDTO);
+	
 	LOGGER.debug("A new request for a Recommendation for a person with name: " + personDTO.getName() + " arrived");
 	
 	LOGGER.debug("Storing person with name: " + personDTO.getName() + " and his interests in the database");
@@ -101,6 +107,39 @@ public class RecommendationServiceImpl implements RecommendationService{
 	    }
 	}
 	return false;
+    }
+    
+    private void preparePerson(PersonDTO personDTO){
+	
+	List<PersonInterestDTO> personInterests = personDTO.getPersonInterests();
+	
+	List<PersonInterestDTO> similarInterests = similarityService.getSimilarInterests(personInterests);
+	personDTO.setPersonInterests(similarInterests);
+	
+	List<String> interestKeywords = new ArrayList<String>();
+	for(PersonInterestDTO personInterestDTO : personInterests){
+	    interestKeywords.add(personInterestDTO.getInterest().getName());
+	}
+	
+	List<String> interestMainTopicKeywords = freebaseService.getMainTopics(interestKeywords);
+	personDTO.setPersonMainTopics(interestMainTopicKeywords);
+	
+	normWeightings(personInterests);
+    }
+    
+    
+    private void normWeightings(List<PersonInterestDTO> personInterestDTOs){
+	int maxRating = 1;
+	
+	for(PersonInterestDTO personInterestDTO : personInterestDTOs){
+	    maxRating = Math.max(maxRating, personInterestDTO.getWeighting());
+	}
+	
+	for(PersonInterestDTO personInterestDTO : personInterestDTOs){
+	    int oldRating = personInterestDTO.getWeighting();
+	    int newRating = (int) ((oldRating/maxRating)*100);
+	    personInterestDTO.setWeighting(newRating);
+	}
     }
     
 }

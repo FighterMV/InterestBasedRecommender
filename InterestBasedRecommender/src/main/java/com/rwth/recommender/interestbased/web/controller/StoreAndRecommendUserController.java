@@ -30,12 +30,6 @@ public class StoreAndRecommendUserController {
     @Autowired
     RecommendationService recommendationService;
     
-    @Autowired
-    SimilarityService similarityService;
-    
-    @Autowired
-    FreebaseService freebaseService;
-    
     
     @RequestMapping(value = "/store-and-recommend-user", method = RequestMethod.POST)
     public ModelAndView storeAndRecommendUser(@ModelAttribute("storeAndRecommendUserModel")StoreAndRecommendUserModel model){
@@ -86,16 +80,7 @@ public class StoreAndRecommendUserController {
 	
 	List<PersonInterestDTO> personInterests = getPersonInterestDTOs(model, personDTO);
 		
-	List<PersonInterestDTO> similarPersonInterests = similarityService.getSimilarInterests(personInterests);
-	personDTO.setPersonInterests(similarPersonInterests);
-	
-	List<String> interestKeywords = new ArrayList<String>();
-	for(PersonInterestDTO personInterestDTO : personInterests){
-	    interestKeywords.add(personInterestDTO.getInterest().getName());
-	}
-	
-	List<String> interestMainTopicKeywords = freebaseService.getMainTopics(interestKeywords);
-	personDTO.setPersonMainTopics(interestMainTopicKeywords);
+	personDTO.setPersonInterests(personInterests);
 	
 	String itemNames = model.getItemNames().replace(" ", "");
 	List<String> itemNameList = Arrays.asList(itemNames.split(Constants.INTEREST_SEPARATOR));
