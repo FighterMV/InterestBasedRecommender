@@ -49,12 +49,6 @@ public class RecommendationServiceImpl implements RecommendationService{
 	
 	LOGGER.debug("Storing person with name: " + personDTO.getName() + " and his interests in the database");
 	personService.storeInDatabase(personDTO);
-		
-//	List<InterestDTO> interests = new ArrayList<InterestDTO>();
-//	for(PersonInterestDTO personInterestDTO : personInterests){
-//	    interests.add(personInterestDTO.getInterest());
-//	}
-//	interestService.storeInDatabase(interests);
 	
 	personInterestService.storeInDatabase(personInterests);
 	
@@ -72,7 +66,7 @@ public class RecommendationServiceImpl implements RecommendationService{
 	List<ItemRecommendationDTO> itemsToBeRecommended = new ArrayList<ItemRecommendationDTO>();
 	for(PersonDTO similarUser : similarUsers){
 	    LOGGER.debug("Searching for similar items");
-	    List<ItemDTO> matchingItemsForUser = similarityService.findSimilarItems(similarUser.getProvidedItems(), personDTO);
+	    List<ItemDTO> matchingItemsForUser = similarUser.getProvidedItems();
 	    for(ItemDTO similarUserItem : matchingItemsForUser){
 		if(!containsLink(itemsToBeRecommended, similarUserItem) &&!isOwnProvidedItem(personDTO, similarUserItem)){
 		    ItemRecommendationDTO itemRecommendation = new ItemRecommendationDTO();

@@ -31,14 +31,6 @@ public interface SimilarityService {
     public List<PersonDTO> findSimilarPersons(PersonDTO person);
     
     /**
-     * This method receives a list of items and a person and returns a List which contains items the person may like
-     * @param items The items to be checked
-     * @param person
-     * @return A subset of the provided items which are interesting for the person
-     */
-    public List<ItemDTO> findSimilarItems(List<ItemDTO> items, PersonDTO person);
-    
-    /**
      * This method returns a list of interested keywords for a raw list of weighted interests
      * @param weightedInterests
      * @return 

@@ -6,18 +6,17 @@ package com.rwth.recommender.interestbased.service.recommendation.impl;
 
 import com.rwth.recommender.interestbased.model.Constants;
 import com.rwth.recommender.interestbased.model.dto.InterestDTO;
-import com.rwth.recommender.interestbased.model.dto.ItemDTO;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
 import com.rwth.recommender.interestbased.model.dto.PersonInterestDTO;
 import com.rwth.recommender.interestbased.model.service.PersonService;
 import com.rwth.recommender.interestbased.service.recommendation.SimilarityService;
 import com.rwth.recommender.interestbased.service.recommendation.component.FreebaseService;
-import com.rwth.recommender.interestbased.service.recommendation.component.SimilarItemFinder;
 import com.rwth.recommender.interestbased.service.recommendation.component.SimilarPersonFinder;
 import com.rwth.recommender.interestbased.service.recommendation.component.WordnetService;
-import edu.smu.tspell.wordnet.Synset;
-import edu.smu.tspell.wordnet.WordNetDatabase;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +36,6 @@ public class SimilarityServiceImpl implements SimilarityService{
     
     @Autowired
     SimilarPersonFinder similarPersonFinder;
-    
-    @Autowired
-    SimilarItemFinder similarItemFinder;
     
     @Autowired
     WordnetService wordnetService;
@@ -90,12 +86,6 @@ public class SimilarityServiceImpl implements SimilarityService{
 	    personInterestDTOs.addAll(findSimilarInterests(personInterest));
 	}
 	return personInterestDTOs;
-    }
-
-    @Override
-    public List<ItemDTO> findSimilarItems(List<ItemDTO> items, PersonDTO person) {
-	List<ItemDTO> similarItems = similarItemFinder.getXSimilarItems(items, person, Constants.NUMBER_OF_BEST_OBJECTS_TO_RETURN);
-	return similarItems;
     }
     
 }
