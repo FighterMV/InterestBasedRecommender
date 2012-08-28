@@ -29,4 +29,6 @@ public class Constants {
     public static int FREEBASE_MAX_SCORE = 300;
     
     public static int MAX_WEIGHTING = 1000;
+    
+    public static Double MINIMUM_ANGEL_TO_BE_EQUAL_PERSON = 0.2;
 }

@@ -221,18 +221,20 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
 	int[] indexesToReturn = new int[numberOfIndexesToReturn];
 	
 	for(int i = 0; i < similarities.length; i++){
-	    if(i < numberOfIndexesToReturn){
-		indexesToReturn[i] = i;
-	    }else{
-		int smallestNumberIndexInSimilarities = getSmallestContentIndex(indexesToReturn, similarities);
-		int indexToReplace = 0;
-		for(int j = 0; j < indexesToReturn.length; j++){
-		    if(indexesToReturn[j] == smallestNumberIndexInSimilarities){
-			indexToReplace = j;
+	    if(similarities[i] >= Constants.MINIMUM_ANGEL_TO_BE_EQUAL_PERSON){
+		if(i < numberOfIndexesToReturn){
+		    indexesToReturn[i] = i;
+		}else{
+		    int smallestNumberIndexInSimilarities = getSmallestContentIndex(indexesToReturn, similarities);
+		    int indexToReplace = 0;
+		    for(int j = 0; j < indexesToReturn.length; j++){
+			if(indexesToReturn[j] == smallestNumberIndexInSimilarities){
+			    indexToReplace = j;
+			}
 		    }
-		}
-		if(similarities[i] > similarities[smallestNumberIndexInSimilarities]){
-		    indexesToReturn[indexToReplace] = i;
+		    if(similarities[i] > similarities[smallestNumberIndexInSimilarities]){
+			indexesToReturn[indexToReplace] = i;
+		    }
 		}
 	    }
 	}
