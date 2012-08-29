@@ -13,6 +13,7 @@ import com.rwth.recommender.interestbased.model.service.PersonService;
 import com.rwth.recommender.interestbased.service.recommendation.RecommendationService;
 import com.rwth.recommender.interestbased.service.recommendation.SimilarityService;
 import com.rwth.recommender.interestbased.service.recommendation.component.FreebaseService;
+import com.rwth.recommender.interestbased.service.recommendation.component.UserItemProvider;
 import com.sun.corba.se.impl.orbutil.closure.Constant;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,9 @@ public class RecommendationServiceImpl implements RecommendationService{
     @Autowired
     InterestService interestService;
     
+    @Autowired
+    UserItemProvider userItemProvider;
+    
     @Override
     public RecommendationDTO getRecommendations(PersonDTO personDTO, List<PersonInterestDTO> personInterests) {
 	
@@ -74,7 +78,7 @@ public class RecommendationServiceImpl implements RecommendationService{
 	List<ItemRecommendationDTO> itemsToBeRecommended = new ArrayList<ItemRecommendationDTO>();
 	for(PersonDTO similarUser : similarUsers){
 	    LOGGER.debug("Searching for similar items");
-	    List<ItemDTO> matchingItemsForUser = similarUser.getProvidedItems();
+	    List<ItemDTO> matchingItemsForUser = userItemProvider.getItemsOfUserFittingForUser(personDTO, similarUser);
 	    for(ItemDTO similarUserItem : matchingItemsForUser){
 		if(!containsLink(itemsToBeRecommended, similarUserItem) &&!isOwnProvidedItem(personDTO, similarUserItem)){
 		    ItemRecommendationDTO itemRecommendation = new ItemRecommendationDTO();
