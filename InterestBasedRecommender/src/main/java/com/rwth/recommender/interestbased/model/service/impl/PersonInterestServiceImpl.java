@@ -12,8 +12,9 @@ import com.rwth.recommender.interestbased.model.database.dao.InterestDAO;
 import com.rwth.recommender.interestbased.model.database.dao.PersonInterestDAO;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
 import com.rwth.recommender.interestbased.model.dto.PersonInterestDTO;
-import com.rwth.recommender.interestbased.model.service.InterestService;
 import com.rwth.recommender.interestbased.model.service.PersonInterestService;
+import com.rwth.recommender.interestbased.service.recommendation.SimilarityService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -41,6 +42,9 @@ public class PersonInterestServiceImpl implements PersonInterestService{
     @Autowired
     InterestAssembler interestAssembler;
     
+    @Autowired
+    SimilarityService similarityService;
+    
     @Override
     @Transactional
     public List<PersonInterestDTO> getPersonInterests(PersonDTO person) {
@@ -58,6 +62,30 @@ public class PersonInterestServiceImpl implements PersonInterestService{
 	    personInterestDAO.persist(personInterest);
 	    personInterestDTO.setId(personInterest.getId());
 	}
+    }
+
+    @Override
+    @Transactional
+    public void findAndStoreSimilarInterests(PersonDTO personDTO) {
+	
+	List<PersonInterestDTO> similarPersonInterestDTOs = new ArrayList<PersonInterestDTO>();
+	
+	List<PersonInterest> currentPersonInterests = personInterestDAO.getPersonInterests(personAssembler.assemble(personDTO));
+	List<PersonInterestDTO> currentPersonInterestDTOs = personInterestAssembler.assembleDTOList(currentPersonInterests);
+	for(PersonInterestDTO personInterestDTO : currentPersonInterestDTOs){
+	    similarPersonInterestDTOs.addAll(similarityService.findSimilarInterests(personInterestDTO));
+	}
+		
+	for(PersonInterestDTO personInterestDTO : similarPersonInterestDTOs){
+	    if(personInterestDTO.getId() == null){
+		Long interestId = interestDAO.persist(interestAssembler.assemble(personInterestDTO.getInterest()));
+		personInterestDTO.getInterest().setId(interestId);
+		PersonInterest personInterest = personInterestAssembler.assemble(personInterestDTO);
+		personInterestDAO.persist(personInterest);
+		personInterestDTO.setId(personInterest.getId());
+	    }
+	}
+	
     }
     
 }

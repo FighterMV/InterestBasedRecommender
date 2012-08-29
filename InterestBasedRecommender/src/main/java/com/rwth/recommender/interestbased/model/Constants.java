@@ -14,9 +14,7 @@ public class Constants {
 
     //SVD
     public static int MAX_DIMENSIONS_TO_CHECK_SIMILARITY = 10;
-    
-    public static int MINIMUM_VALUE_TO_BE_GOOD_INTEREST = 10;
-        
+            
     public static String INTEREST_SEPARATOR = ",";
     public static String ITEM_SEPARATOR = ";";
     

@@ -7,6 +7,7 @@ package com.rwth.recommender.interestbased.service.recommendation.component.help
 import com.rwth.recommender.interestbased.model.dto.ItemDTO;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
 import com.rwth.recommender.interestbased.model.dto.PersonInterestDTO;
+import com.rwth.recommender.interestbased.model.service.PersonInterestService;
 import com.rwth.recommender.interestbased.service.recommendation.component.helper.CosineCalculator;
 import com.rwth.recommender.interestbased.service.recommendation.component.helper.CosineSimilarItemFinder;
 import com.rwth.recommender.interestbased.service.recommendation.component.helper.MostSimilarObjectsGetter;
@@ -30,12 +31,15 @@ public class CosineSimilarItemFinderImpl implements CosineSimilarItemFinder{
     @Autowired
     MostSimilarObjectsGetter mostSimilarObjectsGetter;
     
+    @Autowired
+    PersonInterestService personInterestService;
+    
     @Override
     public List<ItemDTO> getXSimilarItems(List<ItemDTO> items, PersonDTO person, int numberOfItemsToReturn) {
 	Map<ItemDTO, Double> itemAngleMap = new HashMap<ItemDTO, Double>();
 	
 	List<String> personInterestKeywords = new ArrayList<String>();
-	for(PersonInterestDTO personInterest : person.getPersonInterests()){
+	for(PersonInterestDTO personInterest : personInterestService.getPersonInterests(person)){
 	    personInterestKeywords.add(personInterest.getInterest().getName());
 	}
 	

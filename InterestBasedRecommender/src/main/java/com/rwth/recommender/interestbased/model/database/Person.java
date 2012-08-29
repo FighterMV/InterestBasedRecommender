@@ -26,9 +26,6 @@ public class Person {
     @ElementCollection
     private List<String> personMainTopics;
     
-    @ElementCollection
-    private List<PersonInterest> personInterests;
-    
     public Person(){
     }
 
@@ -62,14 +59,6 @@ public class Person {
 
     public void setPersonMainTopics(List<String> personMainTopics) {
 	this.personMainTopics = personMainTopics;
-    }
-
-    public List<PersonInterest> getPersonInterests() {
-	return personInterests;
-    }
-
-    public void setPersonInterests(List<PersonInterest> personInterests) {
-	this.personInterests = personInterests;
     }
     
     

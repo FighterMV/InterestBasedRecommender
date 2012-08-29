@@ -20,7 +20,6 @@ public class PersonDTO {
     private String name;
     private List<ItemDTO> providedItems;
     private List<String> personMainTopics;
-    private List<PersonInterestDTO> personInterests;
 
     public String getName() {
 	return name;
@@ -52,26 +51,6 @@ public class PersonDTO {
 
     public void setPersonMainTopics(List<String> personMainTopics) {
 	this.personMainTopics = personMainTopics;
-    }
-
-    public List<PersonInterestDTO> getPersonInterests() {
-	return personInterests;
-    }
-
-    public void setPersonInterests(List<PersonInterestDTO> personInterests) {
-	this.personInterests = personInterests;
-    }
-    
-    /**
-     * 
-     * @return a List of Strings which represents the interest keywords without weighting 
-     */
-    public List<String> getInterestKeywords(){
-	List<String> interestKeywords = new ArrayList<String>();
-	for(PersonInterestDTO personInterest : personInterests){
-	    interestKeywords.add(personInterest.getInterest().getName());
-	}
-	return interestKeywords;
     }
         
 }

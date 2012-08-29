@@ -8,9 +8,12 @@ import Jama.Matrix;
 import Jama.SingularValueDecomposition;
 import com.rwth.recommender.interestbased.model.Constants;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
+import com.rwth.recommender.interestbased.model.dto.PersonInterestDTO;
+import com.rwth.recommender.interestbased.model.service.PersonInterestService;
 import com.rwth.recommender.interestbased.service.recommendation.component.helper.SVDSimilarityCalculator;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,6 +22,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
+    
+    @Autowired
+    PersonInterestService personInterestService;
 
     @Override
     public List<PersonDTO> getXSimilarPersonsByGroup(PersonDTO person, List<PersonDTO> personDTOs, int numberOfUsersToReturn) {
@@ -31,6 +37,10 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
     }
     
     public List<PersonDTO> getXSimilarPersonsCalc(PersonDTO person, List<PersonDTO> personDTOs, int numberOfUsersToReturn, Boolean byGroup) {
+	
+	if(personDTOs.size() == 0){
+	    return personDTOs;
+	}
 	
 	Matrix queryDocument = getMatrix(person, personDTOs, byGroup);
 	
@@ -104,14 +114,21 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
 	if(byGroup){
 	    keywords = personDTO.getPersonMainTopics();
 	}else{
-	    keywords = personDTO.getInterestKeywords();
+	    List<PersonInterestDTO> personInterests = personInterestService.getPersonInterests(personDTO);
+	    keywords = new ArrayList<String>();
+	    for(PersonInterestDTO personInterestDTO : personInterests){
+		keywords.add(personInterestDTO.getInterest().getName());
+	    }
 	}
 	allKeywords.addAll(keywords);
 	for(PersonDTO person : persons){
 	    if(byGroup){
 		allKeywords.addAll(person.getPersonMainTopics());
 	    }else{
-		allKeywords.addAll(person.getInterestKeywords());
+		List<PersonInterestDTO> personInterests = personInterestService.getPersonInterests(person);
+		for(PersonInterestDTO personInterestDTO : personInterests){
+		    allKeywords.add(personInterestDTO.getInterest().getName());
+		}
 	    }
 	}
 	for(String keyword : allKeywords){
@@ -127,7 +144,11 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
 	if(byGroup){
 	    keywords = personDTO.getPersonMainTopics();
 	}else{
-	    keywords = personDTO.getInterestKeywords();
+	    List<PersonInterestDTO> personInterests = personInterestService.getPersonInterests(personDTO);
+	    keywords = new ArrayList<String>();
+	    for(PersonInterestDTO personInterestDTO : personInterests){
+		keywords.add(personInterestDTO.getInterest().getName());
+	    }
 	}
 	int numberOfOccurences = 0;
 	for(String keyword : keywords){

@@ -52,6 +52,10 @@ public class SimilarityServiceImpl implements SimilarityService{
 	similarInterests.addAll(freebaseService.getSimilarInterests(personInterest));
 	LOGGER.debug("Added similar interests with freebase");
 	
+	for(PersonInterestDTO personInterestDTO : similarInterests){
+	    personInterestDTO.setPerson(personInterest.getPerson());
+	}
+	
 	LOGGER.debug("Returning " + similarInterests.size() + " similar keywords");
 	
 	return similarInterests;
@@ -63,6 +67,16 @@ public class SimilarityServiceImpl implements SimilarityService{
 	LOGGER.trace("Starting to find similar persons");
 	LOGGER.trace("Starting to get existing users");
 	List<PersonDTO> existingUsers = personService.getList();
+	int indexOfCurrentUser = -1;
+	for(int i = 0; i < existingUsers.size(); i++){
+	    PersonDTO existingUser = existingUsers.get(i);
+	    if(existingUser.getId().equals(user.getId())){
+		indexOfCurrentUser = i;
+	    }
+	}
+	if(indexOfCurrentUser != -1){
+	    existingUsers.remove(indexOfCurrentUser);
+	}
 	List<PersonDTO> similarUsers = similarPersonFinder.getXSimilarPersons(user, existingUsers, Constants.NUMBER_OF_BEST_OBJECTS_TO_RETURN);
 	return similarUsers;
     }

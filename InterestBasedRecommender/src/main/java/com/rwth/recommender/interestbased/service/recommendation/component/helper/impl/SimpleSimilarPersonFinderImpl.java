@@ -5,11 +5,14 @@
 package com.rwth.recommender.interestbased.service.recommendation.component.helper.impl;
 
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
+import com.rwth.recommender.interestbased.model.dto.PersonInterestDTO;
+import com.rwth.recommender.interestbased.model.service.PersonInterestService;
 import com.rwth.recommender.interestbased.service.recommendation.component.helper.SimpleSimilarPersonFinder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,6 +22,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class SimpleSimilarPersonFinderImpl implements SimpleSimilarPersonFinder{
 
+    @Autowired
+    PersonInterestService personInterestService;
+    
     @Override
     public List<PersonDTO> findXSimilarPersons(PersonDTO person, List<PersonDTO> persons, int numberOfPersonsToReturn) {
 	Map<PersonDTO, Integer> candidateScoreMap = new HashMap<PersonDTO, Integer>();
@@ -36,8 +42,21 @@ public class SimpleSimilarPersonFinderImpl implements SimpleSimilarPersonFinder{
     
     private int getScore(PersonDTO person, PersonDTO candidate){
 	int score = 0;
-	for(String keyword : person.getInterestKeywords()){
-	    for(String candidateKeyword : candidate.getInterestKeywords()){
+	
+	List<PersonInterestDTO> personInterests = personInterestService.getPersonInterests(person);
+	List<String> keywords = new ArrayList<String>();
+	for(PersonInterestDTO personInterestDTO : personInterests){
+	    keywords.add(personInterestDTO.getInterest().getName());
+	}
+	
+	List<PersonInterestDTO> candidateInterests = personInterestService.getPersonInterests(candidate);
+	List<String> candidateKeywords = new ArrayList<String>();
+	for(PersonInterestDTO candidateInterestDTO : candidateInterests){
+	    candidateKeywords.add(candidateInterestDTO.getInterest().getName());
+	}
+	
+	for(String keyword : keywords){
+	    for(String candidateKeyword : candidateKeywords){
 		if(keyword.equals(candidateKeyword)){
 		    score++;
 		}

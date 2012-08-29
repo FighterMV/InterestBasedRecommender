@@ -18,4 +18,6 @@ public interface PersonInterestService {
     
     public void storeInDatabase(List<PersonInterestDTO> personInterests);
     
+    public void findAndStoreSimilarInterests(PersonDTO personDTO);
+    
 }

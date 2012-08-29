@@ -14,7 +14,6 @@ import com.rwth.recommender.interestbased.service.recommendation.RecommendationS
 import com.rwth.recommender.interestbased.service.recommendation.SimilarityService;
 import com.rwth.recommender.interestbased.service.recommendation.component.FreebaseService;
 import com.rwth.recommender.interestbased.service.recommendation.component.UserItemProvider;
-import com.sun.corba.se.impl.orbutil.closure.Constant;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -59,14 +58,11 @@ public class RecommendationServiceImpl implements RecommendationService{
 	
 	LOGGER.debug("Storing person with name: " + personDTO.getName() + " and his interests in the database");
 	personService.storeInDatabase(personDTO);
-		
-	personDTO.setPersonInterests(personInterests);
-	addSimilarInterestsAndMainTopics(personDTO);
 	
-	personInterestService.storeInDatabase(personDTO.getPersonInterests());
+	personInterestService.storeInDatabase(personInterests);
 	
-	personService.updatePersonInDatabase(personDTO, personDTO.getPersonInterests());
-	
+	personInterestService.findAndStoreSimilarInterests(personDTO);
+					
 	LOGGER.debug("Starting to search similar users for user " + personDTO.getName());
 	List<PersonDTO> similarUsers = similarityService.findSimilarPersons(personDTO);
 	LOGGER.debug("Found " + similarUsers.size() + " similar users for user " + personDTO.getName());
@@ -110,25 +106,6 @@ public class RecommendationServiceImpl implements RecommendationService{
 	    }
 	}
 	return false;
-    }
-    
-    private void addSimilarInterestsAndMainTopics(PersonDTO personDTO){
-	
-	List<PersonInterestDTO> personInterests = personDTO.getPersonInterests();
-	
-	normWeightings(personInterests);
-	
-	List<PersonInterestDTO> similarInterests = similarityService.getSimilarInterests(personInterests);
-	personDTO.setPersonInterests(similarInterests);
-	
-	List<String> interestKeywords = new ArrayList<String>();
-	for(PersonInterestDTO personInterestDTO : personInterests){
-	    interestKeywords.add(personInterestDTO.getInterest().getName());
-	}
-	
-	List<String> interestMainTopicKeywords = freebaseService.getMainTopics(interestKeywords);
-	personDTO.setPersonMainTopics(interestMainTopicKeywords);	
-	
     }
     
     

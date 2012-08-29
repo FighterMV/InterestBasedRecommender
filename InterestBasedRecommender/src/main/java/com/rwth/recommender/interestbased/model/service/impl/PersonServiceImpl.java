@@ -80,25 +80,8 @@ public class PersonServiceImpl implements PersonService{
 
     @Override
     @Transactional
-    public void updatePersonInDatabase(PersonDTO personDTO, List<PersonInterestDTO> personInterestDTOs) {
+    public void updatePersonInDatabase(PersonDTO personDTO) {
 	Person person = personAssembler.assemble(personDTO);
-	
-	if(personInterestDTOs == null){
-	    throw new IllegalStateException("Interests must not be null");
-	}
-	
-	List<PersonInterest> personInterests = new ArrayList<PersonInterest>();
-	for(PersonInterestDTO personInterestDTO : personInterestDTOs){
-	    PersonInterest personInterest = new PersonInterest();
-	    personInterest.setId(personInterestDTO.getId());
-	    personInterest.setInterest(interestAssembler.assemble(personInterestDTO.getInterest()));
-	    personInterest.setPerson(person);
-	    personInterest.setWeighting(personInterestDTO.getWeighting());
-	    personInterests.add(personInterest);
-	}
-
-	person.setPersonInterests(personInterests);
-	
 	personDAO.update(person);
     }
     

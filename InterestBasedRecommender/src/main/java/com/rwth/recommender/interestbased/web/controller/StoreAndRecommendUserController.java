@@ -79,9 +79,7 @@ public class StoreAndRecommendUserController {
 	personDTO.setName(model.getUsername());
 	
 	List<PersonInterestDTO> personInterests = getPersonInterestDTOs(model, personDTO);
-		
-	personDTO.setPersonInterests(personInterests);
-	
+			
 	String itemNames = model.getItemNames().replace(" ", "");
 	List<String> itemNameList = Arrays.asList(itemNames.split(Constants.INTEREST_SEPARATOR));
 	

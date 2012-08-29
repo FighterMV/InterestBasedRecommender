@@ -18,6 +18,6 @@ public interface PersonService {
     
     public void storeInDatabase(PersonDTO personDTO);
     
-    public void updatePersonInDatabase(PersonDTO personDTO, List<PersonInterestDTO> personInterests);
+    public void updatePersonInDatabase(PersonDTO personDTO);
     
 }
