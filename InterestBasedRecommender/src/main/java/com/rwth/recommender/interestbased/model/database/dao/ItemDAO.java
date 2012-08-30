@@ -12,7 +12,7 @@ import com.rwth.recommender.interestbased.model.database.Item;
  */
 public interface ItemDAO {
     
-    void persist(Item item);
+    Boolean persistAndReturnIfExisted(Item item);
     Item get(Long id);
     
 }

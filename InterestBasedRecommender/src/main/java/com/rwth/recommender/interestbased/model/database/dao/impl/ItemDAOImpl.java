@@ -6,6 +6,8 @@ package com.rwth.recommender.interestbased.model.database.dao.impl;
 
 import com.rwth.recommender.interestbased.model.database.Item;
 import com.rwth.recommender.interestbased.model.database.dao.ItemDAO;
+import java.util.List;
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +27,20 @@ public class ItemDAOImpl implements ItemDAO{
     private SessionFactory sessionFactory;
     
     @Override
-    public void persist(Item item) {
+    public Boolean persistAndReturnIfExisted(Item item) {
+	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Item.class);
+	List<Item> existingItems = criteria.list();
+	for(Item existingItem : existingItems){
+	    if(existingItem.getLink().equals(item.getLink())){
+		item.setDescribingKeywords(existingItem.getDescribingKeywords());
+		item.setId(existingItem.getId());
+		item.setName(existingItem.getName());
+		return true;
+	    }
+	}
 	LOGGER.trace("Persisting item with name: " + item.getName() + " in database");
 	sessionFactory.getCurrentSession().persist(item);
+	return false;
     }
 
     @Override

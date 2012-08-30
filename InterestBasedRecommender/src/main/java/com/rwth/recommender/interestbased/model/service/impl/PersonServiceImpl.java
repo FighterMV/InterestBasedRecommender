@@ -68,11 +68,6 @@ public class PersonServiceImpl implements PersonService{
     public void storeInDatabase(PersonDTO personDTO) {
 	LOGGER.debug("Storing person in database");
 	Person person = personAssembler.assemble(personDTO);
-	for(int i = 0; i < person.getProvidedItems().size(); i++){
-	    Item item = person.getProvidedItems().get(i);
-	    itemDAO.persist(item);
-	    personDTO.getProvidedItems().get(i).setId(item.getId());
-	}
 	personDAO.persist(person);
 	personDTO.setId(person.getId());
 	
@@ -80,9 +75,17 @@ public class PersonServiceImpl implements PersonService{
 
     @Override
     @Transactional
-    public void updatePersonInDatabase(PersonDTO personDTO) {
-	Person person = personAssembler.assemble(personDTO);
+    public void updatePersonInDatabase(PersonDTO personDTO, List<Long> providedItems) {
+	Person person = personDAO.get(personDTO.getId());
+	person.setProvidedItems(new ArrayList<Item>());
+	if(providedItems != null && providedItems.size() > 0){
+	    for(Long itemId : providedItems){
+		Item providedItem = itemDAO.get(itemId);
+		person.getProvidedItems().add(providedItem);
+	    }
+	}
 	personDAO.update(person);
     }
+    
     
 }

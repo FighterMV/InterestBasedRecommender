@@ -20,7 +20,7 @@ public class Person {
     
     private String name;
     
-    @OneToMany
+    @ManyToMany
     private List<Item> providedItems;
     
     @ElementCollection

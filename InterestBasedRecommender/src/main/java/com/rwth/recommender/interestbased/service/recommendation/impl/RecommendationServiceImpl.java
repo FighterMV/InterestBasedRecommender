@@ -8,6 +8,7 @@ import com.rwth.recommender.interestbased.model.Constants;
 import com.rwth.recommender.interestbased.model.assembler.PersonAssembler;
 import com.rwth.recommender.interestbased.model.dto.*;
 import com.rwth.recommender.interestbased.model.service.InterestService;
+import com.rwth.recommender.interestbased.model.service.ItemService;
 import com.rwth.recommender.interestbased.model.service.PersonInterestService;
 import com.rwth.recommender.interestbased.model.service.PersonService;
 import com.rwth.recommender.interestbased.service.recommendation.RecommendationService;
@@ -51,13 +52,33 @@ public class RecommendationServiceImpl implements RecommendationService{
     @Autowired
     UserItemProvider userItemProvider;
     
+    @Autowired
+    ItemService itemService;
+    
     @Override
     public RecommendationDTO getRecommendations(PersonDTO personDTO, List<PersonInterestDTO> personInterests) {
 	
 	LOGGER.debug("A new request for a Recommendation for a person with name: " + personDTO.getName() + " arrived");
 	
 	LOGGER.debug("Storing person with name: " + personDTO.getName() + " and his interests in the database");
+	List<String> personKeywords = new ArrayList<String>();
+	for(PersonInterestDTO personInterestDTO : personInterests){
+	    personKeywords.add(personInterestDTO.getInterest().getName());
+	}
+	personDTO.setPersonMainTopics(freebaseService.getMainTopics(personKeywords));
+	
+	itemService.storeItemsInDatabase(personDTO.getProvidedItems());
+	
+	List<Long> providedItemIds = new ArrayList<Long>();
+	for(ItemDTO itemDTO : personDTO.getProvidedItems()){
+	    providedItemIds.add(itemDTO.getId());
+	}
+	
+	personDTO.setProvidedItems(new ArrayList<ItemDTO>());
+	
 	personService.storeInDatabase(personDTO);
+	
+	personService.updatePersonInDatabase(personDTO, providedItemIds);
 	
 	personInterestService.storeInDatabase(personInterests);
 	

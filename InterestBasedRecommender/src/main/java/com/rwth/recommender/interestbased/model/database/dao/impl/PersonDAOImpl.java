@@ -4,6 +4,7 @@
  */
 package com.rwth.recommender.interestbased.model.database.dao.impl;
 
+import com.rwth.recommender.interestbased.model.database.Item;
 import com.rwth.recommender.interestbased.model.database.Person;
 import com.rwth.recommender.interestbased.model.database.dao.PersonDAO;
 import com.rwth.recommender.interestbased.model.database.dao.PersonInterestDAO;
@@ -39,6 +40,11 @@ public class PersonDAOImpl implements PersonDAO{
     @Override
     public void persist(Person person) {
 	LOGGER.trace("Persisting person with name: " + person.getName() + " from database");
+	for(int i = 0; i < person.getProvidedItems().size(); i++){
+	    Item providedItem = person.getProvidedItems().get(i);
+	    Item item = (Item) sessionFactory.getCurrentSession().get(Item.class, providedItem.getId());
+	    person.getProvidedItems().set(i, item);
+	}
 	sessionFactory.getCurrentSession().persist(person);
     }
 
