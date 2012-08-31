@@ -22,10 +22,8 @@ public class Constants {
     
     public static int NUMBER_OF_BEST_OBJECTS_TO_RETURN = 5;
     
-    public static int MIN_SCORE_FROM_FREEBASE_TO_BE_CONSIDERED = 50;
-    
-    public static int FREEBASE_MAX_SCORE = 300;
-    
+    public static double SCORE_FACTOR_FROM_FREEBASE_TO_BE_CONSIDERED = 0.7;
+        
     public static int MAX_WEIGHTING = 1000;
     
     public static Double MINIMUM_ANGEL_TO_BE_EQUAL_PERSON = 0.2;

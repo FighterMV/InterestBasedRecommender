@@ -80,6 +80,7 @@ public class RecommendationServiceImpl implements RecommendationService{
 	
 	personService.updatePersonInDatabase(personDTO, providedItemIds);
 	
+	normWeightings(personInterests);
 	personInterestService.storeInDatabase(personInterests);
 	
 	personInterestService.findAndStoreSimilarInterests(personDTO);

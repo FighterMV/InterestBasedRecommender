@@ -42,6 +42,10 @@ public class FreebaseServiceImpl implements FreebaseService{
 	similarPersonInterestDTOs.add(personInterestDTO);
 	
 	JSONArray resultArray = json.getJSONArray("result");
+	
+	JSONObject bestResult = (JSONObject) resultArray.get(0);
+	double maxScore = bestResult.getDouble("score");
+	
 	for(int i = 0; i < resultArray.size(); i++){
 	    JSONObject currentResult = (JSONObject)resultArray.get(i);
 	    String name = currentResult.getString("name");
@@ -52,8 +56,8 @@ public class FreebaseServiceImpl implements FreebaseService{
 		interest.setName(name);
 		newPersonInterestDTO.setInterest(interest);
 		double score = currentResult.getDouble("score");
-		if(score > Constants.MIN_SCORE_FROM_FREEBASE_TO_BE_CONSIDERED){
-		    double newWeighting = (new Double(score) / new Double(Constants.FREEBASE_MAX_SCORE)) * personInterestDTO.getWeighting();
+		if(score >= Constants.SCORE_FACTOR_FROM_FREEBASE_TO_BE_CONSIDERED * maxScore){
+		    double newWeighting = (new Double(score) / new Double(maxScore)) * personInterestDTO.getWeighting();
 		    newPersonInterestDTO.setWeighting((int) newWeighting);
 		    similarPersonInterestDTOs.add(newPersonInterestDTO);
 		}
@@ -93,10 +97,12 @@ public class FreebaseServiceImpl implements FreebaseService{
 	
 	if(json.containsKey("result")){
 	    JSONArray resultArray = json.getJSONArray("result");
+	    JSONObject bestResult = resultArray.getJSONObject(0);
+	    double maxScore = bestResult.getDouble("score");
 	    for(int i = 0; i < resultArray.size(); i++){
 		JSONObject currentResult = (JSONObject)resultArray.get(i);
 		if(currentResult.containsKey("score")){
-		    if(currentResult.getDouble("score") > Constants.MIN_SCORE_FROM_FREEBASE_TO_BE_CONSIDERED){
+		    if(currentResult.getDouble("score") >= Constants.SCORE_FACTOR_FROM_FREEBASE_TO_BE_CONSIDERED * maxScore){
 			if(currentResult.containsKey("notable")){
 			    JSONObject notable = currentResult.getJSONObject("notable");
 			    if(notable.containsKey("name")){

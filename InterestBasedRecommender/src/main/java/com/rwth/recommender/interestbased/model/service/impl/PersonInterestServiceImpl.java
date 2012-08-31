@@ -4,6 +4,7 @@
  */
 package com.rwth.recommender.interestbased.model.service.impl;
 
+import com.rwth.recommender.interestbased.model.Constants;
 import com.rwth.recommender.interestbased.model.assembler.InterestAssembler;
 import com.rwth.recommender.interestbased.model.assembler.PersonAssembler;
 import com.rwth.recommender.interestbased.model.assembler.PersonInterestAssembler;
@@ -75,6 +76,8 @@ public class PersonInterestServiceImpl implements PersonInterestService{
 	for(PersonInterestDTO personInterestDTO : currentPersonInterestDTOs){
 	    similarPersonInterestDTOs.addAll(similarityService.findSimilarInterests(personInterestDTO));
 	}
+	
+	normWeightings(similarPersonInterestDTOs);
 		
 	for(PersonInterestDTO personInterestDTO : similarPersonInterestDTOs){
 	    if(personInterestDTO.getId() == null){
@@ -86,6 +89,20 @@ public class PersonInterestServiceImpl implements PersonInterestService{
 	    }
 	}
 	
+    }
+    
+    private void normWeightings(List<PersonInterestDTO> personInterestDTOs){
+	int maxRating = 1;
+	
+	for(PersonInterestDTO personInterestDTO : personInterestDTOs){
+	    maxRating = Math.max(maxRating, personInterestDTO.getWeighting());
+	}
+	
+	for(PersonInterestDTO personInterestDTO : personInterestDTOs){
+	    int oldRating = personInterestDTO.getWeighting();
+	    double newRating = (new Double(oldRating) / new Double(maxRating)) * Constants.MAX_WEIGHTING;
+	    personInterestDTO.setWeighting((int)newRating);
+	}
     }
     
 }
