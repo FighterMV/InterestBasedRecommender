@@ -91,23 +91,33 @@ public class RecommendationServiceImpl implements RecommendationService{
 	
 	RecommendationDTO recommendation = new RecommendationDTO();
 	recommendation.setPerson(personDTO);
+	recommendation.setSimilarUsers(similarUsers);
 	
 	LOGGER.debug("Adding recommended items to the result");
 	List<ItemRecommendationDTO> itemsToBeRecommended = new ArrayList<ItemRecommendationDTO>();
+	List<ItemRecommendationDTO> itemsBySimilarUsers = new ArrayList<ItemRecommendationDTO>();
 	for(PersonDTO similarUser : similarUsers){
 	    LOGGER.debug("Searching for similar items");
-	    List<ItemDTO> matchingItemsForUser = userItemProvider.getItemsOfUserFittingForUser(personDTO, similarUser);
-	    for(ItemDTO similarUserItem : matchingItemsForUser){
+	    UserMappingItemsDTO matchingItemsForUser = userItemProvider.orderItemsFittingForUser(personDTO, similarUser);
+	    for(ItemDTO similarUserItem : matchingItemsForUser.getMappingItems()){
 		if(!containsLink(itemsToBeRecommended, similarUserItem) &&!isOwnProvidedItem(personDTO, similarUserItem)){
 		    ItemRecommendationDTO itemRecommendation = new ItemRecommendationDTO();
 		    itemRecommendation.setItem(similarUserItem);
-		    //!TODO set accuracy
 		    itemsToBeRecommended.add(itemRecommendation);
+		}
+	    }
+	    
+	    for(ItemDTO similarUserItem : matchingItemsForUser.getOtherItems()){
+		if(!containsLink(itemsBySimilarUsers, similarUserItem) &&!isOwnProvidedItem(personDTO, similarUserItem)){
+		    ItemRecommendationDTO itemRecommendation = new ItemRecommendationDTO();
+		    itemRecommendation.setItem(similarUserItem);
+		    itemsBySimilarUsers.add(itemRecommendation);
 		}
 	    }
 	}
 	
 	recommendation.setItemRecommendations(itemsToBeRecommended);
+	recommendation.setItemsBySimilarUsers(itemsBySimilarUsers);
 	
 	return recommendation;
     }

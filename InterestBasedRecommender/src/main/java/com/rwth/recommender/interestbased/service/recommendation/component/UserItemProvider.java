@@ -6,6 +6,7 @@ package com.rwth.recommender.interestbased.service.recommendation.component;
 
 import com.rwth.recommender.interestbased.model.dto.ItemDTO;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
+import com.rwth.recommender.interestbased.model.dto.UserMappingItemsDTO;
 import java.util.List;
 
 /**
@@ -14,6 +15,6 @@ import java.util.List;
  */
 public interface UserItemProvider {
     
-    public List<ItemDTO> getItemsOfUserFittingForUser(PersonDTO userToBeRecommended, PersonDTO similarUser);
+    public UserMappingItemsDTO orderItemsFittingForUser(PersonDTO userToBeRecommended, PersonDTO similarUser);
     
 }

@@ -15,6 +15,10 @@ public class RecommendationDTO {
     private PersonDTO person;
     
     private List<ItemRecommendationDTO> itemRecommendations;
+    
+    private List<ItemRecommendationDTO> itemsBySimilarUsers;
+    
+    List<PersonDTO> similarUsers;
 
     public List<ItemRecommendationDTO> getItemRecommendations() {
 	return itemRecommendations;
@@ -31,4 +35,22 @@ public class RecommendationDTO {
     public void setPerson(PersonDTO person) {
 	this.person = person;
     }
+
+    public List<ItemRecommendationDTO> getItemsBySimilarUsers() {
+	return itemsBySimilarUsers;
+    }
+
+    public void setItemsBySimilarUsers(List<ItemRecommendationDTO> itemsBySimilarUsers) {
+	this.itemsBySimilarUsers = itemsBySimilarUsers;
+    }
+
+    public List<PersonDTO> getSimilarUsers() {
+	return similarUsers;
+    }
+
+    public void setSimilarUsers(List<PersonDTO> similarUsers) {
+	this.similarUsers = similarUsers;
+    }
+    
+    
 }

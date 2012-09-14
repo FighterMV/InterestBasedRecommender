@@ -38,7 +38,7 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
     
     public List<PersonDTO> getXSimilarPersonsCalc(PersonDTO person, List<PersonDTO> personDTOs, int numberOfUsersToReturn, Boolean byGroup) {
 	
-	if(personDTOs.size() == 0){
+	if(personDTOs.isEmpty()){
 	    return personDTOs;
 	}
 	
@@ -99,8 +99,8 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
 	
 	int i = 0;
 	for(String term : neededTerms){
-	    int numberOfOccurencesInList = getNumberOfOccurences(term, personDTO, byGroup);
-	    matrixArray[i][0] = numberOfOccurencesInList;
+	    int weighting = getWeighting(term, personDTO, byGroup);
+	    matrixArray[i][0] = weighting;
 	    i++;
 	}
 	
@@ -139,24 +139,22 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
 	return neededTermList;
     }
     
-    private int getNumberOfOccurences(String term, PersonDTO personDTO, Boolean byGroup){
-	List<String> keywords;
+    private int getWeighting(String term, PersonDTO personDTO, Boolean byGroup){
 	if(byGroup){
-	    keywords = personDTO.getPersonMainTopics();
+	    for(String mainTopic : personDTO.getPersonMainTopics()){
+		if(mainTopic.equals(term)){
+		    return 1;
+		}
+	    }
 	}else{
 	    List<PersonInterestDTO> personInterests = personInterestService.getPersonInterests(personDTO);
-	    keywords = new ArrayList<String>();
 	    for(PersonInterestDTO personInterestDTO : personInterests){
-		keywords.add(personInterestDTO.getInterest().getName());
+		if(personInterestDTO.getInterest().getName().equals(term)){
+		    return personInterestDTO.getWeighting();
+		}
 	    }
 	}
-	int numberOfOccurences = 0;
-	for(String keyword : keywords){
-	    if(term.equals(keyword)){
-		numberOfOccurences++;
-	    }
-	}
-	return numberOfOccurences;
+	return 0;
     }
     
     private Matrix getA(PersonDTO personDTO, List<PersonDTO> persons, Boolean byGroup){
@@ -170,8 +168,8 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
 	for(PersonDTO person : persons){
 	    int j = 0;
 	    for(String keyWord : keyWordsToSearchFor){
-		int numberOfOccurences = getNumberOfOccurences(keyWord, personDTO, byGroup);
-		A[j][i] = numberOfOccurences;
+		int weighting = getWeighting(keyWord, personDTO, byGroup);
+		A[j][i] = weighting;
 		j++;
 	    }
 	    i++;
@@ -239,6 +237,7 @@ public class SVDSimilarityCalculatorImpl implements SVDSimilarityCalculator{
     
     
     private int[] getXSimilarDocumentIndexes(Double[] similarities, int numberOfIndexesToReturn){
+	numberOfIndexesToReturn = Math.min(similarities.length, numberOfIndexesToReturn);
 	int[] indexesToReturn = new int[numberOfIndexesToReturn];
 	
 	for(int i = 0; i < similarities.length; i++){
