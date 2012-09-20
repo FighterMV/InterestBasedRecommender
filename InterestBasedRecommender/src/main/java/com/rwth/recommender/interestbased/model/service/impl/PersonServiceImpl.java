@@ -6,16 +6,13 @@ package com.rwth.recommender.interestbased.model.service.impl;
 
 import com.rwth.recommender.interestbased.model.assembler.InterestAssembler;
 import com.rwth.recommender.interestbased.model.assembler.PersonAssembler;
-import com.rwth.recommender.interestbased.model.assembler.PersonInterestAssembler;
 import com.rwth.recommender.interestbased.model.database.Item;
 import com.rwth.recommender.interestbased.model.database.Person;
-import com.rwth.recommender.interestbased.model.database.PersonInterest;
 import com.rwth.recommender.interestbased.model.database.dao.InterestDAO;
 import com.rwth.recommender.interestbased.model.database.dao.ItemDAO;
 import com.rwth.recommender.interestbased.model.database.dao.PersonDAO;
 import com.rwth.recommender.interestbased.model.database.dao.PersonInterestDAO;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
-import com.rwth.recommender.interestbased.model.dto.PersonInterestDTO;
 import com.rwth.recommender.interestbased.model.service.PersonService;
 import java.util.ArrayList;
 import java.util.List;

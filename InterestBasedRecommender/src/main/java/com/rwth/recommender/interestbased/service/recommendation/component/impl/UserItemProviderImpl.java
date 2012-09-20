@@ -7,6 +7,7 @@ package com.rwth.recommender.interestbased.service.recommendation.component.impl
 import com.rwth.recommender.interestbased.model.dto.ItemDTO;
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
 import com.rwth.recommender.interestbased.model.dto.PersonInterestDTO;
+import com.rwth.recommender.interestbased.model.dto.UserMappingItemsDTO;
 import com.rwth.recommender.interestbased.model.service.PersonInterestService;
 import com.rwth.recommender.interestbased.service.recommendation.component.UserItemProvider;
 import java.util.ArrayList;
@@ -27,22 +28,39 @@ public class UserItemProviderImpl implements UserItemProvider{
     PersonInterestService personInterestService;
     
     @Override
-    public List<ItemDTO> getItemsOfUserFittingForUser(PersonDTO personToBeRecommended, PersonDTO similarUser) {
+    public UserMappingItemsDTO orderItemsFittingForUser(PersonDTO personToBeRecommended, PersonDTO similarUser) {
 	List<ItemDTO> itemCandidates = similarUser.getProvidedItems();
-	Set<ItemDTO> itemsToBeRecommended = new HashSet<ItemDTO>();
+	Set<ItemDTO> itemsSimilarToRequestingUser = new HashSet<ItemDTO>();
+	Set<ItemDTO> otherItems = new HashSet<ItemDTO>();
 	
 	for(ItemDTO itemCandidate : itemCandidates){
 	    for(String itemKeyword : itemCandidate.getDescribingKeywords()){
 		List<PersonInterestDTO> personInterests = personInterestService.getPersonInterests(personToBeRecommended);
 		for(PersonInterestDTO personInterestDTO : personInterests){
 		    if(personInterestDTO.getInterest().getName().equals(itemKeyword)){
-			itemsToBeRecommended.add(itemCandidate);
+			itemsSimilarToRequestingUser.add(itemCandidate);
 		    }
 		}
 	    }
+	    if(!containsItem(itemCandidate, itemsSimilarToRequestingUser)){
+		otherItems.add(itemCandidate);
+	    }
 	}
 	
-	return new ArrayList<ItemDTO>(itemsToBeRecommended);
+	UserMappingItemsDTO userMappingItemsDTO = new UserMappingItemsDTO();
+	userMappingItemsDTO.setMappingItems(itemsSimilarToRequestingUser);
+	userMappingItemsDTO.setOtherItems(otherItems);
+	
+	return userMappingItemsDTO;
+    }
+    
+    private Boolean containsItem(ItemDTO item, Set<ItemDTO> itemDTOs){
+	for(ItemDTO itemDTO : itemDTOs){
+	    if(item.getLink().equals(itemDTO.getLink())){
+		return true;
+	    }
+	}
+	return false;
     }
     
 }
