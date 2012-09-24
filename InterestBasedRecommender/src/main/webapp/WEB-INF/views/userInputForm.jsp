@@ -14,6 +14,10 @@
 		    <td><form:input path="username"/></td>
 		</tr>
 		<tr>
+		    <td>Userlink: </td>
+		    <td><form:input path="userlink"/></td>
+		</tr>
+		<tr>
 		    <td>Interests (separate by comma): </td>
 		    <td><form:input path="interests"/></td>
 		</tr>

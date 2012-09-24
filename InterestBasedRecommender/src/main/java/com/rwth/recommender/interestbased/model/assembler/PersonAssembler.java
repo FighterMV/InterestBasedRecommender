@@ -35,6 +35,7 @@ public class PersonAssembler {
 	PersonDTO personDTO = new PersonDTO();
 	personDTO.setId(person.getId());
 	personDTO.setName(person.getName());
+	personDTO.setLink(person.getLink());
 	
 	List<String> personMainTopics = new ArrayList<String>();
 	for(String mainTopicKeyword : person.getPersonMainTopics()){
@@ -70,6 +71,7 @@ public class PersonAssembler {
 	Person person = new Person();
 	person.setId(personDTO.getId());
 	person.setName(personDTO.getName());
+	person.setLink(personDTO.getLink());
 	person.setPersonMainTopics(personDTO.getPersonMainTopics());
 	person.setProvidedItems(itemAssembler.assembleList(personDTO.getProvidedItems()));
 	return person;

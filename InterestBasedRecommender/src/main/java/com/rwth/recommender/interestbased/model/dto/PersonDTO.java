@@ -18,6 +18,7 @@ public class PersonDTO {
         
     private Long id;
     private String name;
+    private String link;
     private List<ItemDTO> providedItems;
     private List<String> personMainTopics;
 
@@ -52,5 +53,15 @@ public class PersonDTO {
     public void setPersonMainTopics(List<String> personMainTopics) {
 	this.personMainTopics = personMainTopics;
     }
+
+    public String getLink() {
+	return link;
+    }
+
+    public void setLink(String link) {
+	this.link = link;
+    }
+    
+    
         
 }

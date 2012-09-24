@@ -20,6 +20,8 @@ public class Person {
     
     private String name;
     
+    private String link;
+    
     @ManyToMany
     private List<Item> providedItems;
     
@@ -59,6 +61,14 @@ public class Person {
 
     public void setPersonMainTopics(List<String> personMainTopics) {
 	this.personMainTopics = personMainTopics;
+    }
+
+    public String getLink() {
+	return link;
+    }
+
+    public void setLink(String link) {
+	this.link = link;
     }
     
     

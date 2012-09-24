@@ -41,7 +41,7 @@ public class StoreAndRecommendUserController {
 	
 	ModelAndView modelAndView = new ModelAndView("recommendation");
 	modelAndView.addObject("username", recommendation.getPerson().getName());
-	modelAndView.addObject("recommendations", recommendation.getItemRecommendations());
+	modelAndView.addObject("recommendation", recommendation);
 	
 	return modelAndView;
     }
@@ -77,6 +77,7 @@ public class StoreAndRecommendUserController {
     private PersonDTO getPersonDTO(StoreAndRecommendUserModel model){
 	PersonDTO personDTO = new PersonDTO();
 	personDTO.setName(model.getUsername());
+	personDTO.setLink(model.getUserlink());
 	
 	List<PersonInterestDTO> personInterests = getPersonInterestDTOs(model, personDTO);
 			
