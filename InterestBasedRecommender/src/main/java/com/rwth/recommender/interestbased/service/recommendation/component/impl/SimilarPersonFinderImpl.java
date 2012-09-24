@@ -7,6 +7,7 @@ package com.rwth.recommender.interestbased.service.recommendation.component.impl
 import com.rwth.recommender.interestbased.model.dto.PersonDTO;
 import com.rwth.recommender.interestbased.service.recommendation.component.SimilarPersonFinder;
 import com.rwth.recommender.interestbased.service.recommendation.component.helper.CosineSimilarPersonFinder;
+import com.rwth.recommender.interestbased.service.recommendation.component.helper.JaccardSimilarGroupGetter;
 import com.rwth.recommender.interestbased.service.recommendation.component.helper.SVDSimilarityCalculator;
 import com.rwth.recommender.interestbased.service.recommendation.component.helper.SimpleSimilarPersonFinder;
 import java.util.List;
@@ -29,9 +30,12 @@ public class SimilarPersonFinderImpl implements SimilarPersonFinder{
     @Autowired
     CosineSimilarPersonFinder cosineSimilarPersonFinder;
     
+    @Autowired
+    JaccardSimilarGroupGetter jaccardSimilarGroupGetter;
+    
     @Override
     public List<PersonDTO> getXSimilarPersons(PersonDTO person, List<PersonDTO> persons, int numberOfPersonsToReturn) {
-	List<PersonDTO> similarPersonsByGroup = svdSimilarityCalculator.getXSimilarPersonsByGroup(person, persons, numberOfPersonsToReturn*5);
+	List<PersonDTO> similarPersonsByGroup = jaccardSimilarGroupGetter.getXSimilarPersonsByGroup(persons, person, numberOfPersonsToReturn*5);
 	return useSVDSimilarPersonFinder(person, similarPersonsByGroup, numberOfPersonsToReturn);
     }
     

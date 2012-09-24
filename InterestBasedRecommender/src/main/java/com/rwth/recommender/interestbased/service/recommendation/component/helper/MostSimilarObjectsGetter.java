@@ -4,6 +4,7 @@
  */
 package com.rwth.recommender.interestbased.service.recommendation.component.helper;
 
+import Jama.Matrix;
 import java.util.List;
 import java.util.Map;
 
@@ -14,5 +15,5 @@ import java.util.Map;
 public interface MostSimilarObjectsGetter<E> {
     
     public List<E> getXMostSimilarObjects(Map<E, Double> angleMap, int numberOfObjectsToReturn);
-    
+        
 }
